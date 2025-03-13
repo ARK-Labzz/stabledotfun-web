@@ -197,11 +197,10 @@ export default function AssetShowcase({ className }: AssetShowcaseProps) {
                       )}
                     </div>
                   </div>
-                  <div className="font-medium mb-4 group-hover:text-teal">
-                    {coin.name}
+                  <div className="py-2">
+                    <div className="text-xs text-gray-400 mb-1">Yield Rate</div>
+                    <div className="text-2xl font-bold mb-2">{coin.yield}</div>
                   </div>
-                  <div className="text-xs text-gray-400 mb-1">Yield Rate</div>
-                  <div className="text-2xl font-bold mb-2">{coin.yield}</div>
                   <div
                     className={`text-xs ${
                       coin.change > 0 ? "text-teal" : "text-red-500"
