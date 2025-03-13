@@ -13,7 +13,12 @@ import {
 import Image from "next/image";
 import React from "react";
 
-export default function UserDetails() {
+interface UserDetailsProp {
+  className?: string;
+  username: string
+}
+
+export default function UserDetails({ username, className }: UserDetailsProp) {
   const { connected, publicKey } = useWallet();
 
   const truncateAddress = (address: string) => {
@@ -23,7 +28,12 @@ export default function UserDetails() {
 
   if (!connected) return null;
   return (
-    <div className="flex flex-col gap-1 bg-white/5 rounded-2xl p-4 border border-secondary/30">
+    <div
+      className={cn(
+        "flex flex-col gap-1 bg-white/5 rounded-2xl p-4 border border-secondary/30",
+        className
+      )}
+    >
       <div className="flex items-center gap-4 mb-4">
         <div className="w-20 h-20 rounded-full bg-secondary/30 border-2 border-secondary flex items-center justify-center">
           <Image
@@ -53,7 +63,7 @@ export default function UserDetails() {
           <div className="text-xs flex flex-1 items-center justify-between">
             <div className="text-white/30">Username</div>
             <div className="text-primary/30 font-medium">
-              cre8tivebuka{" "}
+              {username}{" "}
               <Button variant={"link"} className="w-0 h-0 p-0 text-xs">
                 <Edit className="w-1 h-1 text-primary" />
               </Button>
@@ -88,15 +98,21 @@ export default function UserDetails() {
         </div>
       </div>
 
-      <div className="text-primary items-center p-3 border rounded-lg gap-3 mb-4 bg-white/5 justify-center text-xs border-primary/50 flex flex-1 ">
-        <Badge variant={"outline"} className="border-primary text-primary py-1 pointer-events-none select-none">
+      <div className="text-primary items-center p-3 border rounded-lg gap-3 mb-4 bg-white/5 text-xs border-primary/50 flex flex-1 justify-between">
+        <Badge
+          variant={"outline"}
+          className="border-primary text-primary py-1 pointer-events-none select-none"
+        >
           Balance
         </Badge>
         <div className="text-xl font-bold truncate">$543,423,212.32</div>
       </div>
 
       <div className="flex flex-1 justify-between items-center gap-3">
-        <Button variant={"outline"} className="cursor-pointer flex-1 border-primary border">
+        <Button
+          variant={"outline"}
+          className="cursor-pointer flex-1 border-primary border"
+        >
           <ArrowUpRight className="w-4 h-4" /> Withdraw
         </Button>
 

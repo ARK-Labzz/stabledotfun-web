@@ -1,16 +1,19 @@
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
 import { ArrowUpRight } from "lucide-react";
-import MiniChart from "@/components/mini-chart";
-import UserDetails from "../components/user-details";
 import TradeWindow from "@/components/trade-window";
+import UserPanel from "./components/user-panel";
 
 export default function Dashboard() {
+  const username = "cre8tivebuka";
   return (
     <div className="space-y-4">
-      <div className="text-sm text-gray-400">Welcome, cre8tivebuka</div>
+      <div className="text-xs text-gray-400">
+        Welcome,{" "}
+        <span className="text-primary">{username ? username : "user"}</span>
+      </div>
 
       <div className="flex flex-col lg:flex-row gap-4">
+        <UserPanel username={username} />
         <div className="flex-1 bg-card rounded-lg p-4 border border-border">
           <div className="flex justify-between mb-4">
             <div className="flex gap-2">
@@ -123,8 +126,7 @@ export default function Dashboard() {
         </div>
 
         <div className="w-full lg:w-80 space-y-4">
-          <UserDetails />
-          <TradeWindow />
+          <TradeWindow className="h-full" />
         </div>
       </div>
     </div>

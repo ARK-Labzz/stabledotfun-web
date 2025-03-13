@@ -20,6 +20,10 @@ import {
 } from "@/components/ui/popover";
 import { Check, ChevronDown } from "lucide-react";
 
+interface TradeWindowProp {
+  className?: string;
+}
+
 interface TradeWindowToken {
   id: string;
   name: string;
@@ -50,7 +54,7 @@ const token: TradeWindowToken[] = [
   },
 ];
 
-export default function TradeWindow() {
+export default function TradeWindow({ className }: TradeWindowProp) {
   const [open, setOpen] = React.useState(false);
   const [tradeType, setTradeType] = React.useState<"buy" | "sell">("buy");
   const [activeToken, setActiveToken] = React.useState<TradeWindowToken | null>(
@@ -84,7 +88,12 @@ export default function TradeWindow() {
     : 0;
 
   return (
-    <div className="flex flex-col gap-1 bg-white/5 rounded-2xl p-4 border border-secondary/30">
+    <div
+      className={cn(
+        "flex flex-col gap-1 bg-white/5 rounded-2xl p-4 border border-secondary/30",
+        className
+      )}
+    >
       <div className="bg-white/5 rounded-xl p-4 border border-secondary/30 flex-col gap-3 flex">
         <div className="flex flex-1 justify-between items-center">
           <div>Sell Your Stablecoin</div>
