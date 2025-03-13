@@ -11,7 +11,7 @@ export default function UserPanel({ username }: { username: string }) {
   if (!connected) return null;
 
   return (
-    <div className="w-full lg:w-85 space-y-4 flex flex-col gap-4">
+    <div className="w-full lg:w-85 space-y-4 flex flex-col gap-3">
       <UserDetails username={username} />
       <PayoutTimeline />
     </div>

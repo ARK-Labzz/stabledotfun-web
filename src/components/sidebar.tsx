@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Home, Package, FileText, HelpCircle, PlusCircle, Menu, X, ChevronRight } from "lucide-react"
+import Image from "next/image"
 
 export default function Sidebar() {
   const pathname = usePathname()
@@ -88,7 +89,7 @@ export default function Sidebar() {
         <div className="mb-8">
           <Link href="/" className="block">
             <div className="w-10 h-10 rounded-full bg-teal flex items-center justify-center">
-              <img src="/placeholder.svg?height=40&width=40" alt="Logo" className="w-6 h-6" />
+              <Image src="/stable-fun.svg" alt="Logo" className="w-6 h-6" width={36} height={36} />
             </div>
           </Link>
         </div>
