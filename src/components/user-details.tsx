@@ -1,8 +1,15 @@
 "use client";
 
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { useWallet } from "@/hooks/use-wallet";
-import { ArrowUpRight, Edit, LucideArrowDownRight } from "lucide-react";
+import { cn } from "@/lib/utils";
+import {
+  ArrowDownLeft,
+  ArrowUpRight,
+  Edit,
+  LucideArrowDownRight,
+} from "lucide-react";
 import Image from "next/image";
 import React from "react";
 
@@ -16,19 +23,19 @@ export default function UserDetails() {
 
   if (!connected) return null;
   return (
-    <div className="bg-white/5 rounded-2xl p-4 border border-secondary/30">
+    <div className="flex flex-col gap-1 bg-white/5 rounded-2xl p-4 border border-secondary/30">
       <div className="flex items-center gap-4 mb-4">
-        <div className="w-12 h-12 rounded-full bg-secondary flex items-center justify-center">
+        <div className="w-20 h-20 rounded-full bg-secondary/30 border-2 border-secondary flex items-center justify-center">
           <Image
-            src="/placeholder.svg?height=48&width=48"
+            src="/profile.png"
             alt="Avatar"
-            width={32}
-            height={32}
-            className="w-8 h-8 rounded-full"
+            width={87}
+            height={87}
+            className="w-16 h-16 rounded-full border-2 border-primary"
           />
         </div>
         <div className="flex flex-1 flex-col gap-2">
-          <div className="py-2 px-6 border bg-white/5 items-center justify-center text-xs text-white/30 border-secondary/50 flex flex-1 gap-2 rounded-full">
+          <div className="py-2 px-4 border bg-white/5 items-center justify-center text-xs text-white/30 border-secondary/50 flex flex-1 gap-2 rounded-full">
             {truncateAddress(publicKey || "")}
             <svg
               width="16"
@@ -47,20 +54,33 @@ export default function UserDetails() {
             <div className="text-white/30">Username</div>
             <div className="text-primary/30 font-medium">
               cre8tivebuka{" "}
-              <Button variant={"link"} className="w-0 h-0 p-0">
-                <Edit className="w-2 h-2 text-primary" />
+              <Button variant={"link"} className="w-0 h-0 p-0 text-xs">
+                <Edit className="w-1 h-1 text-primary" />
               </Button>
             </div>
           </div>
           <div className="text-xs flex flex-1 items-center justify-between">
             <div className="text-white/30">Portfolio</div>
-            <div className="text-white bg-secondary font-semibold text-[14px] py-1 px-2 rounded-md">
-              {portfolioChange ? "+" + portfolioChange : "-" + portfolioChange}%
-              <span className="bg-secondary/50 text-white/30 ml-1 p-1 rounded-full">
-                {portfolioChange ? (
-                  <ArrowUpRight className="w-1 h-1 text-primary" />
+            <div
+              className={cn(
+                "text-white flex gap-1 items-center font-medium text-sm py-1 px-2 rounded-md",
+                portfolioChange > 0 ? "bg-secondary" : "bg-red-600/30"
+              )}
+            >
+              {portfolioChange > 0
+                ? "+" + Math.abs(portfolioChange)
+                : "-" + Math.abs(portfolioChange)}
+              %
+              <span
+                className={cn(
+                  "p-1 rounded-md",
+                  portfolioChange > 0 ? "bg-secondary/50" : "bg-red-600/30"
+                )}
+              >
+                {portfolioChange > 0 ? (
+                  <ArrowUpRight className="w-3 h-3 text-primary" />
                 ) : (
-                  <LucideArrowDownRight className="w-1 h-1 text-primary" />
+                  <LucideArrowDownRight className="w-3 h-3 text-red-400" />
                 )}
               </span>
             </div>
@@ -68,9 +88,21 @@ export default function UserDetails() {
         </div>
       </div>
 
-      <div className="bg-secondary rounded-md p-2 mb-4">
-        <div className="text-sm text-gray-400 mb-1">Balance</div>
-        <div className="text-xl font-bold">$543,423,212.32...</div>
+      <div className="text-primary items-center p-3 border rounded-lg gap-3 mb-4 bg-white/5 justify-center text-xs border-primary/50 flex flex-1 ">
+        <Badge variant={"outline"} className="border-primary text-primary py-1 pointer-events-none select-none">
+          Balance
+        </Badge>
+        <div className="text-xl font-bold truncate">$543,423,212.32</div>
+      </div>
+
+      <div className="flex flex-1 justify-between items-center gap-3">
+        <Button variant={"outline"} className="cursor-pointer flex-1 border-primary border">
+          <ArrowUpRight className="w-4 h-4" /> Withdraw
+        </Button>
+
+        <Button variant={"secondary"} className="cursor-pointer flex-1">
+          <ArrowDownLeft className="w-4 h-4" /> Deposit
+        </Button>
       </div>
     </div>
   );

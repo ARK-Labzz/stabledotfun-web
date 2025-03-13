@@ -1,6 +1,7 @@
 import type React from "react"
 import type { Metadata } from "next"
 import { Sora } from "next/font/google"
+// import "@fontsource-variable/sora"
 import "./globals.css"
 import Sidebar from "@/components/sidebar"
 import Header from "@/components/header"
