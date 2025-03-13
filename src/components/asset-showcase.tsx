@@ -18,89 +18,24 @@ import {
   ChevronUp,
 } from "lucide-react";
 import MiniChart from "./mini-chart";
-
-interface AssetProp {
-  id: string;
-  fiat: string;
-  name: string;
-  symbol: string;
-  price: number;
-  image: string;
-  change: number;
-  yield: number;
-}
+import { AssetProp } from "@/types";
 
 interface AssetShowcaseProps {
   className?: string;
-  assets?: AssetProp[];
+  asset: AssetProp[];
 }
 
-const assetMock: AssetProp[] = [
-  {
-    id: "1",
-    fiat: "CETES",
-    name: "Mexican Token",
-    symbol: "MXN",
-    price: 1.3243,
-    change: 23.5,
-    yield: 4.45,
-    image: "/placeholder.svg",
-  },
-  {
-    id: "2",
-    fiat: "EUROB",
-    name: "Euro Bob",
-    symbol: "EUR",
-    price: 1.243,
-    change: -3.5,
-    yield: 0.45,
-    image: "/placeholder.svg",
-  },
 
-  {
-    id: "3",
-    fiat: "GBP",
-    name: "Gilean Tokens",
-    symbol: "GILTS",
-    price: 0.443,
-    change: -1.5,
-    yield: 0.145,
-    image: "/placeholder.svg",
-  },
-
-  {
-    id: "4",
-    fiat: "BRL",
-    name: "Tesour",
-    symbol: "TESOURO",
-    price: 1.008,
-    change: 0.5,
-    yield: 0.5,
-    image: "/placeholder.svg",
-  },
-
-  {
-    id: "5",
-    fiat: "USD",
-    name: "US Troy",
-    symbol: "USTRY",
-    price: 1.3243,
-    change: -3.5,
-    yield: 0.45,
-    image: "/placeholder.svg",
-  },
-];
-
-export default function AssetShowcase({ className }: AssetShowcaseProps) {
+export default function AssetShowcase({ className, asset }: AssetShowcaseProps) {
   const [assets, setAssets] = React.useState<AssetProp[] | null>(null);
   const [asc, setAsc] = React.useState<boolean>(false);
 
   React.useEffect(() => {
-    if (assetMock && assetMock.length > 0) {
+    if (asset && asset.length > 0) {
       // TODO - Replace with the fetch data variable
-      setAssets(assetMock);
+      setAssets(asset);
     }
-  }, []);
+  }, [asset]);
 
   const sortedData = assets?.sort((a, b) =>
     !asc ? a.price - b.price : b.price - a.price
@@ -139,14 +74,14 @@ export default function AssetShowcase({ className }: AssetShowcaseProps) {
       </div>
       <div className="flex flex-col lg:flex-row gap-3">
         <div className="lg:w-3/7 flex">
-          <div className="w-full h-full relative overflow-hidden">
+          <div className="w-full h-full pb-6 md:pb-0 relative overflow-hidden">
             {assets
               ?.filter((_, i) => i < 5)
               .map((coin, index) => (
                 <div
                   key={index}
                   className={cn(
-                    "bg-[#051016] select-none pointer-events-none rounded-lg p-4 border border-primary/50 relative overflow-hidden transition-all duration-200 hover:bg-secondary hover:border-teal/50 hover:shadow-[0_0_15px_rgba(0,194,203,0.3)] group w-60 h-62",
+                    "bg-[#051016] select-none pointer-events-none rounded-lg p-4 border border-primary/50 relative overflow-hidden transition-all duration-200 hover:bg-secondary hover:border-teal/50 hover:shadow-[0_0_15px_rgba(0,194,203,0.3)] group w-50 xl:w-60 xl:h-62",
                     index > 0
                       ? `absolute rounded-xl bg-[#051016]/80 border`
                       : "z-0"
@@ -157,8 +92,8 @@ export default function AssetShowcase({ className }: AssetShowcaseProps) {
                     zIndex: -(1 + index),
                   }}
                 >
-                  <div className="flex justify-between items-start mb-2">
-                    <div className="flex gap-1">
+                  <div className="flex justify-between items-center 2xl:items-start mb-2 gap-1">
+                    <div className="flex">
                       <Image
                         src={coin.image}
                         alt={coin.name}
@@ -168,11 +103,11 @@ export default function AssetShowcase({ className }: AssetShowcaseProps) {
                       />
                     </div>
                     <div className="flex flex-col gap-1">
-                      <div className="text-xs text-gray-400">
+                      <div className="text-[10px] lg:text-xs text-gray-400">
                         Issued by{" "}
                         <span className="text-primary">stable.fun</span>
                       </div>
-                      <div className="text-sm">
+                      <div className="text-xs lg:text-sm">
                         {coin.symbol}s ({coin.fiat})
                       </div>
                     </div>
