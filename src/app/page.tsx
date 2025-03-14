@@ -2,7 +2,7 @@ import TradeWindow from "@/components/trade-window";
 import UserPanel from "./components/user-panel";
 import AssetShowcase from "@/components/asset-showcase";
 import { AssetProp } from "@/types";
-import AssetHolding from "@/components/asset-holding";
+// import AssetHolding from "@/components/asset-holding";
 
 const assetMock: AssetProp[] = [
   {
@@ -98,10 +98,11 @@ export default function Dashboard() {
 
         <div className="flex-1 flex flex-col gap-3">
           <AssetShowcase asset={assetMock} />
-          <AssetHolding asset={assetMock} />
+          {/* <AssetHolding asset={assetMock} /> */}
+          {/* TODO - Fix the Asset Holding component responsiveness */}
         </div>
 
-        <div className="w-full lg:w-78 xl:w-80 space-y-4">
+        <div className="w-full lg:w-75 xl:w-80 space-y-4">
           <TradeWindow className="h-full" />
         </div>
       </div>

@@ -39,7 +39,7 @@ export default function AssetHolding({ className, asset }: AssetHoldingProps) {
   return (
     <div
       className={cn(
-        "flex flex-col gap-1 bg-white/5 rounded-2xl p-4 border border-secondary/30",
+        "flex flex-col gap-1 bg-white/5 rounded-2xl p-4 border border-secondary/30 lg:w-[50vw]",
         className
       )}
     >
@@ -67,7 +67,7 @@ export default function AssetHolding({ className, asset }: AssetHoldingProps) {
         </div>
       </div>
 
-      <div className="lg:flex-1 w-[85vw] mx-auto lg:w-full overflow-x-hidden">
+      <div className="lg:flex-1 w-[85vw] lg:w-1/2 mx-auto overflow-x-hidden">
         <Table>
           <TableHeader>
             <TableRow className="w-full border-none hover:bg-transparent">
