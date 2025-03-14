@@ -13,3 +13,22 @@ export interface AssetProp {
   nextYield: number;
   tnx: string;
 }
+
+export interface TradeWindowProp {
+  className?: string;
+}
+
+export interface TradeWindowToken {
+  id: string;
+  name: string;
+  icon: string;
+  amount: number;
+  ratio: number;
+  fiat: string;
+  symbol: string;
+}
+
+export interface TradeWindowTokenComboBox extends TradeWindowToken {
+  value: string;
+  label: string;
+}
