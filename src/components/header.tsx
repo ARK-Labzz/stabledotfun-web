@@ -99,7 +99,7 @@ export default function Header() {
               </svg>
             </span>
             <span className="text-[10px] lg:text-xs text-white opacity-30 flex gap-1 px-1.5">
-              Landing
+              Lending
               <svg
                 width="16"
                 height="16"
