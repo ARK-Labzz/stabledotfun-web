@@ -1,159 +1,125 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { Home, Package, FileText, HelpCircle, PlusCircle, Menu, X, ChevronRight } from "lucide-react"
-import Image from "next/image"
+import Link from "next/link";
+import Image from "next/image";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  useSidebar,
+} from "./ui/sidebar";
+import {
+  DashboardIcon,
+  StackIcon,
+  CreateFoldericon,
+  CashIcon,
+  HelpIcon,
+  SettingIcon,
+} from "./icons/sidebar";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 
-export default function Sidebar() {
-  const pathname = usePathname()
-  const [isOpen, setIsOpen] = useState(false)
-  const [isMobile, setIsMobile] = useState(false)
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768)
-    }
-
-    checkMobile()
-    window.addEventListener("resize", checkMobile)
-
-    return () => window.removeEventListener("resize", checkMobile)
-  }, [])
-
-  const toggleSidebar = () => {
-    setIsOpen(!isOpen)
-  }
+export default function AppSidebar() {
+  const pathname = usePathname();
+  const {
+    state,
+    // open,
+    // setOpen,
+    // openMobile,
+    // setOpenMobile,
+    isMobile,
+    // toggleSidebar,
+  } = useSidebar();
 
   const navItems = [
-    { icon: Home, label: "Dashboard", href: "/" },
-    { icon: Package, label: "Assets", href: "/assets" },
-    { icon: FileText, label: "Redeem", href: "/redeem" },
-    { icon: PlusCircle, label: "Create", href: "/create" },
-    { icon: HelpCircle, label: "Help", href: "/help" },
-  ]
-
-  // Close sidebar when clicking outside on mobile
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const sidebar = document.getElementById("sidebar")
-      const toggleButton = document.getElementById("sidebar-toggle")
-
-      if (
-        isMobile &&
-        isOpen &&
-        sidebar &&
-        !sidebar.contains(event.target as Node) &&
-        toggleButton &&
-        !toggleButton.contains(event.target as Node)
-      ) {
-        setIsOpen(false)
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutside)
-    return () => document.removeEventListener("mousedown", handleClickOutside)
-  }, [isMobile, isOpen])
-
-  // Close sidebar when route changes on mobile
-  useEffect(() => {
-    if (isMobile) {
-      setIsOpen(false)
-    }
-  }, [pathname, isMobile])
+    { icon: DashboardIcon, label: "Dashboard", href: "/" },
+    { icon: StackIcon, label: "Assets", href: "/assets" },
+    { icon: CreateFoldericon, label: "Redeem", href: "/redeem" },
+    { icon: CashIcon, label: "Create", href: "/create" },
+    { icon: HelpIcon, label: "Help", href: "/help" },
+    { icon: SettingIcon, label: "Setting", href: "/setting" },
+  ];
 
   return (
-    <>
-      {/* Mobile menu button */}
-      <button
-        id="sidebar-toggle"
-        className="fixed z-50 top-4 left-4 md:hidden text-white bg-sidebar rounded-full p-2"
-        onClick={toggleSidebar}
-      >
-        {isOpen ? <X size={20} /> : <Menu size={20} />}
-      </button>
-
-      {/* Overlay for mobile */}
-      {isMobile && isOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-30" onClick={() => setIsOpen(false)} />
-      )}
-
-      {/* Sidebar */}
-      <div
-        id="sidebar"
-        className={`fixed md:static z-40 h-full w-16 bg-sidebar flex flex-col items-center py-6 transition-all duration-300 ${
-          isOpen || !isMobile ? "left-0" : "-left-16"
-        }`}
-      >
-        <div className="mb-8">
-          <Link href="/" className="block">
-            <div className="w-10 h-10 rounded-full bg-teal flex items-center justify-center">
-              <Image src="/stable-fun.svg" alt="Logo" className="w-6 h-6" width={36} height={36} />
-            </div>
-          </Link>
-        </div>
-
-        <nav className="flex-1 flex flex-col items-center gap-6">
-          {navItems.map((item) => {
-            const isActive = pathname === item.href
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`p-2 rounded-md transition-colors relative group ${
-                  isActive ? "bg-secondary text-teal" : "text-gray-400 hover:text-white"
-                }`}
-              >
-                <item.icon size={20} />
-                <span className="sr-only">{item.label}</span>
-
-                {/* Mobile tooltip */}
-                {isMobile && isOpen && (
-                  <div className="absolute left-14 top-1/2 -translate-y-1/2 bg-secondary text-white px-3 py-1 rounded-md text-sm whitespace-nowrap">
-                    {item.label}
-                    <div className="absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 transform rotate-45 w-2 h-2 bg-secondary"></div>
-                  </div>
-                )}
-
-                {/* Desktop tooltip */}
-                {!isMobile && (
-                  <div className="absolute left-14 top-1/2 -translate-y-1/2 bg-secondary text-white px-3 py-1 rounded-md text-sm whitespace-nowrap opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity">
-                    {item.label}
-                    <div className="absolute left-0 top-1/2 -translate-x-1/2 -translate-y-1/2 transform rotate-45 w-2 h-2 bg-secondary"></div>
-                  </div>
-                )}
-              </Link>
-            )
-          })}
-        </nav>
-      </div>
-
-      {/* Mobile slide-in menu (creative solution) */}
-      {isMobile && isOpen && (
-        <div className="fixed top-0 left-16 z-40 h-full w-48 bg-sidebar border-r border-border py-6 px-4 transition-all duration-300">
-          <div className="flex flex-col gap-4">
-            <h3 className="text-lg font-bold text-white mb-4">Menu</h3>
-            {navItems.map((item) => {
-              const isActive = pathname === item.href
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={`flex items-center gap-3 p-2 rounded-md transition-colors ${
-                    isActive ? "bg-secondary text-teal" : "text-gray-400 hover:text-white hover:bg-secondary/30"
-                  }`}
+    <Sidebar collapsible="icon" className="border-none">
+      <SidebarHeader className="flex flex-col gap-4">
+        {state === "collapsed" && !isMobile ? (
+          <>
+            <Link href="/" className="block">
+              <Image
+                src="/stable-fun.svg"
+                alt="Logo"
+                className="w-6 h-6"
+                width={36}
+                height={36}
+              />
+            </Link>
+            <svg
+              width="32"
+              height="1"
+              viewBox="0 0 32 1"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <line
+                y1="0.5"
+                x2="32"
+                y2="0.5"
+                stroke="url(#paint0_linear_738_1146)"
+              />
+              <defs>
+                <linearGradient
+                  id="paint0_linear_738_1146"
+                  x1="0"
+                  y1="1.5"
+                  x2="32"
+                  y2="1.5"
+                  gradientUnits="userSpaceOnUse"
                 >
-                  <item.icon size={18} />
-                  <span>{item.label}</span>
-                  {isActive && <ChevronRight size={16} className="ml-auto" />}
-                </Link>
-              )
-            })}
-          </div>
-        </div>
-      )}
-    </>
-  )
-}
+                  <stop stopColor="white" stopOpacity="0" />
+                  <stop offset="0.124" stopColor="#00BCD4" />
+                  <stop offset="1" stopColor="#CCCCCC" stopOpacity="0" />
+                </linearGradient>
+              </defs>
+            </svg>
+          </>
+        ) : (
+          <Link href={"/"}>
+            <Image
+              src={"/stable-fun-logo.svg"}
+              alt="Logo"
+              width={140}
+              height={34}
+            />
+          </Link>
+        )}
+      </SidebarHeader>
 
+      <SidebarContent className="py-2">
+        <SidebarMenu className="px-1 gap-3">
+          {navItems.map((project) => (
+            <SidebarMenuItem key={project.label}>
+              <SidebarMenuButton
+                className={cn(
+                  "p-2 hover:bg-white/5 hover:text-primary",
+                  pathname.startsWith(project.href)
+                    ? "border border-primary/10 bg-white/5"
+                    : ""
+                )}
+                asChild
+              >
+                <Link href={project.href} className="text-white text-sm">
+                  <project.icon />
+                  <span>{project.label}</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          ))}
+        </SidebarMenu>
+      </SidebarContent>
+    </Sidebar>
+  );
+}
