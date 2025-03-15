@@ -1,14 +1,18 @@
-import { Button } from "@/components/ui/button"
-import { Copy, Info } from "lucide-react"
-import RedeemWindow from "./components/redeem-window"
+import { Button } from "@/components/ui/button";
+import { Copy, Info } from "lucide-react";
+import RedeemWindow from "./components/redeem-window";
+import { stablecoins, token } from "@/static-data/token";
 
 export default function RedeemPage() {
   return (
     <div className="space-y-2">
-      <div className="text-xs text-white/50 mb-3">Exchange your <span className="text-primary">stablecoin</span> and get your initial supply</div>
+      <div className="text-xs text-white/50 mb-3">
+        Exchange your <span className="text-primary">stablecoin</span> and get
+        your initial supply
+      </div>
 
       <div className="flex flex-col lg:flex-row gap-4">
-        <RedeemWindow />
+        <RedeemWindow stablecoins={stablecoins} token={token} />
 
         {/* <div className="w-full lg:w-80 space-y-4">
           <div className="bg-card rounded-lg p-4 border border-border">
@@ -57,6 +61,5 @@ export default function RedeemPage() {
         </div> */}
       </div>
     </div>
-  )
+  );
 }
-

@@ -28,13 +28,17 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { TradeWindowToken, TradeWindowTokenComboBox } from "@/types";
-import { stablecoins, token } from "@/static-data/token";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { useWallet } from "@/hooks/use-wallet";
 import { toast } from "sonner";
 import { MaxInput } from "@/components/max-input";
+
+interface RedeemWindowProp {
+  token: TradeWindowToken[];
+  stablecoins: TradeWindowToken[];
+}
 
 const RedeemSchema = z.object({
   from: z.string({
@@ -48,7 +52,7 @@ const RedeemSchema = z.object({
   }),
 });
 
-export default function RedeemWindow() {
+export default function RedeemWindow({ token, stablecoins }: RedeemWindowProp) {
   const { publicKey } = useWallet();
   const [activeToken, setActiveToken] = React.useState<TradeWindowToken | null>(
     null
@@ -61,7 +65,6 @@ export default function RedeemWindow() {
   const [stables, setStables] = React.useState<
     TradeWindowTokenComboBox[] | null
   >(null);
-  // const [amount, setAmount] = React.useState<number>(0);
 
   React.useEffect(() => {
     if (token && token.length > 0) {
@@ -73,7 +76,7 @@ export default function RedeemWindow() {
       }));
       setTokens(output);
     } // TODO - Make this reset the tokens when fetched from API
-  }, []);
+  }, [token]);
 
   React.useEffect(() => {
     if (stablecoins && stablecoins.length > 0) {
@@ -85,7 +88,7 @@ export default function RedeemWindow() {
       }));
       setStables(output);
     } // TODO - Make this reset the stablecoin when fetched from API
-  }, []);
+  }, [stablecoins]);
 
   const tokenName = activeToken ? activeToken.name.toUpperCase() + "s" : "Null";
   const tokenRatioChange = activeToken
@@ -364,7 +367,7 @@ export default function RedeemWindow() {
         </form>
       </Form>
 
-      <div className="flex items-center gap-2 justify-center text-xs text-gray-400 mb-6">
+      <div className="flex items-center gap-2 justify-center text-xs text-white/50 rounded-lg bg-white/5 border border-white/10 p-2 mb-6">
         <Info size={14} />
         To redeem your stablecoins, transfer them to the wallet address of your
         choice. Below is your unique redemption account.
