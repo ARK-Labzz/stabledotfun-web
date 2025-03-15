@@ -32,6 +32,9 @@ import { stablecoins, token } from "@/static-data/token";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import { useWallet } from "@/hooks/use-wallet";
+import { toast } from "sonner";
+import { MaxInput } from "@/components/max-input";
 
 const RedeemSchema = z.object({
   from: z.string({
@@ -40,9 +43,13 @@ const RedeemSchema = z.object({
   to: z.string({
     required_error: "Please select a token.",
   }),
+  amount: z.number({
+    required_error: "Please input an amount.",
+  }),
 });
 
 export default function RedeemWindow() {
+  const { publicKey } = useWallet();
   const [activeToken, setActiveToken] = React.useState<TradeWindowToken | null>(
     null
   );
@@ -98,6 +105,15 @@ export default function RedeemWindow() {
     console.log(data);
     console.info({ tokenName, tokenRatioChange, tokens, activeStable });
   }
+
+  const handleCopy = () => {
+    if (publicKey) navigator.clipboard.writeText(publicKey);
+    toast("Address Copied!");
+  };
+
+  const handleMaxClick = () => {
+    form.setValue("amount", activeToken?.amount || 0, { shouldValidate: true });
+  };
 
   return (
     <div className="flex-1 rounded-lg p-6 border border-white/10 bg-white/5">
@@ -171,7 +187,10 @@ export default function RedeemWindow() {
                                 />
                               </>
                             ) : (
-                              "Select token"
+                              <div className="flex gap-2 items-center">
+                                <ChevronDown className="opacity-50" />
+                                Select token
+                              </div>
                             )}
                           </Button>
                         </FormControl>
@@ -248,7 +267,7 @@ export default function RedeemWindow() {
                                           (token) => token.value === field.value
                                         )?.icon || "/placeholder.svg"
                                       }
-                                      className="h-4 w-4 rounded-full bg-white "
+                                      className="h-4 w-4 overflow-hidden rounded-full bg-white "
                                       width={16}
                                       height={16}
                                       alt={
@@ -268,7 +287,10 @@ export default function RedeemWindow() {
                                 </div>
                               </>
                             ) : (
-                              "Select stablecoin"
+                              <div className="flex gap-2 items-center">
+                                <ChevronDown className="opacity-50" />
+                                Select stablecoin
+                              </div>
                             )}
                           </Button>
                         </FormControl>
@@ -308,54 +330,58 @@ export default function RedeemWindow() {
                 )}
               />
             </div>
-            {/* <div>
-              <div className="text-sm text-gray-400 mb-2">To</div>
-              <div className="bg-secondary rounded-md p-3 border border-border">
-                <div className="flex justify-between items-center">
-                  <div className="font-medium flex items-center gap-1">
-                    - USDC <Info size={14} className="text-blue-400" />
-                  </div>
-                  <div className="text-xs bg-secondary px-2 py-1 rounded">
-                    USD
-                  </div>
-                </div>
-              </div>
-            </div> */}
           </div>
 
           <div className="mb-6">
-            <div className="text-sm text-gray-400 mb-2">Amount</div>
-            <div className="bg-secondary rounded-md p-4 border border-border">
-              <div className="flex justify-between items-center mb-2">
-                <div className="text-2xl">0</div>
-                <button className="bg-teal text-white px-3 py-1 rounded text-xs">
-                  MAX
-                </button>
-              </div>
-              <div className="text-xs text-gray-400">
-                Available: {activeToken?.symbol}s{" "}
-                {activeToken?.amount.toLocaleString("en", {
-                  maximumFractionDigits: 3,
-                })}
-              </div>
+            <div>
+              <FormField
+                control={form.control}
+                name="amount"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col">
+                    <FormLabel className="text-sm text-gray-400 mb-2">
+                      Amount
+                    </FormLabel>
+                    <FormControl>
+                      <MaxInput
+                        className=""
+                        placeholder="0.00"
+                        {...field}
+                        onMaxClick={handleMaxClick}
+                        availableAmount={
+                          activeToken?.amount.toLocaleString("en", {
+                            maximumFractionDigits: 3,
+                          }) || 0
+                        }
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
           </div>
         </form>
       </Form>
 
-      <div className="flex items-center justify-center text-xs text-gray-400 mb-6">
-        <Info size={14} className="mr-2" />
+      <div className="flex items-center gap-2 justify-center text-xs text-gray-400 mb-6">
+        <Info size={14} />
         To redeem your stablecoins, transfer them to the wallet address of your
         choice. Below is your unique redemption account.
       </div>
 
       <div>
-        <div className="text-sm text-gray-400 mb-2">Destination Address</div>
-        <div className="flex items-center gap-2 bg-secondary p-3 rounded-md border border-border">
-          <div className="truncate text-sm flex-1">
-            - Cs1tBHsL5KcQybQqywKFQ5qWfUEdfX2copkPH7UBCNKL
+        <div className="text-sm text-white/50 mb-2">Destination Address</div>
+        <div className="flex items-center gap-2 bg-white/5 p-3 rounded-md border border-white/10">
+          <ChevronDown className="w-3 h-3" />
+          <div className="truncate w-10 lg:w-full text-sm flex-1 flex flex-wrap items-center gap-2">
+            {publicKey || "Null"}
           </div>
-          <Copy size={16} className="text-gray-400 flex-shrink-0" />
+          <Copy
+            onClick={handleCopy}
+            size={16}
+            className="text-gray-400 flex-shrink-0"
+          />
         </div>
       </div>
     </div>
