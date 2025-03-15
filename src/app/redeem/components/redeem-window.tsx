@@ -45,7 +45,7 @@ const RedeemSchema = z.object({
     required_error: "Please select a token.",
   }),
   to: z.string({
-    required_error: "Please select a token.",
+    required_error: "Please select a stablecoin.",
   }),
   amount: z.number({
     required_error: "Please input an amount.",
