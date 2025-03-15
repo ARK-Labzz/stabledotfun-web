@@ -8,6 +8,7 @@ interface MaxInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   availableAmount?: string | number;
   onMaxClick?: () => void;
   showInfoIcon?: boolean;
+  symbol?: string;
   className?: string;
 }
 
@@ -16,6 +17,7 @@ export function MaxInput({
   onMaxClick,
   showInfoIcon = false,
   className,
+  symbol,
   ...props
 }: MaxInputProps) {
   return (
@@ -41,8 +43,12 @@ export function MaxInput({
       </div>
       {availableAmount && (
         <div className="flex flex-wrap gap-1.5 items-center mt-2 text-sm text-muted-foreground">
-          Available:
-          <span className="text-primary">{availableAmount}</span>
+          Available: {symbol && <>{`${symbol} `} </>}
+          <span className="text-primary">
+            {Number(availableAmount).toLocaleString("en", {
+              maximumFractionDigits: 3,
+            })}
+          </span>
           {showInfoIcon && (
             <Info className="h-4 w-4 ml-1 text-muted-foreground cursor-help" />
           )}

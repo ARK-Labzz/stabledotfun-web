@@ -26,7 +26,6 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
 import { TradeWindowToken, TradeWindowTokenComboBox } from "@/types";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -34,25 +33,16 @@ import Image from "next/image";
 import { useWallet } from "@/hooks/use-wallet";
 import { toast } from "sonner";
 import { MaxInput } from "@/components/max-input";
+import { RedeemSchema } from "@/lib/validation";
+import { useRedeem } from "./redeem-context";
 
 interface RedeemWindowProp {
   token: TradeWindowToken[];
   stablecoins: TradeWindowToken[];
 }
 
-const RedeemSchema = z.object({
-  from: z.string({
-    required_error: "Please select a token.",
-  }),
-  to: z.string({
-    required_error: "Please select a stablecoin.",
-  }),
-  amount: z.number({
-    required_error: "Please input an amount.",
-  }),
-});
-
 export default function RedeemWindow({ token, stablecoins }: RedeemWindowProp) {
+  const { set } = useRedeem();
   const { publicKey } = useWallet();
   const [activeToken, setActiveToken] = React.useState<TradeWindowToken | null>(
     null
@@ -90,23 +80,20 @@ export default function RedeemWindow({ token, stablecoins }: RedeemWindowProp) {
     } // TODO - Make this reset the stablecoin when fetched from API
   }, [stablecoins]);
 
-  const tokenName = activeToken ? activeToken.name.toUpperCase() + "s" : "Null";
-  const tokenRatioChange = activeToken
-    ? Number(activeToken.amount.toPrecision(3)).toLocaleString("en", {
-        // notation: "compact",
-        // HACK - Change uncomment if you want output to look like 10K, 1Bn, etc
-        compactDisplay: "long",
-        maximumFractionDigits: 3,
-      })
-    : 0;
-
   const form = useForm<z.infer<typeof RedeemSchema>>({
     resolver: zodResolver(RedeemSchema),
   });
 
+  React.useEffect(() => console.log(activeToken?.amount), [activeToken]);
+
+  const watch = form.watch();
+
+  React.useEffect(() => {
+    set(activeToken, activeStable, watch.amount || 0);
+  }, [activeStable, activeToken, set, watch]);
+
   function onSubmit(data: z.infer<typeof RedeemSchema>) {
     console.log(data);
-    console.info({ tokenName, tokenRatioChange, tokens, activeStable });
   }
 
   const handleCopy = () => {
@@ -177,7 +164,7 @@ export default function RedeemWindow({ token, stablecoins }: RedeemWindowProp) {
                                         activeToken?.name.toLowerCase()
                                     )?.icon || "/placeholder.svg"
                                   }
-                                  className="h-9 w-9 rounded-lg bg-gray-500 "
+                                  className="h-9 w-9 rounded-lg bg-white/50"
                                   width={35}
                                   height={35}
                                   alt={
@@ -209,7 +196,7 @@ export default function RedeemWindow({ token, stablecoins }: RedeemWindowProp) {
                             <CommandGroup>
                               {tokens?.map((token) => (
                                 <CommandItem
-                                  value={token.label}
+                                  value={token.id}
                                   key={token.value}
                                   onSelect={() => {
                                     form.setValue("from", token.value);
@@ -270,7 +257,7 @@ export default function RedeemWindow({ token, stablecoins }: RedeemWindowProp) {
                                           (token) => token.value === field.value
                                         )?.icon || "/placeholder.svg"
                                       }
-                                      className="h-4 w-4 overflow-hidden rounded-full bg-white "
+                                      className="h-4 w-4 overflow-hidden rounded-full bg-white/5"
                                       width={16}
                                       height={16}
                                       alt={
@@ -309,7 +296,7 @@ export default function RedeemWindow({ token, stablecoins }: RedeemWindowProp) {
                             <CommandGroup>
                               {stables?.map((token) => (
                                 <CommandItem
-                                  value={token.label}
+                                  value={token.id}
                                   key={token.id}
                                   onSelect={() => {
                                     form.setValue("to", token.value);
@@ -349,13 +336,9 @@ export default function RedeemWindow({ token, stablecoins }: RedeemWindowProp) {
                       <MaxInput
                         className=""
                         placeholder="0.00"
-                        {...field}
                         onMaxClick={handleMaxClick}
-                        availableAmount={
-                          activeToken?.amount.toLocaleString("en", {
-                            maximumFractionDigits: 3,
-                          }) || 0
-                        }
+                        availableAmount={activeToken?.amount || 0}
+                        {...field}
                       />
                     </FormControl>
                     <FormMessage />

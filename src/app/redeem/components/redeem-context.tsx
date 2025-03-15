@@ -7,14 +7,18 @@ import React from "react";
 interface RedeemContextType {
   from: TradeWindowToken | null;
   to: TradeWindowToken | null;
-  amount: number;
-  set?: (from: TradeWindowToken, to: TradeWindowToken, amount: number) => void;
+  amount: number | null;
+  set: (
+    from: TradeWindowToken | null,
+    to: TradeWindowToken | null,
+    amount: number | null
+  ) => void;
 }
 
 const RedeemContext = createContext<RedeemContextType>({
   from: null,
   to: null,
-  amount: 0,
+  amount: null,
   set: () => {},
 });
 
@@ -23,7 +27,7 @@ export const useRedeem = () => useContext(RedeemContext);
 export default function RedeemProvider({ children }: { children: ReactNode }) {
   const [from, setFrom] = React.useState<TradeWindowToken | null>(null);
   const [to, setTo] = React.useState<TradeWindowToken | null>(null);
-  const [amount, setAmount] = React.useState<number>(0);
+  const [amount, setAmount] = React.useState<number | null>(null);
 
   React.useEffect(() => {
     const savedRedeemAsset = localStorage.getItem("redeemAsset");
@@ -37,9 +41,9 @@ export default function RedeemProvider({ children }: { children: ReactNode }) {
   }, [setFrom]);
 
   const set = (
-    from: TradeWindowToken,
-    to: TradeWindowToken,
-    amount: number
+    from: TradeWindowToken | null,
+    to: TradeWindowToken | null,
+    amount: number | null
   ) => {
     setFrom(from);
     setTo(to);
