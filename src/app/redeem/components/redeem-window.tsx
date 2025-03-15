@@ -232,42 +232,44 @@ export default function RedeemWindow() {
                               !field.value && "text-muted-foreground"
                             )}
                           >
-                            <div className="flex gap-2 items-center">
-                              <ChevronDown className="opacity-50" />
-                              {field.value ? (
-                                <div className="flex gap-2 font-normal text-xl items-center">
+                            {field.value ? (
+                              <>
+                                <div className="flex gap-2 items-center">
+                                  <ChevronDown className="opacity-50" />
+                                  <div className="flex gap-2 font-normal text-xl items-center">
+                                    {
+                                      stables?.find(
+                                        (token) => token.value === field.value
+                                      )?.symbol
+                                    }
+                                    <Image
+                                      src={
+                                        stables?.find(
+                                          (token) => token.value === field.value
+                                        )?.icon || "/placeholder.svg"
+                                      }
+                                      className="h-4 w-4 rounded-full bg-white "
+                                      width={16}
+                                      height={16}
+                                      alt={
+                                        stables?.find(
+                                          (token) => token.value === field.value
+                                        )?.symbol || "Coin"
+                                      }
+                                    />
+                                  </div>
+                                </div>
+                                <div className="text-xs bg-white/5 border border-white/10 py-1 px-2 rounded-lg">
                                   {
                                     stables?.find(
                                       (token) => token.value === field.value
-                                    )?.symbol
+                                    )?.fiat
                                   }
-                                  <Image
-                                    src={
-                                      stables?.find(
-                                        (token) => token.value === field.value
-                                      )?.icon || "/placeholder.svg"
-                                    }
-                                    className="h-4 w-4 rounded-full bg-white "
-                                    width={16}
-                                    height={16}
-                                    alt={
-                                      stables?.find(
-                                        (token) => token.value === field.value
-                                      )?.symbol || "Coin"
-                                    }
-                                  />
                                 </div>
-                              ) : (
-                                "Select stablecoin"
-                              )}
-                            </div>
-                            <div className="text-xs bg-white/5 border border-white/10 py-1 px-2 rounded-lg">
-                              {
-                                stables?.find(
-                                  (token) => token.value === field.value
-                                )?.fiat
-                              }
-                            </div>
+                              </>
+                            ) : (
+                              "Select stablecoin"
+                            )}
                           </Button>
                         </FormControl>
                       </PopoverTrigger>
