@@ -4,13 +4,13 @@ import RedeemWindow from "./components/redeem-window"
 
 export default function RedeemPage() {
   return (
-    <div className="space-y-4">
-      <div className="text-xs text-white/50">Exchange your <span className="text-primary">stablecoin</span> and get your initial supply</div>
+    <div className="space-y-2">
+      <div className="text-xs text-white/50 mb-3">Exchange your <span className="text-primary">stablecoin</span> and get your initial supply</div>
 
       <div className="flex flex-col lg:flex-row gap-4">
         <RedeemWindow />
 
-        <div className="w-full lg:w-80 space-y-4">
+        {/* <div className="w-full lg:w-80 space-y-4">
           <div className="bg-card rounded-lg p-4 border border-border">
             <div className="text-xs text-gray-400 mb-1">Issued by cre8tivebuka</div>
             <div className="font-medium mb-4">MXNs (CETES)</div>
@@ -54,7 +54,7 @@ export default function RedeemPage() {
               <Button className="w-full">Redeem MXNs</Button>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   )

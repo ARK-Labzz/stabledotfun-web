@@ -29,7 +29,9 @@ export default function RootLayout({
             <AppSidebar />
             <div className="flex min-h-screen flex-col flex-1">
               <Header />
-              <main className="flex-1 p-4">{children}</main>
+              <main className="flex-1 p-4 pt-30 mt-10 md:mt-0 md:pt-4">
+                {children}
+              </main>
             </div>
           </WalletProvider>
         </SidebarProvider>
