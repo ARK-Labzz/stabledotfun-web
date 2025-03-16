@@ -1,27 +1,133 @@
 "use client";
 
+import { cn } from "@/lib/utils";
+import { AssetProp } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
+import { ExternalLink } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
-export type Payment = {
-  id: string;
-  amount: number;
-  status: "pending" | "processing" | "success" | "failed";
-  email: string;
-};
-
-export const columns: ColumnDef<Payment>[] = [
+export const columns: ColumnDef<AssetProp>[] = [
   {
-    accessorKey: "status",
-    header: "Status",
+    accessorKey: "name",
+    header: "Name",
+    cell: ({ row }) => {
+      const { image, name, symbol, fiat } = row.original;
+      return (
+        <div className="flex items-center gap-2">
+          <Image
+            src={image}
+            alt={name}
+            width={28}
+            height={28}
+            className="rounded-md bg-white/5"
+          />
+          {symbol}s ({fiat})
+        </div>
+      );
+    },
   },
   {
-    accessorKey: "email",
-    header: "Email",
+    accessorKey: "price",
+    header: "Price",
+    cell: ({ row }) => {
+      const { price, change } = row.original;
+
+      return (
+        <div
+          className={cn(
+            change >= 0 ? "text-primary" : "text-red-400"
+          )}
+        >
+          $
+          {price.toLocaleString("en", {
+            compactDisplay: "long",
+            maximumFractionDigits: 3,
+          })}
+        </div>
+      );
+    },
   },
   {
     accessorKey: "amount",
     header: "Amount",
+    cell: ({ row }) => {
+      const { amount } = row.original;
+
+      return (
+        <div>
+          {amount.toLocaleString("en", {
+            compactDisplay: "long",
+            maximumFractionDigits: 3,
+          })}
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "initialInvestment",
+    header: "Initial Investment",
+    cell: ({ row }) => {
+      const { initialInvestment } = row.original;
+
+      return (
+        <div>
+          $
+          {initialInvestment.toLocaleString("en", {
+            compactDisplay: "long",
+            maximumFractionDigits: 3,
+          })}
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "currentInvestment",
+    header: "Current Investment",
+    cell: ({ row }) => {
+      const { currentInvestment } = row.original;
+
+      return (
+        <div>
+          $
+          {currentInvestment.toLocaleString("en", {
+            compactDisplay: "long",
+            maximumFractionDigits: 3,
+          })}
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "nextYield",
+    header: "Next Yield",
+    cell: ({ row }) => {
+      const { nextYield } = row.original;
+
+      return (
+        <div className={cn(nextYield >= 0 ? "text-primary" : "text-red-400")}>
+          $
+          {nextYield.toLocaleString("en", {
+            compactDisplay: "long",
+            maximumFractionDigits: 3,
+          })}
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "tnx",
+    header: "TNX",
+    cell: ({ row }) => {
+      const { tnx } = row.original;
+
+      return (
+        <div className="text-center">
+          <Link href={tnx}>
+            <ExternalLink className="text-primary w-3 h-3" />
+          </Link>
+        </div>
+      );
+    },
   },
 ];

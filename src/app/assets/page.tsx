@@ -2,10 +2,17 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { token } from "@/static-data/token";
 import AssetWindow from "./components/asset-window";
+import { AssetProp } from "@/types";
 
-export default function AssetsPage() {
+async function getData(): Promise<AssetProp[]> {
+  // Fetch data from your API here.
+  return token as AssetProp[]
+}
+
+export default async function AssetsPage() {
+   const data = await getData();
   // TODO - Implement token fetch api to replace the static `token` import
-  if (!token || token.length < 1) return <NoAssetFound />;
+  if (!data || data.length < 1) return <NoAssetFound />;
 
   return (
     <div className="space-y-2">
@@ -15,7 +22,7 @@ export default function AssetsPage() {
       </div>
 
       <div className="flex flex-col lg:flex-row gap-4">
-        <AssetWindow />
+        <AssetWindow data={data} />
       </div>
     </div>
   );
