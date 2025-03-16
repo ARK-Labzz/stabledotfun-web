@@ -11,7 +11,7 @@ interface AssetWindowProp {
 
 export default function AssetWindow({data}: AssetWindowProp) {
   return (
-    <div className="flex-1 rounded-lg p-6 border border-white/10 bg-white/5">
+    <div className="lg:flex-1 rounded-lg p-6 border border-white/10 bg-white/5">
       <DataTable columns={columns} data={data} />
     </div>
   );

@@ -45,7 +45,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex justify-between mb-4">
+      <div className="flex flex-col gap-3 lg:flex-row justify-between mb-4">
         <div className="flex items-center gap-2">
           <span className="text-xs font-normal text-primary">
             Available coins
@@ -69,7 +69,7 @@ export function DataTable<TData, TValue>({
           </Button>
         </div>
       </div>
-      <div className="rounded-md border border-white/10">
+      <div className="rounded-md border border-white/10 w-30 lg:w-auto overflow-x-auto">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -123,7 +123,7 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
+      <div className="flex items-center lg:justify-end space-x-2 py-4">
         <Button
           variant="outline"
           size="sm"

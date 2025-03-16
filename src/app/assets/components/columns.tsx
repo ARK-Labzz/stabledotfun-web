@@ -14,7 +14,7 @@ export const columns: ColumnDef<AssetProp>[] = [
     cell: ({ row }) => {
       const { image, name, symbol, fiat } = row.original;
       return (
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 pr-3">
           <Image
             src={image}
             alt={name}
