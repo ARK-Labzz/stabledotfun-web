@@ -1,6 +1,6 @@
 import { AssetProp, TradeWindowToken } from "@/types";
 
-export const token: (AssetProp | Partial<TradeWindowToken>)[] = [
+export const token: (AssetProp | TradeWindowToken)[] = [
   {
     id: "1",
     name: "Mexican Token",

@@ -20,10 +20,8 @@ import {
 } from "@/components/ui/popover";
 import { Check, ChevronDown } from "lucide-react";
 import { TradeWindowProp, TradeWindowToken, TradeWindowTokenComboBox } from "@/types";
-import { token } from "@/static-data/token";
 
-
-export default function TradeWindow({ className }: TradeWindowProp) {
+export default function TradeWindow({ className, token }: TradeWindowProp) {
   const [open, setOpen] = React.useState(false);
   const [tradeType, setTradeType] = React.useState<"buy" | "sell">("buy");
   const [activeToken, setActiveToken] = React.useState<TradeWindowToken | null>(
@@ -44,7 +42,7 @@ export default function TradeWindow({ className }: TradeWindowProp) {
       }));
       setTokens(output);
     } // TODO - Make this reset the tokens when fetched from API
-  }, []);
+  }, [token]);
 
   const tokenName = activeToken ? activeToken.name.toUpperCase() + "s" : "Null";
   const tokenRatioChange = activeToken
@@ -81,7 +79,7 @@ export default function TradeWindow({ className }: TradeWindowProp) {
                       {
                         tokens.find(
                           (token) =>
-                            token.value === activeToken?.name.toLowerCase()
+                            token.value === activeToken?.symbol.toLowerCase()
                         )?.label
                       }
                       {"s"}
