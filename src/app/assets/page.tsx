@@ -1,8 +1,10 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { token } from "@/static-data/token";
+import { stablecoins, token } from "@/static-data/token";
 import AssetWindow from "./components/asset-window";
-import { AssetProp } from "@/types";
+import { AssetProp, TradeWindowToken } from "@/types";
+import SellWindow from "./components/sell-window";
+import { PayoutTimeline } from "@/components/payout-timeline";
 
 async function getData(): Promise<AssetProp[]> {
   // Fetch data from your API here.
@@ -54,6 +56,13 @@ export default async function AssetsPage() {
 
       <div className="flex flex-col lg:flex-row gap-4">
         <AssetWindow data={data} />
+        <div className="flex flex-col gap-4">
+          <SellWindow
+            stablecoins={stablecoins}
+            token={data as unknown as TradeWindowToken[]}
+          />
+          <PayoutTimeline />
+        </div>
       </div>
     </div>
   );
