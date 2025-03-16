@@ -29,11 +29,7 @@ import { SidebarTrigger, useSidebar } from "./ui/sidebar";
 export default function Header() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isMobileSearch, setMobileSearch] = useState(false);
-  const {
-    openMobile,
-    setOpenMobile,
-    isMobile,
-  } = useSidebar();
+  const { openMobile, setOpenMobile, isMobile } = useSidebar();
 
   const toggleSidebar = () => {
     setOpenMobile(!openMobile);
@@ -133,7 +129,9 @@ export default function Header() {
                   ? "fixed z-20 top-18 left-1/2 -translate-x-1/2  w-full h-20 lg:h-auto flex justify-center p-4 bg-black/90 backdrop-blur-lg"
                   : "hidden lg:flex lg:relative lg:top-0 lg:p-0 lg:backdrop-blur-none lg:bg-transparent items-center"
               )}
-              onClick={() => setMobileSearch((prev) => !prev)}
+              onClick={() => {
+                if (isMobile) setMobileSearch((prev) => !prev);
+              }}
             >
               <input
                 type="text"

@@ -26,12 +26,7 @@ export default function AppSidebar() {
   const pathname = usePathname();
   const {
     state,
-    // open,
-    // setOpen,
-    // openMobile,
-    // setOpenMobile,
     isMobile,
-    // toggleSidebar,
   } = useSidebar();
 
   const navItems = [
@@ -105,7 +100,7 @@ export default function AppSidebar() {
               <SidebarMenuButton
                 className={cn(
                   "p-2 hover:bg-white/5 hover:text-primary",
-                  pathname.startsWith(project.href)
+                  pathname === project.href
                     ? "border border-primary/10 bg-white/5"
                     : ""
                 )}
