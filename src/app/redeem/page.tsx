@@ -2,8 +2,16 @@ import RedeemWindow from "./components/redeem-window";
 import { stablecoins, token } from "@/static-data/token";
 import RedeemProvider from "./components/redeem-context";
 import RedeemMiniWindow from "./components/redeem-mini-window";
+import { TradeWindowToken } from "@/types";
 
-export default function RedeemPage() {
+async function getData(): Promise<TradeWindowToken[]> {
+  // Fetch data from your API here.
+  return token as TradeWindowToken[];
+}
+
+export default async function RedeemPage() {
+  const token = await getData();
+
   return (
     <RedeemProvider>
       <div className="space-y-2">
