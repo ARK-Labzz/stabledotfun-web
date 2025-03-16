@@ -19,7 +19,11 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Check, ChevronDown } from "lucide-react";
-import { TradeWindowProp, TradeWindowToken, TradeWindowTokenComboBox } from "@/types";
+import {
+  TradeWindowProp,
+  TradeWindowToken,
+  TradeWindowTokenComboBox,
+} from "@/types";
 
 export default function TradeWindow({ className, token }: TradeWindowProp) {
   const [open, setOpen] = React.useState(false);
@@ -218,30 +222,6 @@ export default function TradeWindow({ className, token }: TradeWindowProp) {
           {tradeType === "buy" ? "Buy" : "Sell"} {tokenName}
         </Button>
       </div>
-
-      {/* <div className="bg-secondary/50 rounded-md p-4 border border-border">
-        <div className="flex justify-between items-center mb-2">
-          <div className="text-lg font-medium">Payout Period</div>
-          <div className="text-sm text-teal">7 days</div>
-        </div>
-
-        <div className="space-y-2">
-          <div className="flex justify-between">
-            <div className="text-sm text-gray-400">Next Maturity Date</div>
-            <div className="text-sm">March 6, 2024</div>
-          </div>
-          <div className="flex justify-between">
-            <div className="text-sm text-gray-400">
-              Total Current Investment
-            </div>
-            <div className="text-sm">$0.00</div>
-          </div>
-          <div className="flex justify-between">
-            <div className="text-sm text-gray-400">Total Yield Reward</div>
-            <div className="text-sm">$1,543.56</div>
-          </div>
-        </div>
-      </div> */}
     </div>
   );
 }
