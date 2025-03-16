@@ -21,12 +21,16 @@ import {
 } from "@/components/ui/form";
 
 export default function RedeemMiniWindow() {
-  const { from, to } = useRedeem();
+  const { from, to, amount, set } = useRedeem();
   const { publicKey } = useWallet();
 
   const form = useForm<z.infer<typeof RedeemMiniSchema>>({
     resolver: zodResolver(RedeemMiniSchema),
   });
+
+  React.useEffect(() => {
+    if (amount) form.setValue("from", String(amount));
+  }, [amount, form]);
 
   const watch = form.watch();
 
@@ -39,6 +43,11 @@ export default function RedeemMiniWindow() {
   React.useEffect(() => {
     if (getAmount) form.setValue("to", String(getAmount));
   }, [getAmount, form]);
+
+  React.useEffect(() => {
+    const fromInput = form.getValues("from");
+    if (fromInput) set(from, to, Number(fromInput));
+  }, [form, from, set, to]);
 
   const handleCopy = () => {
     if (publicKey) navigator.clipboard.writeText(publicKey);

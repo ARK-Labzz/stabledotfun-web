@@ -84,8 +84,6 @@ export default function RedeemWindow({ token, stablecoins }: RedeemWindowProp) {
     resolver: zodResolver(RedeemSchema),
   });
 
-  React.useEffect(() => console.log(activeToken?.amount), [activeToken]);
-
   const watch = form.watch();
 
   React.useEffect(() => {
