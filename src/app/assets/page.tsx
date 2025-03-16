@@ -1,12 +1,24 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { token } from "@/static-data/token";
+import AssetWindow from "./components/asset-window";
 
 export default function AssetsPage() {
   // TODO - Implement token fetch api to replace the static `token` import
   if (!token || token.length < 1) return <NoAssetFound />;
 
-  return <div className="space-y-2"></div>;
+  return (
+    <div className="space-y-2">
+      <div className="text-xs text-white/50 mb-3">
+        Explore your <span className="text-primary">coins</span> collections and
+        earnings
+      </div>
+
+      <div className="flex flex-col lg:flex-row gap-4">
+        <AssetWindow />
+      </div>
+    </div>
+  );
 }
 
 function NoAssetFound() {
