@@ -19,40 +19,9 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Check, ChevronDown } from "lucide-react";
+import { TradeWindowProp, TradeWindowToken, TradeWindowTokenComboBox } from "@/types";
+import { token } from "@/static-data/token";
 
-interface TradeWindowProp {
-  className?: string;
-}
-
-interface TradeWindowToken {
-  id: string;
-  name: string;
-  icon: string;
-  amount: number;
-  ratio: number;
-}
-
-interface TradeWindowTokenComboBox extends TradeWindowToken {
-  value: string;
-  label: string;
-}
-
-const token: TradeWindowToken[] = [
-  {
-    id: "1",
-    name: "MXN",
-    icon: "/placeholder.svg",
-    amount: 100_000,
-    ratio: 0.8,
-  },
-  {
-    id: "2",
-    name: "SND",
-    icon: "/placeholder.svg",
-    amount: 23_000,
-    ratio: 0.3,
-  },
-];
 
 export default function TradeWindow({ className }: TradeWindowProp) {
   const [open, setOpen] = React.useState(false);
