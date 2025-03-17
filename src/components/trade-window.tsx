@@ -48,9 +48,9 @@ export default function TradeWindow({ className, token }: TradeWindowProp) {
     } // TODO - Make this reset the tokens when fetched from API
   }, [token]);
 
-  const tokenName = activeToken ? activeToken.name.toUpperCase() + "s" : "Null";
+  const tokenName = activeToken ? activeToken.symbol.toUpperCase() + "s" : "Null";
   const tokenRatioChange = activeToken
-    ? Number(activeToken.amount.toPrecision(3)).toLocaleString("en", {
+    ? Number(activeToken.amount.toPrecision(3) || 0).toLocaleString("en", {
         // notation: "compact",
         // HACK - Change uncomment if you want output to look like 10K, 1Bn, etc
         compactDisplay: "long",
@@ -208,7 +208,7 @@ export default function TradeWindow({ className, token }: TradeWindowProp) {
             {activeToken
               ? `${tokenName} ${
                   tradeType === "buy"
-                    ? (amount * activeToken.ratio).toLocaleString("en", {
+                    ? (amount || 0 * activeToken.ratio).toLocaleString("en", {
                         compactDisplay: "long",
                         maximumFractionDigits: 3,
                       })
