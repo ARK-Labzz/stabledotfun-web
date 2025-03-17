@@ -72,7 +72,7 @@
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: #7FCDD3;
+  --primary: #7fcdd3;
   --primary-foreground: oklch(0.985 0 0);
   --secondary: #194253;
   --secondary-foreground: hsl(0 0% 100%);
@@ -107,10 +107,14 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-family: 'Sora Variable', sans-serif;
+    font-family: "Sora Variable", sans-serif;
   }
   input::placeholder {
     @apply text-gray-500;
+  }
+
+  .connect-with-wallet-button {
+    background-color: var(--primary);
   }
 
   .chart-line {

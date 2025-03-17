@@ -113,7 +113,7 @@ export default function SellWindow({
   };
 
   function onSubmit(data: z.infer<typeof RedeemMiniSchema>) {
-    console.log({data, stables, tokens});
+    console.log({ data, stables, tokens });
   }
 
   return (
@@ -274,15 +274,11 @@ export default function SellWindow({
               </div>
 
               <div className="relative flex flex-col gap-3 mb-2 border border-primary/30 py-2 px-2.5 rounded-md bg-white/5">
-                {/* <div className="absolute -top-6 left-1/2 -translate-x-1/2 w-7 h-7 rounded-full bg-primary outline-4 outline-background/60 flex items-center justify-center">
-                  <ArrowUpDown size={20} className="text-background" />
-                </div> */}
-
                 <div className="text-xs text-white/50">Get</div>
                 <div className="flex flex-1 justify-between gap-3">
                   <div className="relative flex flex-1 gap-2 justify-between items-center">
                     <div className="text-2xl truncate w-7/12">
-                      {getAmount.toLocaleString("en", {
+                      {(getAmount || 0).toLocaleString("en", {
                         maximumFractionDigits: 3,
                       })}
                     </div>

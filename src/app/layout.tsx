@@ -36,13 +36,13 @@ export default function RootLayout({
                     <Header />
                     <main className="flex-1 p-4 pt-30 mt-10 md:mt-0 md:pt-4">
                       {children}
+                      <Toaster />
                     </main>
                   </div>
                 </WalletProvider>
               </SidebarProvider>
             </WagmiConnector>
           </QueryProvider>
-          <Toaster />
         </body>
       </DynamicProvider>
     </html>
