@@ -22,9 +22,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { SidebarTrigger, useSidebar } from "./ui/sidebar";
+import Image from "next/image";
 
 export default function Header() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -36,7 +36,7 @@ export default function Header() {
   };
 
   return (
-    <header className="fixed lg:sticky top-0 z-20 border-b border-border/20 bg-sidebar">
+    <header className="fixed lg:sticky top-0 z-20 bg-sidebar">
       <div className="bg-secondary p-4 flex md:hidden items-center justify-between">
         <Image
           src={"/stable-fun-logo.svg"}
@@ -167,6 +167,13 @@ export default function Header() {
           <ConnectButton className="hidden lg:flex" />
         </div>
       </div>
+      <Image
+        src="Line.svg"
+        className="w-full"
+        height={10}
+        width={100}
+        alt="line"
+      />
     </header>
   );
 }
