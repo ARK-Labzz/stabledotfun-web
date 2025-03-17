@@ -9,6 +9,8 @@ import { WalletProvider } from "@/hooks/use-wallet";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/sonner";
 import DynamicProvider from "@/components/providers/dynamic-lab";
+import { config } from "@/components/providers/wagmi";
+
 
 const sora = Sora({ subsets: ["latin"] });
 
@@ -16,6 +18,7 @@ export const metadata: Metadata = {
   title: "Stable | Launch Stablecoins",
   description: "Create and manage stablecoins",
 };
+
 
 export default function RootLayout({
   children,
@@ -25,9 +28,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${sora.className} bg-[#051016] text-white`}>
-        <DynamicProvider>
-          <SidebarProvider defaultOpen={false}>
-            <WalletProvider>
+        <SidebarProvider defaultOpen={false}>
+          <WalletProvider>
+            <DynamicProvider config={config}>
               <AppSidebar />
               <div className="flex min-h-screen flex-col flex-1">
                 <Header />
@@ -35,10 +38,10 @@ export default function RootLayout({
                   {children}
                 </main>
               </div>
-            </WalletProvider>
-          </SidebarProvider>
-          <Toaster />
-        </DynamicProvider>
+            </DynamicProvider>
+          </WalletProvider>
+        </SidebarProvider>
+        <Toaster />
       </body>
     </html>
   );

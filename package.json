@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@dynamic-labs/ethereum": "^4.9.3",
+    "@dynamic-labs/ethereum-core": "^4.9.3",
     "@dynamic-labs/sdk-react-core": "^4.9.3",
     "@dynamic-labs/solana": "^4.9.3",
     "@dynamic-labs/wagmi-connector": "^4.9.3",
@@ -80,5 +82,12 @@
   "resolutions": {
     "@types/react": "19.0.10",
     "@types/react-dom": "19.0.4"
+  },
+  "browser": {
+    "crypto": false
+  },
+  "overrides": {
+    "rpc-websockets": "7.10.0",
+    "@solana/web3.js": "1.91.6"
   }
 }

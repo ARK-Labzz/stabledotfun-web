@@ -6,6 +6,9 @@ const nextConfig: NextConfig = {
       { pathname: "/logos/**", protocol: "https", hostname: "cryptologos.cc" },
     ],
   },
+  experimental: {
+    optimizePackageImports: ["@dynamic-labs/sdk-react-core"],
+  },
 };
 
 export default nextConfig;
