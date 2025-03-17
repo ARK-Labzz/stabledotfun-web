@@ -16,6 +16,7 @@ export default function WagmiConnector({
   children: React.ReactNode;
 }) {
   const isLogged = useIsLoggedIn();
+
   return (
     <WagmiProvider config={config}>
       <DynamicWagmiConnector>
@@ -43,7 +44,7 @@ export default function WagmiConnector({
                   </p>
                 </div>
                 <DynamicEmbeddedWidget
-                  background="none"
+                  background="with-border"
                   className="text-white"
                   style={{ color: "white" }}
                 />
