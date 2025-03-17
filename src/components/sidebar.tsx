@@ -39,7 +39,6 @@ export default function AppSidebar() {
   ];
 
   return (
-    <>
       <Sidebar collapsible="icon" className="border-none z-30">
         <SidebarHeader className="flex flex-col gap-4">
           {state === "collapsed" && !isMobile ? (
