@@ -39,59 +39,32 @@ export default function AppSidebar() {
   ];
 
   return (
-    <Sidebar collapsible="icon" className="border-none z-30">
-      <SidebarHeader className="flex flex-col gap-4">
-        {state === "collapsed" && !isMobile ? (
-          <>
-            <Link href="/" className="block">
+      <Sidebar collapsible="icon" className="border-none z-30">
+        <SidebarHeader className="flex flex-col gap-4">
+          {state === "collapsed" && !isMobile ? (
+            <div className="h-full flex flex-row justify-end pt-5 w-full">
+              <Link href="/" className="block">
+                <Image
+                  src="/stable-fun.svg"
+                  alt="Logo"
+                  className="w-6 h-6"
+                  width={36}
+                  height={36}
+                />
+              </Link>
+              <Image src="line.svg" alt="Line" width={100} height={10} />
+            </div>
+          ) : (
+            <Link href={"/"}>
               <Image
-                src="/stable-fun.svg"
+                src={"/stable-fun-logo.svg"}
                 alt="Logo"
-                className="w-6 h-6"
-                width={36}
-                height={36}
+                width={140}
+                height={34}
               />
             </Link>
-            <svg
-              width="32"
-              height="1"
-              viewBox="0 0 32 1"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <line
-                y1="0.5"
-                x2="32"
-                y2="0.5"
-                stroke="url(#paint0_linear_738_1146)"
-              />
-              <defs>
-                <linearGradient
-                  id="paint0_linear_738_1146"
-                  x1="0"
-                  y1="1.5"
-                  x2="32"
-                  y2="1.5"
-                  gradientUnits="userSpaceOnUse"
-                >
-                  <stop stopColor="white" stopOpacity="0" />
-                  <stop offset="0.124" stopColor="#00BCD4" />
-                  <stop offset="1" stopColor="#CCCCCC" stopOpacity="0" />
-                </linearGradient>
-              </defs>
-            </svg>
-          </>
-        ) : (
-          <Link href={"/"}>
-            <Image
-              src={"/stable-fun-logo.svg"}
-              alt="Logo"
-              width={140}
-              height={34}
-            />
-          </Link>
-        )}
-      </SidebarHeader>
+          )}
+        </SidebarHeader>
 
       <SidebarContent className="py-2">
         <SidebarMenu className="px-1 gap-3">
