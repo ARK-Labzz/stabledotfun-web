@@ -79,7 +79,7 @@ export default function CreateWindow({ stablecoins }: CreateWindowProp) {
   }
 
   return (
-    <div className="flex-1 bg-[rgba(255,255,255,0.05)] border-gray-600/10 border-[2px] rounded-2xl p-6 ">
+    <div className="flex-1 border-white/10 border rounded-2xl p-6">
       <h2 className="text-2xl font-normal mb-6 text-white">
         Create Your Stablecoin
       </h2>
@@ -99,7 +99,7 @@ export default function CreateWindow({ stablecoins }: CreateWindowProp) {
                     <FormControl>
                       <Input
                         placeholder="MXNs"
-                        className="bg-gray-600/5 border-gray-600/10 border-[1px]"
+                        className="bg-white/10 border-white/5 border"
                         {...field}
                       />
                     </FormControl>
@@ -121,7 +121,7 @@ export default function CreateWindow({ stablecoins }: CreateWindowProp) {
                     <FormControl>
                       <Input
                         placeholder="Mexican Peso Stablecoin"
-                        className="bg-gray-600/5 border-none"
+                        className="bg-white/10 border-white/5 border"
                         {...field}
                       />
                     </FormControl>

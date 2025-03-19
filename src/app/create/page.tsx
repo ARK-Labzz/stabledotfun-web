@@ -14,7 +14,7 @@ export default async function CreatePage() {
   const stablecoins = await getFiatData();
   return (
     <CreateProvider>
-      <div className="space-y-4  bg-sidebar">
+      <div className="space-y-4">
         <div className="text-sm w-full">
           <p className="pt-5 pl-5">
             Deploy your stablecoin and mint an initial supply
