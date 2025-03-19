@@ -27,12 +27,12 @@ export default async function Dashboard() {
       <div className="flex flex-col lg:flex-row gap-3">
         <UserPanel />
 
-        <div className="flex-1 flex w-full lg:w-[40vw] flex-col gap-3">
+        <div className="flex-1 flex w-full lg:w-[40vw] 2xl:w-[50vw] flex-col gap-3">
           <AssetShowcase asset={token} />
           <AssetHolding asset={token} />
         </div>
 
-        <div className="w-full lg:w-75 xl:w-80 space-y-4">
+        <div className="w-full lg:w-70 xl:w-75 space-y-4">
           <TradeWindow
             className="h-full"
             token={token as unknown as TradeWindowToken[]}

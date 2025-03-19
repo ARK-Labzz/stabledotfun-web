@@ -222,11 +222,19 @@ export default function TradeWindow({
                 ? activeStable && activeStable.symbol
                 : activeToken && activeToken.symbol}{" "}
               <Image
-                src={"/placeholder.svg"}
+                src={
+                  tradeType === "buy"
+                    ? activeStable?.icon || "/placeholder.svg"
+                    : activeToken?.icon || "/placeholder.svg"
+                }
                 className="h-4 w-4 rounded-full bg-gray-500"
                 width={16}
                 height={16}
-                alt="USDC"
+                alt={
+                  tradeType === "buy"
+                    ? activeStable?.name || "Token"
+                    : activeToken?.name || "Token"
+                }
               />
             </span>
           </div>
