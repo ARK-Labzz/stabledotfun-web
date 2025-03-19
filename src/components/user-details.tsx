@@ -13,6 +13,7 @@ import {
 import Image from "next/image";
 import React from "react";
 import { toast } from "sonner";
+import { useSidebar } from "./ui/sidebar";
 
 interface UserDetailsProp {
   className?: string;
@@ -21,16 +22,17 @@ interface UserDetailsProp {
 
 export default function UserDetails({ username, className }: UserDetailsProp) {
   const { connected, publicKey, balance } = useWallet();
+  const { isMobile } = useSidebar();
 
   const truncateAddress = (address: string) => {
-    return `${address.slice(0, 15)}...`;
+    return `${address.slice(0, isMobile ? 25 : 15)}...`;
   };
 
   const handleCopy = () => {
-      if (publicKey) navigator.clipboard.writeText(publicKey);
-      toast("Address Copied!");
+    if (publicKey) navigator.clipboard.writeText(publicKey);
+    toast("Address Copied!");
   };
-  
+
   const portfolioChange = 7.69;
 
   if (!connected) return null;
@@ -52,7 +54,7 @@ export default function UserDetails({ username, className }: UserDetailsProp) {
           />
         </div>
         <div className="flex flex-1 flex-col gap-3">
-          <div className="py-2 px-4 border bg-white/5 items-center justify-center text-xs text-white/30 border-secondary/50 flex flex-1 gap-2 rounded-full">
+          <div className="p-2 border bg-white/5 items-center justify-center text-xs text-white/30 border-secondary/50 flex flex-1 gap-2 rounded-full truncate">
             {truncateAddress(publicKey || "")}
             <svg
               width="16"
@@ -129,10 +131,9 @@ export default function UserDetails({ username, className }: UserDetailsProp) {
           <ArrowUpRight className="w-4 h-4" /> Withdraw
         </Button>
 
-            <Button variant={"secondary"} className="cursor-pointer flex-1">
-              <ArrowDownLeft className="w-4 h-4" /> Deposit
-            </Button>
-        
+        <Button variant={"secondary"} className="cursor-pointer flex-1">
+          <ArrowDownLeft className="w-4 h-4" /> Deposit
+        </Button>
       </div>
     </div>
   );

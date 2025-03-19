@@ -12,7 +12,7 @@ export default function UserPanel() {
 
   return (
     <div className="w-full lg:w-80 space-y-4 flex flex-col gap-3">
-      <UserDetails username={username || ""} />
+      <UserDetails username={username || "username"} />
       <PayoutTimeline />
     </div>
   );

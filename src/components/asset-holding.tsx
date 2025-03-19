@@ -31,15 +31,15 @@ export default function AssetHolding({ className, asset }: AssetHoldingProps) {
     }
   }, [asset]);
 
-  const sortedData = assets?.sort((a, b) =>
-    !asc ? a.price - b.price : b.price - a.price
-  );
+  const sortedData = assets
+    ?.filter((_, i) => i < 10)
+    ?.sort((a, b) => (!asc ? a.price - b.price : b.price - a.price));
   // HACK - Sorts data in decending order on default
 
   return (
     <div
       className={cn(
-        "flex flex-col gap-1 bg-white/5 rounded-2xl p-4 border border-secondary/30 lg:w-[50vw]",
+        "flex flex-col flex-1 gap-1 bg-white/5 rounded-2xl p-4 border border-secondary/30 overflow-scroll",
         className
       )}
     >
@@ -67,7 +67,7 @@ export default function AssetHolding({ className, asset }: AssetHoldingProps) {
         </div>
       </div>
 
-      <div className="lg:flex-1 w-[85vw] lg:w-1/2 mx-auto overflow-x-hidden">
+      <div className="lg:flex-1 mx-auto w-[85vw] lg:w-full overflow-x-scroll">
         <Table>
           <TableHeader>
             <TableRow className="w-full border-none hover:bg-transparent">

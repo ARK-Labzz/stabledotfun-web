@@ -2,17 +2,23 @@ import TradeWindow from "@/components/trade-window";
 import UserPanel from "./components/user-panel";
 import AssetShowcase from "@/components/asset-showcase";
 import { AssetProp, TradeWindowToken } from "@/types";
-import { token } from "@/static-data/token";
+import { stablecoins, token } from "@/static-data/token";
 import UsernameBlock from "./components/username-block";
+import AssetHolding from "@/components/asset-holding";
 
 async function getData(): Promise<AssetProp[]> {
   // Fetch data from your API here.
   return token as AssetProp[];
 }
 
-export default async function Dashboard() {
+async function getFiatData(): Promise<TradeWindowToken[]> {
+  // Fetch data from your API here.
+  return stablecoins as TradeWindowToken[];
+}
 
+export default async function Dashboard() {
   const token = await getData();
+  const fiat = await getFiatData()
 
   return (
     <div className="space-y-4">
@@ -21,16 +27,16 @@ export default async function Dashboard() {
       <div className="flex flex-col lg:flex-row gap-3">
         <UserPanel />
 
-        <div className="flex-1 flex flex-col gap-3">
+        <div className="flex-1 flex w-full lg:w-[40vw] flex-col gap-3">
           <AssetShowcase asset={token} />
-          {/* <AssetHolding asset={assetMock} /> */}
-          {/* TODO - Fix the Asset Holding component responsiveness */}
+          <AssetHolding asset={token} />
         </div>
 
         <div className="w-full lg:w-75 xl:w-80 space-y-4">
           <TradeWindow
             className="h-full"
             token={token as unknown as TradeWindowToken[]}
+            stablecoins={fiat}
           />
         </div>
       </div>

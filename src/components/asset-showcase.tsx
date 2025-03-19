@@ -45,7 +45,7 @@ export default function AssetShowcase({ className, asset }: AssetShowcaseProps) 
   return (
     <div
       className={cn(
-        "flex flex-col gap-1 bg-white/5 rounded-2xl p-4 border border-secondary/30",
+        "flex flex-col gap-1 bg-white/5 rounded-2xl p-4 border border-secondary/30 overflow-scroll",
         className
       )}
     >
