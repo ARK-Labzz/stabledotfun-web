@@ -25,7 +25,11 @@ import {
   TradeWindowTokenComboBox,
 } from "@/types";
 
-export default function TradeWindow({ className, token }: TradeWindowProp) {
+export default function TradeWindow({
+  className,
+  token,
+  stablecoins,
+}: TradeWindowProp) {
   const [open, setOpen] = React.useState(false);
   const [tradeType, setTradeType] = React.useState<"buy" | "sell">("buy");
   const [activeToken, setActiveToken] = React.useState<TradeWindowToken | null>(
@@ -35,6 +39,17 @@ export default function TradeWindow({ className, token }: TradeWindowProp) {
     null
   );
   const [amount, setAmount] = React.useState<number>(0);
+
+  const [activeStable, setActiveStable] =
+    React.useState<TradeWindowToken | null>(null);
+
+  const [stables, setStables] = React.useState<
+    TradeWindowTokenComboBox[] | null
+  >(null);
+
+  React.useEffect(() => {
+    console.log({ stables });
+  });
 
   React.useEffect(() => {
     if (token && token.length > 0) {
@@ -48,10 +63,26 @@ export default function TradeWindow({ className, token }: TradeWindowProp) {
     } // TODO - Make this reset the tokens when fetched from API
   }, [token]);
 
+  React.useEffect(() => {
+    if (stablecoins && stablecoins.length > 0) {
+      setActiveStable(stablecoins[0]); // Set the active token to the first index
+      const output: TradeWindowTokenComboBox[] = stablecoins.map((el) => ({
+        ...el,
+        label: el.name,
+        value: el.name.toLowerCase(),
+      }));
+      setStables(output);
+    } // TODO - Make this reset the stablecoin when fetched from API
+  }, [stablecoins]);
+
   const tokenName = activeToken
     ? activeToken.symbol.toUpperCase() + "s"
     : "Null";
-  const tokenRatioChange = activeToken ? activeToken.amount : 0;
+
+  const tokenRatioChange =
+    activeToken && activeStable ? activeToken.amount / activeStable?.amount : 0;
+
+  const getAmount = tokenRatioChange * amount;
 
   return (
     <div
@@ -187,7 +218,9 @@ export default function TradeWindow({ className, token }: TradeWindowProp) {
               className="text-2xl border-transparent w-5/8 mr-auto focus-visible:border-transparent focus-visible:border-b focus-visible:border-b-secondary focus-visible:ring-ring/0"
             />
             <span className="absolute flex gap-1 right-2 items-center top-1/2 -translate-y-1/2 text-sm text-gray-400 p-2 w-fit bg-white/5 border border-primary/30 rounded-md pointer-events-none">
-              USDC{" "}
+              {tradeType === "buy"
+                ? activeStable && activeStable.symbol
+                : activeToken && activeToken.symbol}{" "}
               <Image
                 src={"/placeholder.svg"}
                 className="h-4 w-4 rounded-full bg-gray-500"
@@ -203,12 +236,7 @@ export default function TradeWindow({ className, token }: TradeWindowProp) {
           <span className="text-primary">
             {activeToken
               ? `${tokenName} ${
-                  tradeType === "buy"
-                    ? (amount * activeToken.ratio).toLocaleString("en", {
-                        compactDisplay: "long",
-                        maximumFractionDigits: 3,
-                      })
-                    : tokenRatioChange
+                  tradeType === "buy" ? getAmount : tokenRatioChange
                 }`
               : 0.0}
           </span>

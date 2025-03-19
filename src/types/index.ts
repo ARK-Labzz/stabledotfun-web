@@ -16,7 +16,8 @@ export interface AssetProp {
 
 export interface TradeWindowProp {
   className?: string;
-  token: TradeWindowToken[]
+  token: TradeWindowToken[];
+  stablecoins?: TradeWindowToken[];
 }
 
 export interface TradeWindowToken {
