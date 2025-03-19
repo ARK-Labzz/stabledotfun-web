@@ -5,7 +5,6 @@ import {
   Search,
   ChevronDown,
   LogOut,
-  User,
   Wallet,
   ExternalLink,
   Copy,
@@ -25,6 +24,7 @@ import {
 import { cn } from "@/lib/utils";
 import { SidebarTrigger, useSidebar } from "./ui/sidebar";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Header() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -219,47 +219,47 @@ function ConnectButton({ className }: { className?: string }) {
           </DropdownMenuTrigger>
           <DropdownMenuContent
             align="end"
-            className="w-64 bg-card border-border"
+            className="w-64 border-white/10 bg-secondary"
           >
             <DropdownMenuLabel className="font-bold text-white">
               My Wallet
             </DropdownMenuLabel>
-            <DropdownMenuSeparator />
+            <DropdownMenuSeparator className="bg-white/50" />
             <div className="px-2 py-1">
-              <div className="text-xs text-gray-100 mb-1">
+              <div className="text-xs text-white/80 mb-1">
                 Connected Address
               </div>
-              <div className="flex items-center justify-between bg-secondary/60 rounded-md p-2 text-sm">
+              <div className="flex items-center justify-between bg-primary/30 rounded-md p-2 text-sm">
                 <span className="truncate text-gray-200">{publicKey}</span>
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-6 w-6 ml-1 text-gray-100 hover:text-white"
+                  className="h-6 w-6 ml-1 text-white/80 hover:text-white"
                   onClick={handleCopy}
                 >
                   <Copy size={14} />
                 </Button>
               </div>
             </div>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem className="cursor-pointer text-gray-100 hover:bg-secondary hover:text-white">
-              <User className="mr-2 h-4 w-4" />
-              <span>Profile</span>
+            <DropdownMenuSeparator className="bg-white/50" />
+            <DropdownMenuItem
+              className="cursor-pointer text-white/80 hover:bg-secondary hover:text-white"
+              asChild
+            >
+              <Link
+                href={`https://solscan.io/account/${publicKey}`}
+                target="_blank"
+              >
+                <ExternalLink className="mr-2 h-4 w-4 text-white/50" />
+                <span>View on Explorer</span>
+              </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer text-gray-100 hover:bg-secondary hover:text-white">
-              <Wallet className="mr-2 h-4 w-4" />
-              <span>Wallet</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer text-gray-100 hover:bg-secondary hover:text-white">
-              <ExternalLink className="mr-2 h-4 w-4" />
-              <span>View on Explorer</span>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
+            <DropdownMenuSeparator className="bg-white/50" />
             <DropdownMenuItem
               onClick={disconnect}
               className="cursor-pointer text-red-500 hover:bg-red-500/10 hover:text-red-400"
             >
-              <LogOut className="mr-2 h-4 w-4" />
+              <LogOut className="mr-2 h-4 w-4 text-red-500" />
               <span>Disconnect</span>
             </DropdownMenuItem>
           </DropdownMenuContent>

@@ -103,7 +103,7 @@ export function PayoutTimeline({
                   <path
                     d="M8.30385 8.93067C7.7265 9.93066 6.28312 9.93066 5.70577 8.93066L1.37565 1.43066L12.634 1.43066L8.30385 8.93067Z"
                     stroke="#00BCD4"
-                    stroke-opacity="0.16"
+                    strokeOpacity="0.16"
                   />
                   <defs>
                     <filter
@@ -113,9 +113,9 @@ export function PayoutTimeline({
                       width="12.9902"
                       height="13.25"
                       filterUnits="userSpaceOnUse"
-                      color-interpolation-filters="sRGB"
+                      colorInterpolationFilters="sRGB"
                     >
-                      <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                      <feFlood floodOpacity="0" result="BackgroundImageFix" />
                       <feBlend
                         mode="normal"
                         in="SourceGraphic"

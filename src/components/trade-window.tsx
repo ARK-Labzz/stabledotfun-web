@@ -48,15 +48,10 @@ export default function TradeWindow({ className, token }: TradeWindowProp) {
     } // TODO - Make this reset the tokens when fetched from API
   }, [token]);
 
-  const tokenName = activeToken ? activeToken.symbol.toUpperCase() + "s" : "Null";
-  const tokenRatioChange = activeToken
-    ? Number(activeToken.amount.toPrecision(3) || 0).toLocaleString("en", {
-        // notation: "compact",
-        // HACK - Change uncomment if you want output to look like 10K, 1Bn, etc
-        compactDisplay: "long",
-        maximumFractionDigits: 3,
-      })
-    : 0;
+  const tokenName = activeToken
+    ? activeToken.symbol.toUpperCase() + "s"
+    : "Null";
+  const tokenRatioChange = activeToken ? activeToken.amount : 0;
 
   return (
     <div
@@ -83,8 +78,8 @@ export default function TradeWindow({ className, token }: TradeWindowProp) {
                       {
                         tokens.find(
                           (token) =>
-                            token.value === activeToken?.symbol.toLowerCase()
-                        )?.label
+                            token.value === activeToken?.name.toLowerCase()
+                        )?.symbol
                       }
                       {"s"}
                       <Image
@@ -103,6 +98,7 @@ export default function TradeWindow({ className, token }: TradeWindowProp) {
                               token.value === activeToken?.name.toLowerCase()
                           )?.name || "Token"
                         }
+                        priority
                       />
                     </>
                   ) : (
@@ -208,7 +204,7 @@ export default function TradeWindow({ className, token }: TradeWindowProp) {
             {activeToken
               ? `${tokenName} ${
                   tradeType === "buy"
-                    ? (amount || 0 * activeToken.ratio).toLocaleString("en", {
+                    ? (amount * activeToken.ratio).toLocaleString("en", {
                         compactDisplay: "long",
                         maximumFractionDigits: 3,
                       })

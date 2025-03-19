@@ -22,7 +22,7 @@ import {
 
 export default function RedeemMiniWindow() {
   const { from, to, amount, set } = useRedeem();
-  const { publicKey } = useWallet();
+  const { publicKey, username } = useWallet();
 
   const form = useForm<z.infer<typeof RedeemMiniSchema>>({
     resolver: zodResolver(RedeemMiniSchema),
@@ -79,7 +79,10 @@ export default function RedeemMiniWindow() {
               />
               <div className="flex flex-col gap-1">
                 <div className="text-xs text-gray-400">
-                  Issued by <span className="text-primary">cre8tivebuka</span>
+                  Issued by{" "}
+                  <span className="text-primary">
+                    {username ? username : "cre8tivebuka"}
+                  </span>
                 </div>
                 <div className="font-medium">
                   {from?.symbol}s ({from?.fiat})

@@ -24,10 +24,7 @@ import { cn } from "@/lib/utils";
 
 export default function AppSidebar() {
   const pathname = usePathname();
-  const {
-    state,
-    isMobile,
-  } = useSidebar();
+  const { state, isMobile } = useSidebar();
 
   const navItems = [
     { icon: DashboardIcon, label: "Dashboard", href: "/" },
@@ -39,32 +36,40 @@ export default function AppSidebar() {
   ];
 
   return (
-      <Sidebar collapsible="icon" className="border-none z-30">
-        <SidebarHeader className="flex flex-col gap-4">
-          {state === "collapsed" && !isMobile ? (
-            <div className="h-full flex flex-row justify-end pt-5 w-full">
-              <Link href="/" className="block">
-                <Image
-                  src="/stable-fun.svg"
-                  alt="Logo"
-                  className="w-6 h-6"
-                  width={36}
-                  height={36}
-                />
-              </Link>
-              <Image src="line.svg" alt="Line" width={100} height={10} />
-            </div>
-          ) : (
-            <Link href={"/"}>
+    <Sidebar collapsible="icon" className="border-none z-30">
+      <SidebarHeader className="flex flex-col gap-4">
+        {state === "collapsed" && !isMobile ? (
+          <div className="h-full flex flex-row justify-end pt-5 w-full">
+            <Link href="/" className="block">
               <Image
-                src={"/stable-fun-logo.svg"}
+                src="./stable-fun.svg"
                 alt="Logo"
-                width={140}
-                height={34}
+                className="w-6 h-6"
+                width={36}
+                height={36}
+                priority
               />
             </Link>
-          )}
-        </SidebarHeader>
+            <Image
+              src="./line.svg"
+              alt="Line"
+              width={100}
+              height={10}
+              priority
+            />
+          </div>
+        ) : (
+          <Link href={"/"}>
+            <Image
+              src={"./stable-fun-logo.svg"}
+              alt="Logo"
+              width={140}
+              height={34}
+              priority
+            />
+          </Link>
+        )}
+      </SidebarHeader>
 
       <SidebarContent className="py-2">
         <SidebarMenu className="px-1 gap-3">

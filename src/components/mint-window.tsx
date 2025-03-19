@@ -33,7 +33,7 @@ interface CreateMiniWindowProp {
 }
 
 const MintWindow = ({ stablecoins }: CreateMiniWindowProp) => {
-  const { publicKey } = useWallet();
+  const { publicKey, username } = useWallet();
 
   const { ticker, name, fiat, logo } = useCreateCoin();
 
@@ -84,7 +84,10 @@ const MintWindow = ({ stablecoins }: CreateMiniWindowProp) => {
             <div className="h-10 w-10 bg-zinc-600/10 rounded-xl "></div>
             <div className="">
               <p className="text-xs text-gray-400">
-                Issued by <span className="text-primary">cre8tivebuka</span>
+                Issued by{" "}
+                <span className="text-primary">
+                  {username ? username : "cre8tivebuka"}
+                </span>
               </p>
               <p>
                 {ticker ? ticker + "s" : "MXNs"} ({fiat ? fiat.symbol : "CETES"}

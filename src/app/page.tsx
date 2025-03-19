@@ -3,6 +3,7 @@ import UserPanel from "./components/user-panel";
 import AssetShowcase from "@/components/asset-showcase";
 import { AssetProp, TradeWindowToken } from "@/types";
 import { token } from "@/static-data/token";
+import UsernameBlock from "./components/username-block";
 
 async function getData(): Promise<AssetProp[]> {
   // Fetch data from your API here.
@@ -10,16 +11,12 @@ async function getData(): Promise<AssetProp[]> {
 }
 
 export default async function Dashboard() {
-  const username = "cre8tivebuka";
 
   const token = await getData();
 
   return (
     <div className="space-y-4">
-      <div className="text-xs text-gray-400">
-        Welcome,{" "}
-        <span className="text-primary">{username ? username : "user"}</span>
-      </div>
+      <UsernameBlock />
 
       <div className="flex flex-col lg:flex-row gap-3">
         <UserPanel />
@@ -40,3 +37,4 @@ export default async function Dashboard() {
     </div>
   );
 }
+

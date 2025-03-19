@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 import {
   ArrowDownLeft,
   ArrowUpRight,
-  Edit,
+  // Edit,
   LucideArrowDownRight,
 } from "lucide-react";
 import Image from "next/image";
@@ -51,7 +51,7 @@ export default function UserDetails({ username, className }: UserDetailsProp) {
             className="w-16 h-16 rounded-full border-2 border-primary"
           />
         </div>
-        <div className="flex flex-1 flex-col gap-2">
+        <div className="flex flex-1 flex-col gap-3">
           <div className="py-2 px-4 border bg-white/5 items-center justify-center text-xs text-white/30 border-secondary/50 flex flex-1 gap-2 rounded-full">
             {truncateAddress(publicKey || "")}
             <svg
@@ -70,11 +70,11 @@ export default function UserDetails({ username, className }: UserDetailsProp) {
           </div>
           <div className="text-xs flex flex-1 items-center justify-between">
             <div className="text-white/30">Username</div>
-            <div className="text-primary/30 font-medium">
-              {username}{" "}
-              <Button variant={"link"} className="w-0 h-0 p-0 text-xs">
+            <div className="flex gap-2 text-primary/40 font-medium">
+              {username}
+              {/* <Button variant={"link"} className="w-0 h-0 p-0 text-xs">
                 <Edit className="w-1 h-1 text-primary" />
-              </Button>
+              </Button> */}
             </div>
           </div>
           <div className="text-xs flex flex-1 items-center justify-between">
