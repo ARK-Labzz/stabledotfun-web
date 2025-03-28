@@ -67,7 +67,7 @@ export function FaqModal() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm" className="w-full">
+        <Button variant="outline" size="lg" className="w-full">
           View FAQs
         </Button>
       </DialogTrigger>
