@@ -32,7 +32,7 @@ export default function AppSidebar() {
     { icon: CashIcon, label: "Create Stablecoin", href: "/create" },
     { icon: CreateFoldericon, label: "Redeem Assets", href: "/redeem" },
     { icon: HelpIcon, label: "Help & Support", href: "/help" },
-    { icon: SettingIcon, label: "Settings", href: "/setting" },
+    // { icon: SettingIcon, label: "Settings", href: "/setting" },
   ];
 
   return (
