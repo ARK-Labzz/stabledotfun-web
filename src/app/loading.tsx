@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function Loading() {
   return (
-    <div className="absolute top-0 left-0 flex flex-1 w-full h-screen bg-secondary/70 backdrop-blur-md items-center justify-center">
+    <div className="absolute top-0 left-0 flex flex-1 w-full h-screen bg-secondary/80 backdrop-blur-md items-center justify-center">
       <div className="lg:w-1/6 bg-secondary/90 border border-white/50 rounded-2xl p-8 gap-6 flex flex-col items-center">
         <Image
           src="/stable-fun-logo.svg"
