@@ -37,9 +37,9 @@ export default function AppSidebar() {
 
   return (
     <Sidebar collapsible="icon" className="border-none z-30">
-      <SidebarHeader className="flex flex-col gap-4">
+      <SidebarHeader className="flex flex-col items-center justify-center gap-4">
         {state === "collapsed" && !isMobile ? (
-          <div className="h-full flex flex-row justify-end pt-5 w-full">
+          <div className="flex flex-col">
             <Link href="/" className="block">
               <Image
                 src="./stable-fun.svg"
