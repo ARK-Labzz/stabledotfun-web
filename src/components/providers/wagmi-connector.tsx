@@ -27,8 +27,10 @@ export default function WagmiConnector({
     <WagmiProvider config={config}>
       <DynamicWagmiConnector>
         <div className="relative">
-          {!isLogged && isLoaded && (
-            <div className="fixed z-40 w-screen h-screen bg-secondary/70 backdrop-blur-md flex items-center justify-center">
+          {!isLoaded ? (
+            <Loading />
+          ) : !isLogged ? (
+            <div className="fixed z-40 w-screen h-screen bg-secondary/80 backdrop-blur-md flex items-center justify-center">
               {/* background can be none, default or with-border */}
               <div className="lg:w-1/3 bg-secondary/90 border border-white/50 rounded-2xl p-8 gap-6 flex flex-col items-center">
                 <Image
@@ -56,9 +58,9 @@ export default function WagmiConnector({
                 />
               </div>
             </div>
+          ) : (
+            children
           )}
-          {!isLoaded && <Loading />}
-          {children}
         </div>
       </DynamicWagmiConnector>
     </WagmiProvider>

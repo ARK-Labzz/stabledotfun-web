@@ -19,16 +19,20 @@ import {
 } from "lucide-react";
 import MiniChart from "./mini-chart";
 import { AssetProp } from "@/types";
+import { motion } from "motion/react";
 
 interface AssetShowcaseProps {
   className?: string;
   asset: AssetProp[];
 }
 
-
-export default function AssetShowcase({ className, asset }: AssetShowcaseProps) {
+export default function AssetShowcase({
+  className,
+  asset,
+}: AssetShowcaseProps) {
   const [assets, setAssets] = React.useState<AssetProp[] | null>(null);
   const [asc, setAsc] = React.useState<boolean>(false);
+  const [isHover, setHover] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     if (asset && asset.length > 0) {
@@ -72,24 +76,49 @@ export default function AssetShowcase({ className, asset }: AssetShowcaseProps) 
           </button>
         </div>
       </div>
-      <div className="flex flex-col lg:flex-row gap-3">
-        <div className="lg:w-3/7 flex">
-          <div className="w-full h-full pb-6 md:pb-0 relative overflow-hidden">
+      <div className="relative flex flex-col lg:flex-row gap-3 overflow-x-auto overflow-y-hidden">
+        <div className="lg:w-3/7 flex z-10">
+          <motion.div
+            className={cn(
+              "relative h-full pb-6 md:pb-0 bg-[#121c22] flex gap-3 flex-1 overflow-x-auto overflow-y-hidden",
+              isHover ? "absolute" : ""
+            )}
+            onHoverStart={() => setHover(true)}
+            onHoverEnd={() => setHover(false)}
+          >
             {assets
               ?.filter((_, i) => i < 5)
               .map((coin, index) => (
-                <div
+                <motion.div
                   key={index}
                   className={cn(
-                    "bg-[#051016] select-none pointer-events-none rounded-lg p-4 border border-primary/50 relative overflow-hidden transition-all duration-200 hover:bg-secondary hover:border-teal/50 hover:shadow-[0_0_15px_rgba(0,194,203,0.3)] group w-50 xl:w-60 xl:h-62",
-                    index > 0
-                      ? `absolute rounded-xl bg-[#051016]/80 border`
-                      : "z-0"
+                    "select-none pointer-events-none rounded-lg p-4 border border-primary/50 relative overflow-hidden transition-all duration-200 group",
+                    "hover:bg-secondary hover:border-teal/50 hover:inset-ring inset-ring-1 inset-ring-[rgba(0,194,203,0.3)] shadow-[rgba(0,194,203,0.3)] inset-shadow-[rgba(0,194,203,0.3)] inset-shadow-xs",
+                    "top-1/2 -translate-y-1/2",
+                    "w-50 xl:w-55 h-70",
+                    index > 0 ? `rounded-xl border` : "bg-[#051016]"
                   )}
-                  style={{
-                    left: 1 + index * 15,
-                    top: 1 + index * 5,
-                    zIndex: -(1 + index),
+                  style={
+                    !isHover
+                      ? {
+                          position: "absolute",
+                          left: 1 + index * 8,
+                          height: 280 - 10 * index,
+                          zIndex: 10 - index,
+                        }
+                      : undefined
+                  }
+                  initial={false}
+                  animate={{
+                    position: isHover ? "relative" : "absolute",
+                    left: isHover ? undefined : 1 + index * 8,
+                    height: isHover ? 280 : 280 - 10 * index,
+                    zIndex: isHover ? 10 : 10 - index,
+                    backgroundColor: "#051016",
+                  }}
+                  transition={{
+                    duration: 0.5,
+                    ease: [0.25, 0.1, 0.25, 1],
                   }}
                 >
                   <div className="flex justify-between items-center 2xl:items-start mb-2 gap-1">
@@ -153,11 +182,11 @@ export default function AssetShowcase({ className, asset }: AssetShowcaseProps) 
                       trend={coin.change > 0 ? "up" : "down"}
                     />
                   </div>
-                </div>
+                </motion.div>
               ))}
-          </div>
+          </motion.div>
         </div>
-        <div className="flex-1 rounded-2xl p-4 border border-secondary/30 bg-white/5">
+        <div className="flex-1 z-0 rounded-2xl p-4 border border-secondary/30 bg-white/5">
           <Table>
             <TableHeader>
               <TableRow className="w-full border-none hover:bg-transparent">
