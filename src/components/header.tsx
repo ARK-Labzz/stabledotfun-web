@@ -36,7 +36,7 @@ export default function Header() {
   };
 
   return (
-    <header className="fixed lg:sticky top-0 z-20 bg-sidebar">
+    <header className="fixed lg:sticky top-0 z-30 bg-sidebar">
       <div className="bg-secondary p-4 flex md:hidden items-center justify-between">
         <Image
           src={"/stable-fun-logo.svg"}
