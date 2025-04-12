@@ -61,7 +61,6 @@ export const useFilteredData = (tokenData: ChartTokenData[], timeframe: Timefram
 
           aggregated.push({
             date: new Date(sliceStart),
-            month: sliceStart.toLocaleString("default", { month: "long" }),
             price: parseFloat(avgPrice.toFixed(4)),
             volume: Math.round(totalVolume),
             yield: parseFloat(avgYield.toFixed(4)),
