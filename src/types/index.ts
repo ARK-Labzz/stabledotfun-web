@@ -12,6 +12,10 @@ export interface AssetProp {
   currentInvestment: number;
   nextYield: number;
   tnx: string;
+  supply?: number;
+  tvl?: number;
+  interest?: number;
+  liquidity?: number;
 }
 
 export interface TradeWindowProp {
@@ -33,4 +37,15 @@ export interface TradeWindowToken {
 export interface TradeWindowTokenComboBox extends TradeWindowToken {
   value: string;
   label: string;
+}
+
+export type Timeframe = "24H" | "7D" | "30D" | "90D" | "1Y";
+export type BondType = "ALL" | "USD" | "EUR" | "GBP" | "CETES" | "EUROB";
+
+export interface ChartTokenData {
+  date: Date;
+  price: number;
+  volume: number;
+  yield?: number;
+  bondType: BondType;
 }
