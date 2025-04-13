@@ -12,18 +12,20 @@ export const columns: ColumnDef<AssetProp>[] = [
     accessorKey: "name",
     header: "Name",
     cell: ({ row }) => {
-      const { image, name, symbol, fiat } = row.original;
+      const { image, name, symbol, fiat, id } = row.original;
       return (
-        <div className="flex items-center gap-2 pr-3">
-          <Image
-            src={image}
-            alt={name}
-            width={28}
-            height={28}
-            className="rounded-md bg-white/5"
-          />
-          {symbol}s ({fiat})
-        </div>
+        <Link href={`/assets/${id}`}>
+          <div className="flex items-center gap-2 pr-3">
+            <Image
+              src={image}
+              alt={name}
+              width={28}
+              height={28}
+              className="rounded-md bg-white/5"
+            />
+            {symbol}s ({fiat})
+          </div>
+        </Link>
       );
     },
   },
@@ -34,11 +36,7 @@ export const columns: ColumnDef<AssetProp>[] = [
       const { price, change } = row.original;
 
       return (
-        <div
-          className={cn(
-            change >= 0 ? "text-primary" : "text-red-400"
-          )}
-        >
+        <div className={cn(change >= 0 ? "text-primary" : "text-red-400")}>
           $
           {price.toLocaleString("en", {
             compactDisplay: "long",

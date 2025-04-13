@@ -52,6 +52,7 @@ export default async function AssetDetail({
           ticker={data.symbol}
           totalDays={7}
           endDate={"March 6, 2025"}
+          currentAmount={(data.currentInvestment / priceAvg).toString()}
         />
       </div>
     </div>

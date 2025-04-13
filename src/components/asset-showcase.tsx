@@ -20,6 +20,7 @@ import {
 import MiniChart from "./mini-chart";
 import { AssetProp } from "@/types";
 import { motion } from "motion/react";
+import Link from "next/link";
 
 interface AssetShowcaseProps {
   className?: string;
@@ -206,24 +207,26 @@ export default function AssetShowcase({
                     key={el.id}
                     className="text-xs my-4 border-b-white/5 hover:bg-muted/5"
                   >
-                    <TableCell className="flex items-center gap-2 w-1/2">
-                      <Image
-                        src={el.image}
-                        alt={el.name}
-                        width={28}
-                        height={28}
-                        className="rounded-md bg-white/5"
-                      />
-                      {el.symbol}s ({el.fiat})
-                    </TableCell>
-                    <TableCell
-                      className={cn(
-                        "text-center w-1/2",
-                        el.change >= 0 ? "text-primary" : "text-red-400"
-                      )}
-                    >
-                      ${el.price}
-                    </TableCell>
+                    <Link href={`/assets/${el.id}`}>
+                      <TableCell className="flex items-center gap-2 w-1/2">
+                        <Image
+                          src={el.image}
+                          alt={el.name}
+                          width={28}
+                          height={28}
+                          className="rounded-md bg-white/5"
+                        />
+                        {el.symbol}s ({el.fiat})
+                      </TableCell>
+                    </Link>
+                      <TableCell
+                        className={cn(
+                          "text-center w-1/2",
+                          el.change >= 0 ? "text-primary" : "text-red-400"
+                        )}
+                      >
+                        ${el.price}
+                      </TableCell>
                   </TableRow>
                 ))}
             </TableBody>

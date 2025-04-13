@@ -102,6 +102,7 @@ export default function AssetHolding({ className, asset }: AssetHoldingProps) {
                   key={el.id}
                   className="text-xs my-4 border-b-white/5 hover:bg-muted/5"
                 >
+                  <Link href={`/assets/${el.id}`}>
                   <TableCell className="flex items-center gap-2 w-1/2">
                     <Image
                       src={el.image}
@@ -112,6 +113,7 @@ export default function AssetHolding({ className, asset }: AssetHoldingProps) {
                     />
                     {el.symbol}s ({el.fiat})
                   </TableCell>
+                  </Link>
                   <TableCell
                     className={cn(
                       "text-center",
