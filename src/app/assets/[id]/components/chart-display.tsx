@@ -69,7 +69,7 @@ export function TokenPriceChart({ token }: { token: ChartTokenData[] }) {
   };
 
   return (
-    <div className="rounded-xl border border-primary/30 p-4 bg-white/5 flex flex-col flex-1 gap-8">
+    <div className="rounded-xl border border-primary/30 p-4 bg-white/5 flex flex-col flex-1 gap-4">
       <div className="flex flex-1 items-center justify-between">
         <div className="flex gap-4 flex-wrap flex-1">
           <div className="flex gap-2">
@@ -163,7 +163,6 @@ export function TokenPriceChart({ token }: { token: ChartTokenData[] }) {
         </div>
       </div>
 
-      <div>
         <ChartContainer
           config={chartConfig}
           className={cn("min-h-[200px] bg-white/1 rounded-xl p-5")}
@@ -248,7 +247,7 @@ export function TokenPriceChart({ token }: { token: ChartTokenData[] }) {
             </AreaChart>
           </ResponsiveContainer>
         </ChartContainer>
-      </div>
+      
     </div>
   );
 }

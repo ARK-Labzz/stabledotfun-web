@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 import { TokenPriceChart } from "./components/chart-display";
 import { generateTokenData } from "@/lib/utils";
 import AssetInfo from "./components/asset-info";
+import { PayoutTimeline } from "@/components/payout-timeline";
 
 async function getData(): Promise<AssetProp[]> {
   // Fetch data from your API here.
@@ -31,24 +32,26 @@ export default async function AssetDetail({
   const data = dataArr.length > 0 ? dataArr[0] : null;
 
   if (!data) return notFound();
-  
+
   const priceAvg = tokenData[tokenData.length - 1].price;
 
   return (
     <div className="space-y-4 flex gap-4">
-      <div className="flex flex-col flex-1 rounded-xl border border-primary/10 p-4 bg-white/5">
+      <div className="flex flex-col flex-1 gap-4 rounded-xl border border-primary/10 p-4 bg-white/5">
         <TokenPriceChart token={tokenData} />
+        <div className="h-[350px] bg-white/10 rounded-xl animate-pulse"></div>
       </div>
 
-      <div className="w-full lg:w-70 xl:w-75 space-y-4">
+      <div className="w-full lg:w-80 xl:w-85 space-y-4">
         <TradeWindow
           token={dataArr as unknown as TradeWindowToken[]}
           stablecoins={fiat}
         />
-        <AssetInfo
+        <AssetInfo ticker={data.symbol} {...data} price={priceAvg} />
+        <PayoutTimeline
           ticker={data.symbol}
-          {...data}
-          price={priceAvg}
+          totalDays={7}
+          endDate={"March 6, 2025"}
         />
       </div>
     </div>
