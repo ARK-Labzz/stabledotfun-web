@@ -5,6 +5,7 @@ import TradeWindow from "@/components/trade-window";
 import { notFound } from "next/navigation";
 import { TokenPriceChart } from "./components/chart-display";
 import { generateTokenData } from "@/lib/utils";
+import AssetInfo from "./components/asset-info";
 
 async function getData(): Promise<AssetProp[]> {
   // Fetch data from your API here.
@@ -30,19 +31,24 @@ export default async function AssetDetail({
   const data = dataArr.length > 0 ? dataArr[0] : null;
 
   if (!data) return notFound();
+  
+  const priceAvg = tokenData[tokenData.length - 1].price;
 
   return (
     <div className="space-y-4 flex gap-4">
       <div className="flex flex-col flex-1 rounded-xl border border-primary/10 p-4 bg-white/5">
         <TokenPriceChart token={tokenData} />
-        {data.name}
       </div>
 
       <div className="w-full lg:w-70 xl:w-75 space-y-4">
         <TradeWindow
-          className="h-full"
           token={dataArr as unknown as TradeWindowToken[]}
           stablecoins={fiat}
+        />
+        <AssetInfo
+          ticker={data.symbol}
+          {...data}
+          price={priceAvg}
         />
       </div>
     </div>

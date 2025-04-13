@@ -42,7 +42,7 @@ const chartConfig = {
 
 export function TokenPriceChart({ token }: { token: ChartTokenData[] }) {
   const [asc, setAsc] = React.useState<boolean>(false);
-  const [timeframe, setTimeframe] = useState<Timeframe>("7D");
+  const [timeframe, setTimeframe] = useState<Timeframe>("30D");
   const [bondType, setBondType] = useState<BondType>("ALL");
 
   const filteredData = useFilteredData(token, timeframe, bondType);
@@ -53,26 +53,12 @@ export function TokenPriceChart({ token }: { token: ChartTokenData[] }) {
     [filteredData]
   );
 
-  //   const averagePrice = useMemo(
-  //     () =>
-  //       filteredData.reduce((sum, entry) => sum + entry.price, 0) /
-  //       filteredData.length,
-  //     [filteredData]
-  //   );
-
-  //   const averageYield = useMemo(
-  //     () =>
-  //       filteredData.reduce((sum, entry) => sum + (entry.yield || 0), 0) /
-  //       filteredData.length,
-  //     [filteredData]
-  //   );
-
   // Calculate statistics
   const currentPrice = filteredData[filteredData.length - 1].price;
 
-  const sortedData = filteredData
-    ?.filter((_, i) => i < 10)
-    ?.sort((a, b) => (!asc ? a.price - b.price : b.price - a.price));
+  const sortedData = filteredData?.sort((a, b) =>
+    !asc ? a.price - b.price : b.price - a.price
+  );
   // HACK - Sorts data in decending order on default
 
   // Format X-axis labels based on timeframe
@@ -85,7 +71,7 @@ export function TokenPriceChart({ token }: { token: ChartTokenData[] }) {
   return (
     <div className="rounded-xl border border-primary/30 p-4 bg-white/5 flex flex-col flex-1 gap-8">
       <div className="flex flex-1 items-center justify-between">
-        <div className="flex gap-4">
+        <div className="flex gap-4 flex-wrap flex-1">
           <div className="flex gap-2">
             <span className="w-9 h-9 rounded-lg bg-white/5 flex items-center justify-center">
               <span className="w-3 h-3 bg-[#D9D9D9] rounded-full"></span>
@@ -109,7 +95,15 @@ export function TokenPriceChart({ token }: { token: ChartTokenData[] }) {
             <div className="text-primary text-xs flex flex-col">
               Token Price
               <span className="text-white text-sm">
-                $
+                {bondType === "CETES"
+                  ? "CETES"
+                  : bondType === "EUROB"
+                  ? "EUROB"
+                  : bondType === "EUR"
+                  ? "EUR"
+                  : bondType === "GBP"
+                  ? "GBP"
+                  : "$"}
                 {currentPrice.toLocaleString("en", {
                   compactDisplay: "long",
                   currency: "USD",
@@ -127,7 +121,7 @@ export function TokenPriceChart({ token }: { token: ChartTokenData[] }) {
             value={timeframe}
             onValueChange={(value) => setTimeframe(value as Timeframe)}
           >
-            <SelectTrigger className="w-[80px] bg-white/5">
+            <SelectTrigger className="w-[80px] bg-white/5 border border-primary/30 text-xs">
               <SelectValue placeholder="Bond Type" />
             </SelectTrigger>
             <SelectContent>
@@ -154,7 +148,7 @@ export function TokenPriceChart({ token }: { token: ChartTokenData[] }) {
             value={bondType}
             onValueChange={(value) => setBondType(value as BondType)}
           >
-            <SelectTrigger className="w-[150px] bg-white/3">
+            <SelectTrigger className="w-[120px] bg-white/3 border border-primary/30 text-xs">
               <SelectValue placeholder="Bond Type" />
             </SelectTrigger>
             <SelectContent>

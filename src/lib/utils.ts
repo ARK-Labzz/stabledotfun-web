@@ -32,7 +32,7 @@ export const generateTokenData = async (): Promise<ChartTokenData[]> => {
 
     // Volume follows price movements with some randomness
     currentVolume = Math.min(
-      1_000_000_000_000,
+      1_000_000_000,
       Math.max(
         500000,
         currentVolume *

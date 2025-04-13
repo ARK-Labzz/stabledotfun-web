@@ -84,6 +84,8 @@ export default function TradeWindow({
 
   const getAmount = tokenRatioChange * amount;
 
+  const hasEnoughToken = !tokens || tokens.length <= 1;
+
   return (
     <div
       className={cn(
@@ -96,12 +98,13 @@ export default function TradeWindow({
           <div>Sell Your Stablecoin</div>
           {tokens && (
             <Popover open={open} onOpenChange={setOpen}>
-              <PopoverTrigger asChild>
+              <PopoverTrigger asChild disabled={hasEnoughToken}>
                 <Button
                   variant="outline"
                   role="combobox"
                   aria-expanded={open}
                   className="w-[110px] justify-between bg-white/10 border-primary/30 gap-1 px-0"
+                  disabled={hasEnoughToken}
                 >
                   <ChevronDown className="opacity-50" />
                   {tokens ? (
