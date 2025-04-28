@@ -25,7 +25,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${sora.className} bg-[#051016] text-white`}>
+      <body className={`${sora.className} bg-background text-white`}>
         <DynamicProvider>
           <QueryProvider>
             <WagmiConnector>

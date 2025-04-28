@@ -95,7 +95,7 @@ export default function TradeWindow({
     >
       <div className="bg-white/5 rounded-xl p-4 border border-secondary/30 flex-col gap-3 flex">
         <div className="flex flex-1 justify-between items-center">
-          <div>Sell Your Stablecoin</div>
+          <div >Sell Your Stablecoin</div>
           {tokens && (
             <Popover open={open} onOpenChange={setOpen}>
               <PopoverTrigger asChild disabled={hasEnoughToken}>
@@ -103,10 +103,10 @@ export default function TradeWindow({
                   variant="outline"
                   role="combobox"
                   aria-expanded={open}
-                  className="w-[110px] justify-between bg-white/10 border-primary/30 gap-1 px-0"
+                  className="w-[100px] justify-between items-center bg-white/10 border-primary/30 gap-1 px-2"
                   disabled={hasEnoughToken}
                 >
-                  <ChevronDown className="opacity-50" />
+                  <ChevronDown className="opacity-50 w-2 h-2" />
                   {tokens ? (
                     <>
                       {
@@ -123,9 +123,9 @@ export default function TradeWindow({
                               token.value === activeToken?.name.toLowerCase()
                           )?.icon || "/placeholder.svg"
                         }
-                        className="h-4 w-4 rounded-full bg-gray-500"
-                        width={16}
-                        height={16}
+                        className="h-3 w-3 rounded-full bg-gray-500"
+                        width={12}
+                        height={12}
                         alt={
                           tokens.find(
                             (token) =>
