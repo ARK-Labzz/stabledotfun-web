@@ -111,7 +111,8 @@ export default function AssetInfo({
               maximumFractionDigits: 6,
               minimumFractionDigits: 0,
               compactDisplay: "long",
-            })}{"% "}
+            })}
+            {"% "}
             APY
           </span>
         </div>

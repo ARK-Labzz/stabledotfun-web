@@ -135,7 +135,7 @@ export default function SellWindow({
                       variant="outline"
                       role="combobox"
                       aria-expanded={open}
-                      className="w-[110px] justify-between bg-white/10 border-primary/30 gap-1 px-0"
+                      className="w-[110px] justify-between bg-white/5 border-primary/30 gap-1 px-0"
                     >
                       <ChevronDown className="opacity-50" />
                       {tokens ? (
@@ -225,7 +225,7 @@ export default function SellWindow({
                   className={cn(
                     "flex flex-1 border cursor-pointer uppercase font-normal",
                     tradeType === "buy"
-                      ? "border-primary text-white bg-white/10"
+                      ? "border-primary text-white bg-white/5"
                       : "text-white/50 bg-white/5 border-white/10"
                   )}
                   onClick={() => setTradeType("buy")}
@@ -237,7 +237,7 @@ export default function SellWindow({
                   className={cn(
                     "flex flex-1 border cursor-pointer uppercase font-normal",
                     tradeType === "sell"
-                      ? "border-primary text-white bg-white/10"
+                      ? "border-primary text-white bg-white/5"
                       : "text-white/50 bg-white/5 border-white/10"
                   )}
                   onClick={() => setTradeType("sell")}

@@ -39,7 +39,7 @@ export default async function AssetDetail({
     <div className="space-y-4 flex gap-4">
       <div className="flex flex-col flex-1 gap-4 rounded-xl border border-primary/10 p-4 bg-white/5">
         <TokenPriceChart token={tokenData} />
-        <div className="h-[350px] bg-white/10 rounded-xl animate-pulse"></div>
+        <div className="h-[350px] bg-white/5 rounded-xl animate-pulse"></div>
       </div>
 
       <div className="w-full lg:w-80 xl:w-85 space-y-4">

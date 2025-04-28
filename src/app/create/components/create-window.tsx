@@ -70,7 +70,7 @@ export default function CreateWindow({ stablecoins }: CreateWindowProp) {
   React.useEffect(() => {
     if (activeStable) {
       console.log({ symbol, name, logo, activeStable });
-        set(symbol, name, logo || null, activeStable);
+      set(symbol, name, logo || null, activeStable);
     }
   }, [activeStable, logo, name, set, symbol]);
 
@@ -99,7 +99,7 @@ export default function CreateWindow({ stablecoins }: CreateWindowProp) {
                     <FormControl>
                       <Input
                         placeholder="MXNs"
-                        className="bg-white/10 border-white/5 border"
+                        className="bg-white/5 border-white/5 border"
                         {...field}
                       />
                     </FormControl>
@@ -121,7 +121,7 @@ export default function CreateWindow({ stablecoins }: CreateWindowProp) {
                     <FormControl>
                       <Input
                         placeholder="Mexican Peso Stablecoin"
-                        className="bg-white/10 border-white/5 border"
+                        className="bg-white/5 border-white/5 border"
                         {...field}
                       />
                     </FormControl>

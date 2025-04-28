@@ -163,91 +163,90 @@ export function TokenPriceChart({ token }: { token: ChartTokenData[] }) {
         </div>
       </div>
 
-        <ChartContainer
-          config={chartConfig}
-          className={cn("min-h-[200px] bg-white/1 rounded-xl p-5")}
-        >
-          <ResponsiveContainer width="100%" height="100%">
-            <AreaChart
-              data={sortedData}
-              margin={{
-                top: 10,
-                right: 20,
-                left: 0,
-                bottom: 0,
+      <ChartContainer
+        config={chartConfig}
+        className={cn("min-h-[200px] bg-white/1 rounded-xl p-5")}
+      >
+        <ResponsiveContainer width="100%" height="100%">
+          <AreaChart
+            data={sortedData}
+            margin={{
+              top: 10,
+              right: 20,
+              left: 0,
+              bottom: 0,
+            }}
+          >
+            <defs>
+              <linearGradient id="priceGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#7fcdd3" stopOpacity={0.2} />
+                <stop offset="95%" stopColor="#7fcdd3" stopOpacity={0} />
+              </linearGradient>
+              <linearGradient id="volumeGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#BDD0D1" stopOpacity={0.2} />
+                <stop offset="95%" stopColor="#BDD0D1" stopOpacity={0} />
+              </linearGradient>
+            </defs>
+            <CartesianGrid
+              strokeDasharray="3 3"
+              vertical={false}
+              stroke="#f0f0f0"
+            />
+            <XAxis
+              dataKey="date"
+              axisLine={false}
+              tickLine={false}
+              tick={{ fill: "#6b7280" }}
+              tickFormatter={formatXAxis}
+            />
+            <YAxis
+              yAxisId="left"
+              orientation="left"
+              axisLine={false}
+              tickLine={false}
+              tick={{ fill: "#6b7280" }}
+              tickFormatter={(value) => `$${value}`}
+            />
+            <YAxis
+              yAxisId="right"
+              orientation="right"
+              axisLine={false}
+              tickLine={false}
+              tick={{ fill: "#6b7280" }}
+            />
+            <Tooltip
+              content={<ChartTooltipContent />}
+              formatter={(value, name) => {
+                if (name === "price") return [`$${value}`, " Price"];
+                return [value.toLocaleString(), " Volume"];
               }}
-            >
-              <defs>
-                <linearGradient id="priceGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#7fcdd3" stopOpacity={0.2} />
-                  <stop offset="95%" stopColor="#7fcdd3" stopOpacity={0} />
-                </linearGradient>
-                <linearGradient id="volumeGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#BDD0D1" stopOpacity={0.2} />
-                  <stop offset="95%" stopColor="#BDD0D1" stopOpacity={0} />
-                </linearGradient>
-              </defs>
-              <CartesianGrid
-                strokeDasharray="3 3"
-                vertical={false}
-                stroke="#f0f0f0"
-              />
-              <XAxis
-                dataKey="date"
-                axisLine={false}
-                tickLine={false}
-                tick={{ fill: "#6b7280" }}
-                tickFormatter={formatXAxis}
-              />
-              <YAxis
-                yAxisId="left"
-                orientation="left"
-                axisLine={false}
-                tickLine={false}
-                tick={{ fill: "#6b7280" }}
-                tickFormatter={(value) => `$${value}`}
-              />
-              <YAxis
-                yAxisId="right"
-                orientation="right"
-                axisLine={false}
-                tickLine={false}
-                tick={{ fill: "#6b7280" }}
-              />
-              <Tooltip
-                content={<ChartTooltipContent />}
-                formatter={(value, name) => {
-                  if (name === "price") return [`$${value}`, " Price"];
-                  return [value.toLocaleString(), " Volume"];
-                }}
-                labelFormatter={(label) => `Month: ${label}`}
-              />
-              <Area
-                yAxisId="left"
-                type="monotone"
-                dataKey="price"
-                stroke="#7fcdd3"
-                fillOpacity={1}
-                fill="url(#priceGrad)"
-                strokeWidth={1}
-                strokeDasharray={"3 3"}
-                activeDot={{ r: 6 }}
-              />
-              <Area
-                yAxisId="right"
-                type="monotone"
-                dataKey="volume"
-                stroke="#BDD0D1"
-                fillOpacity={1}
-                fill="url(#volumeGrad)"
-                strokeWidth={1}
-                strokeDasharray={"3 3"}
-                activeDot={{ r: 6 }}
-              />
-            </AreaChart>
-          </ResponsiveContainer>
-        </ChartContainer>
-      
+              labelFormatter={(label) => `Month: ${label}`}
+            />
+            <Area
+              yAxisId="left"
+              type="monotone"
+              dataKey="price"
+              stroke="#7fcdd3"
+              fillOpacity={1}
+              fill="url(#priceGrad)"
+              strokeWidth={1}
+              strokeDasharray={"3 3"}
+              activeDot={{ r: 6 }}
+            />
+            <Area
+              yAxisId="right"
+              type="monotone"
+              dataKey="volume"
+              stroke="#BDD0D1"
+              fillOpacity={1}
+              fill="url(#volumeGrad)"
+              strokeWidth={1}
+              strokeDasharray={"3 3"}
+              activeDot={{ r: 6 }}
+            />
+          </AreaChart>
+        </ResponsiveContainer>
+      </ChartContainer>
     </div>
   );
 }
