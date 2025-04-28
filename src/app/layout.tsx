@@ -25,8 +25,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <DynamicProvider>
-        <body className={`${sora.className} bg-[#051016] text-white`}>
+      <body className={`${sora.className} bg-[#051016] text-white`}>
+        <DynamicProvider>
           <QueryProvider>
             <WagmiConnector>
               <SidebarProvider defaultOpen={false}>
@@ -43,8 +43,8 @@ export default function RootLayout({
               </SidebarProvider>
             </WagmiConnector>
           </QueryProvider>
-        </body>
-      </DynamicProvider>
+        </DynamicProvider>
+      </body>
     </html>
   );
 }

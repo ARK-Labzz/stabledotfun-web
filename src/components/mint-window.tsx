@@ -54,7 +54,7 @@ const MintWindow = ({ stablecoins }: CreateMiniWindowProp) => {
     if (logo) form.setValue("logo", logo);
     if (publicKey) form.setValue("wallet", publicKey);
   }, [name, ticker, form, fiat, logo, publicKey]);
-  
+
   React.useEffect(() => {
     if (stablecoins && stablecoins.length > 0) {
       setActiveStable(stablecoins[0]); // Set the active token to the first index

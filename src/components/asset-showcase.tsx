@@ -206,9 +206,13 @@ export default function AssetShowcase({
                   <TableRow
                     key={el.id}
                     className="text-xs my-4 border-b-white/5 hover:bg-muted/5"
+                    data-href={`/portfolio/${el.id}`}
                   >
-                    <Link href={`/portfolio/${el.id}`}>
-                      <TableCell className="flex items-center gap-2 w-1/2">
+                    <TableCell className="flex items-center gap-2 w-1/2">
+                      <Link
+                        href={`/portfolio/${el.id}`}
+                        className="flex gap-3 items-center hover:text-primary transition-colors ease-in duration-200"
+                      >
                         <Image
                           src={el.image}
                           alt={el.name}
@@ -217,16 +221,16 @@ export default function AssetShowcase({
                           className="rounded-md bg-white/5"
                         />
                         {el.symbol}s ({el.fiat})
-                      </TableCell>
-                    </Link>
-                      <TableCell
-                        className={cn(
-                          "text-center w-1/2",
-                          el.change >= 0 ? "text-primary" : "text-red-400"
-                        )}
-                      >
-                        ${el.price}
-                      </TableCell>
+                      </Link>
+                    </TableCell>
+                    <TableCell
+                      className={cn(
+                        "text-center w-1/2",
+                        el.change >= 0 ? "text-primary" : "text-red-400"
+                      )}
+                    >
+                      ${el.price}
+                    </TableCell>
                   </TableRow>
                 ))}
             </TableBody>

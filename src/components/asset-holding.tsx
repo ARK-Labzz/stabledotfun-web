@@ -102,18 +102,21 @@ export default function AssetHolding({ className, asset }: AssetHoldingProps) {
                   key={el.id}
                   className="text-xs my-4 border-b-white/5 hover:bg-muted/5"
                 >
-                  <Link href={`/portfolio/${el.id}`}>
                   <TableCell className="flex items-center gap-2 w-1/2">
-                    <Image
-                      src={el.image}
-                      alt={el.name}
-                      width={28}
-                      height={28}
-                      className="rounded-md bg-white/5"
-                    />
-                    {el.symbol}s ({el.fiat})
+                    <Link
+                      href={`/portfolio/${el.id}`}
+                      className="flex gap-3 items-center hover:text-primary transition-colors ease-in duration-200"
+                    >
+                      <Image
+                        src={el.image}
+                        alt={el.name}
+                        width={28}
+                        height={28}
+                        className="rounded-md bg-white/5"
+                      />
+                      {el.symbol}s ({el.fiat})
+                    </Link>
                   </TableCell>
-                  </Link>
                   <TableCell
                     className={cn(
                       "text-center",

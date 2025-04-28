@@ -91,7 +91,7 @@ export default function RedeemWindow({ token, stablecoins }: RedeemWindowProp) {
   }, [activeStable, activeToken, set, watch]);
 
   function onSubmit(data: z.infer<typeof RedeemSchema>) {
-    console.log({data, tokens});
+    console.log({ data, tokens });
   }
 
   const handleCopy = () => {

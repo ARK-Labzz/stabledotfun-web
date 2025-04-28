@@ -13,7 +13,7 @@ interface TimelineProgressProps {
   totalDays?: number;
   onWithdraw?: () => void;
   className?: string;
-  ticker?: string
+  ticker?: string;
 }
 
 export function PayoutTimeline({
@@ -24,8 +24,7 @@ export function PayoutTimeline({
   totalDays = 30,
   onWithdraw,
   className,
-  ticker
-
+  ticker,
 }: TimelineProgressProps) {
   const progress = ((totalDays - daysLeft) / totalDays) * 100;
 
@@ -39,9 +38,8 @@ export function PayoutTimeline({
       <div className="flex flex-col gap-8 mb-10 space-y-6">
         <div className="flex flex-1 flex-col gap-4 justify-end items-start mb-7">
           <div className="flex w-full gap-1">
-            Payout Period {ticker && (
-              <span className="text-white/30">({ticker}s)</span>
-            )}
+            Payout Period{" "}
+            {ticker && <span className="text-white/30">({ticker}s)</span>}
             <span className="text-primary px-2 py-1 rounded-md text-xs ml-auto bg-[#00BCD429]">
               {totalDays} days
             </span>

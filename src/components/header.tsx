@@ -168,36 +168,35 @@ export default function Header() {
         </div>
       </div>
       <div className="flex w- overflow-hidden">
-
-      <svg
-        // width="1751"
-        height="1"
-        viewBox="0 0 1751 1"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        className="w-full"
-      >
-        <line
-          y1="0.5"
-          x2="1751"
-          y2="0.5"
-          stroke="url(#paint0_linear_120_492)"
-        />
-        <defs>
-          <linearGradient
-            id="paint0_linear_120_492"
-            x1="0"
-            y1="1.5"
+        <svg
+          // width="1751"
+          height="1"
+          viewBox="0 0 1751 1"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          className="w-full"
+        >
+          <line
+            y1="0.5"
             x2="1751"
-            y2="1.5"
-            gradientUnits="userSpaceOnUse"
-          >
-            <stop stop-color="white" stop-opacity="0" />
-            <stop offset="0.129" stop-color="#00BCD4" />
-            <stop offset="1" stop-color="#CCCCCC" stop-opacity="0" />
-          </linearGradient>
-        </defs>
-      </svg>
+            y2="0.5"
+            stroke="url(#paint0_linear_120_492)"
+          />
+          <defs>
+            <linearGradient
+              id="paint0_linear_120_492"
+              x1="0"
+              y1="1.5"
+              x2="1751"
+              y2="1.5"
+              gradientUnits="userSpaceOnUse"
+            >
+              <stop stop-color="white" stop-opacity="0" />
+              <stop offset="0.129" stop-color="#00BCD4" />
+              <stop offset="1" stop-color="#CCCCCC" stop-opacity="0" />
+            </linearGradient>
+          </defs>
+        </svg>
       </div>
     </header>
   );
