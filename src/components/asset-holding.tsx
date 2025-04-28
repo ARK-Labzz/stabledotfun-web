@@ -102,7 +102,7 @@ export default function AssetHolding({ className, asset }: AssetHoldingProps) {
                   key={el.id}
                   className="text-xs my-4 border-b-white/5 hover:bg-muted/5"
                 >
-                  <Link href={`/assets/${el.id}`}>
+                  <Link href={`/portfolio/${el.id}`}>
                   <TableCell className="flex items-center gap-2 w-1/2">
                     <Image
                       src={el.image}

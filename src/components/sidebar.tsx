@@ -28,9 +28,9 @@ export default function AppSidebar() {
 
   const navItems = [
     { icon: DashboardIcon, label: "Dashboard", href: "/" },
-    { icon: StackIcon, label: "My Assets", href: "/assets" },
+    { icon: StackIcon, label: "Portfolio", href: "/portfolio" },
     { icon: CashIcon, label: "Create Stablecoin", href: "/create" },
-    { icon: CreateFoldericon, label: "Redeem Assets", href: "/redeem" },
+    { icon: CreateFoldericon, label: "Redeem Stablecoins", href: "/redeem" },
     { icon: HelpIcon, label: "Help & Support", href: "/help" },
     // { icon: SettingIcon, label: "Settings", href: "/setting" },
   ];
