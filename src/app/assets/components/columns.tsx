@@ -14,7 +14,7 @@ export const columns: ColumnDef<AssetProp>[] = [
     cell: ({ row }) => {
       const { image, name, symbol, fiat, id } = row.original;
       return (
-        <Link href={`/assets/${id}`}>
+        <Link href={`/portfolio/${id}`}>
           <div className="flex items-center gap-2 pr-3">
             <Image
               src={image}
