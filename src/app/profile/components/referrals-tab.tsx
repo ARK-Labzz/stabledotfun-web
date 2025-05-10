@@ -26,7 +26,7 @@ export default function ReferralsTab({ referralUsers, referralCode }: ReferralsT
   if (referralUsers.length === 0) {
     return (
       <div className="text-center py-16 bg-white/5 rounded-2xl border border-secondary/30">
-        <p className="text-gray-400 mb-4">You don't have any referrals yet.</p>
+        <p className="text-gray-400 mb-4">You don&apos;t have any referrals yet.</p>
         <Button onClick={handleCopyReferralCode}>
           Share Your Referral Code
         </Button>

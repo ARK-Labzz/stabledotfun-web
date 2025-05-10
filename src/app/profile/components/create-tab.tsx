@@ -25,7 +25,7 @@ export default function CreatedTab({ coinsCreated }: CreatedTabProps) {
   if (coinsCreated.length === 0) {
     return (
       <div className="text-center py-16 bg-white/5 rounded-2xl border border-secondary/30">
-        <p className="text-gray-400 mb-4">You haven't created any stablecoins yet.</p>
+        <p className="text-gray-400 mb-4">You haven&apos;t created any stablecoins yet.</p>
         <Button onClick={() => router.push("/create")}>
           Create Your First Stablecoin
         </Button>
