@@ -1,18 +1,38 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { stablecoins, token } from "@/static-data/token";
+import { token } from "@/static-data/token";
 import AssetWindow from "./components/asset-window";
-import { AssetProp, TradeWindowToken } from "@/types";
-import SellWindow from "./components/sell-window";
+import { AssetProp } from "@/types";
 import { PayoutTimeline } from "@/components/payout-timeline";
+import UserDetails from "@/components/user-details";
+import MetricsCards from "./components/metrics-card";
 
 async function getData(): Promise<AssetProp[]> {
   // Fetch data from your API here.
   return token as AssetProp[];
 }
 
+// Calculate overall portfolio metrics
+function calculateMetrics(data: AssetProp[]) {
+  const netWorth = data.reduce((sum, asset) => sum + asset.currentInvestment, 0);
+  const initialInvestment = data.reduce((sum, asset) => sum + asset.initialInvestment, 0);
+  const returnOnInvestment = netWorth - initialInvestment;
+  const roiPercentage = initialInvestment > 0 ? (returnOnInvestment / initialInvestment) * 100 : 0;
+  const weeklyChange = 7.69; // Mock data, this would be calculated from historical data
+
+  return {
+    netWorth,
+    invested: initialInvestment,
+    returnOnInvestment,
+    roiPercentage,
+    weeklyChange
+  };
+}
+
 export default async function AssetsPage() {
   const data = await getData();
+  const metrics = calculateMetrics(data);
+  
   // TODO - Implement token fetch api to replace the static `token` import
   if (!data || data.length < 1) return <NoAssetFound />;
 
@@ -54,13 +74,22 @@ export default async function AssetsPage() {
         </svg>
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-4">
+      {/* Mobile layout: UserDetails -> Metrics -> Table -> Timeline */}
+      <div className="flex flex-col lg:hidden gap-4">
+        <UserDetails username="stable.user" className="w-full" />
+        <MetricsCards metrics={metrics} />
         <AssetWindow data={data} />
-        <div className="flex flex-col gap-4">
-          <SellWindow
-            stablecoins={stablecoins}
-            token={data as unknown as TradeWindowToken[]}
-          />
+        <PayoutTimeline />
+      </div>
+
+      {/* Desktop layout: Split into columns */}
+      <div className="hidden lg:flex lg:flex-row gap-4">
+        <div className="flex-1 flex flex-col gap-4">
+          <MetricsCards metrics={metrics} />
+          <AssetWindow data={data} />
+        </div>
+        <div className="flex flex-col gap-4 lg:w-80 xl:w-96">
+          <UserDetails username="stable.user" />
           <PayoutTimeline />
         </div>
       </div>
@@ -72,7 +101,7 @@ function NoAssetFound() {
   return (
     <div className="flex flex-col items-center justify-center h-[calc(100vh-120px)]">
       <div className="text-center max-w-md">
-        <h2 className="text-2xl font-bold mb-4">Your Assets</h2>
+        <h2 className="text-2xl font-bold mb-4">Holdings</h2>
         <p className="text-white/50 mb-6">
           {
             "You don't have any assets yet. Create a stablecoin or buy one to get started."

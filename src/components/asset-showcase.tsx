@@ -50,17 +50,17 @@ export default function AssetShowcase({
   return (
     <div
       className={cn(
-        "flex flex-col gap-1 bg-white/5 rounded-2xl p-4 border border-secondary/30 overflow-scroll",
+        "flex flex-col gap-1 bg-white/5 rounded-2xl p-4 border border-secondary/30",
         className
       )}
     >
       <div className="flex justify-between mb-4">
         <div className="flex items-center gap-2">
           <span className="text-xs font-normal text-primary">
-            Available coins
+            Top Stablecoins
           </span>
           <span className="text-xs font-normal px-2 py-1 rounded-md text-gray-400 bg-secondary/70">
-            {assets?.length} Assets
+            {assets?.filter((_, i) => i < 5).length} Assets
           </span>
         </div>
         <div className="flex gap-2">
@@ -77,11 +77,11 @@ export default function AssetShowcase({
           </button>
         </div>
       </div>
-      <div className="relative flex flex-col lg:flex-row gap-3 overflow-x-auto overflow-y-hidden">
+      <div className="relative flex flex-col lg:flex-row gap-3 overflow-x-auto overflow-y-hidden custom-scrollbar">
         <div className="lg:w-3/7 flex z-10">
           <motion.div
             className={cn(
-              "relative h-full pb-6 md:pb-0 bg-[#121c2200] flex gap-3 flex-1 overflow-x-auto overflow-y-hidden",
+              "relative h-full pb-6 md:pb-0 bg-[#121c2200] flex gap-3 flex-1 overflow-x-auto overflow-y-hidden custom-scrollbar",
               isHover ? "absolute bg-background/40 backdrop-blur-md" : ""
             )}
             onHoverStart={() => setHover(true)}
@@ -118,8 +118,8 @@ export default function AssetShowcase({
                     backgroundColor: "#051016",
                   }}
                   transition={{
-                    duration: 0.5,
-                    ease: [0.25, 0.1, 0.25, 1],
+                    duration: 0.8,
+                    ease: [0.22, 1, 0.36, 1],
                   }}
                 >
                   <div className="flex justify-between items-center 2xl:items-start mb-2 gap-1">
@@ -187,15 +187,27 @@ export default function AssetShowcase({
               ))}
           </motion.div>
         </div>
-        <div className="flex-1 z-0 rounded-2xl p-4 border border-secondary/30 bg-white/5">
+        <div className="flex-1 z-0 rounded-2xl p-4 border border-secondary/30 bg-white/5 overflow-x-auto custom-scrollbar">
           <Table>
             <TableHeader>
               <TableRow className="w-full border-none hover:bg-transparent">
-                <TableHead className="bg-white/5 outline-white/10 text-white text-xs font-normal rounded-md rounded-r-none text-center">
-                  Stablecoin
+                <TableHead className="bg-white/5 outline-white/10 text-white text-xs font-normal text-center">
+                  Name
                 </TableHead>
-                <TableHead className="bg-white/5 outline-white/10 text-white text-xs font-normal rounded-md rounded-l-none text-center">
-                  Price
+                <TableHead className="bg-white/5 outline-white/10 text-white text-xs font-normal text-center">
+                  Price (USD)
+                </TableHead>
+                <TableHead className="bg-white/5 outline-white/10 text-white text-xs font-normal text-center hidden md:table-cell">
+                  MCap
+                </TableHead>
+                <TableHead className="bg-white/5 outline-white/10 text-white text-xs font-normal text-center hidden md:table-cell">
+                  Bond
+                </TableHead>
+                <TableHead className="bg-white/5 outline-white/10 text-white text-xs font-normal text-center hidden md:table-cell">
+                  Start Date
+                </TableHead>
+                <TableHead className="bg-white/5 outline-white/10 text-white text-xs font-normal text-center hidden lg:table-cell">
+                  Next Maturity Date
                 </TableHead>
               </TableRow>
             </TableHeader>
@@ -208,7 +220,7 @@ export default function AssetShowcase({
                     className="text-xs my-4 border-b-white/5 hover:bg-muted/5"
                     data-href={`/portfolio/${el.id}`}
                   >
-                    <TableCell className="flex items-center gap-2 w-1/2">
+                    <TableCell className="flex items-center gap-2">
                       <Link
                         href={`/portfolio/${el.id}`}
                         className="flex gap-3 items-center hover:text-primary transition-colors ease-in duration-200"
@@ -225,11 +237,23 @@ export default function AssetShowcase({
                     </TableCell>
                     <TableCell
                       className={cn(
-                        "text-center w-1/2",
+                        "text-center",
                         el.change >= 0 ? "text-primary" : "text-red-400"
                       )}
                     >
-                      ${el.price}
+                      ${el.price.toFixed(6)}
+                    </TableCell>
+                    <TableCell className="text-center hidden md:table-cell">
+                      ${((el.price * (el.supply || 1000000)) / 1000000).toFixed(2)}M
+                    </TableCell>
+                    <TableCell className="text-center hidden md:table-cell">
+                      {el.bond || "CETES"}
+                    </TableCell>
+                    <TableCell className="text-center hidden md:table-cell">
+                      {el.startDate || "May 8, 2025"}
+                    </TableCell>
+                    <TableCell className="text-center hidden lg:table-cell">
+                      {el.maturityDate || "May 15, 2025"}
                     </TableCell>
                   </TableRow>
                 ))}
@@ -240,3 +264,4 @@ export default function AssetShowcase({
     </div>
   );
 }
+

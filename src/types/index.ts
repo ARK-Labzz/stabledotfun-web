@@ -16,6 +16,9 @@ export interface AssetProp {
   tvl?: number;
   interest?: number;
   liquidity?: number;
+  bond?: string;
+  startDate?: string;
+  maturityDate?: string;
 }
 
 export interface TradeWindowProp {
@@ -27,11 +30,14 @@ export interface TradeWindowProp {
 export interface TradeWindowToken {
   id: string;
   name: string;
-  icon: string;
+  icon?: string; 
+  image?: string;  
   amount: number;
   ratio: number;
   fiat: string;
   symbol: string;
+  apy?: number;    
+  price?: number;
 }
 
 export interface TradeWindowTokenComboBox extends TradeWindowToken {

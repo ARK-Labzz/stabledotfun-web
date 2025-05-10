@@ -3,7 +3,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ChevronDown, Upload } from "lucide-react";
+import { ChevronDown, Info, Upload } from "lucide-react";
 import { TradeWindowToken, TradeWindowTokenComboBox } from "@/types";
 import {
   Command,
@@ -26,6 +26,13 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { Switch } from "@/components/ui/switch";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -40,12 +47,24 @@ interface CreateWindowProp {
 
 export default function CreateWindow({ stablecoins }: CreateWindowProp) {
   const { set } = useCreateCoin();
-  const [activeStable, setActiveStable] =
-    React.useState<TradeWindowToken | null>(null);
+  const [activeStable, setActiveStable] = React.useState<TradeWindowToken | null>(null);
+  const [isCToken, setIsCToken] = React.useState<boolean>(false);
+  const [, setLogoFile] = React.useState<File | null>(null); // Fixed: removed unused variable
+  const [logoPreview, setLogoPreview] = React.useState<string | null>(null);
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   const [stables, setStables] = React.useState<
     TradeWindowTokenComboBox[] | null
   >(null);
+
+  // Bond mapping based on fiat currency
+  const bondMap: Record<string, { bond: string; apy: number }> = {
+    USD: { bond: "USTRY", apy: 3.62 },
+    GBP: { bond: "GILTS", apy: 3.92 },
+    EUR: { bond: "EUROB", apy: 1.95 },
+    MXN: { bond: "CETES", apy: 7.3 },
+    BRL: { bond: "TESUORO", apy: 12.95 },
+  };
 
   React.useEffect(() => {
     if (stablecoins && stablecoins.length > 0) {
@@ -56,7 +75,7 @@ export default function CreateWindow({ stablecoins }: CreateWindowProp) {
         value: el.name.toLowerCase(),
       }));
       setStables(output);
-    } // TODO - Make this reset the stablecoin when fetched from API
+    }
   }, [stablecoins]);
 
   const form = useForm<z.infer<typeof CreateWindowSchema>>({
@@ -65,15 +84,86 @@ export default function CreateWindow({ stablecoins }: CreateWindowProp) {
 
   const watch = form.watch();
   const stablecoinSymbol = watch.symbol;
-  const { symbol, name, logo } = watch;
+  const { symbol, name } = watch; // Fixed: removed unused variables
 
   React.useEffect(() => {
     if (activeStable) {
-      console.log({ symbol, name, logo, activeStable });
-      set(symbol, name, logo || null, activeStable);
+      const bondInfo = activeStable.fiat ? bondMap[activeStable.fiat] || { bond: "CETES", apy: 7.3 } : { bond: "CETES", apy: 7.3 };
+      
+      set(
+        symbol || null, 
+        name || null, 
+        logoPreview, 
+        activeStable, 
+        isCToken, 
+        bondInfo.bond,
+        bondInfo.apy,
+        0 // Initial supply is 0
+      );
     }
-  }, [activeStable, logo, name, set, symbol]);
+  }, [activeStable, logoPreview, name, set, symbol, isCToken, bondMap]); 
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      
+      // Check file size (1MB = 1048576 bytes)
+      if (file.size > 1048576) {
+        form.setError("logo", { message: "File is too large. Maximum size is 1MB." });
+        return;
+      }
+      
+      // Check file type
+      if (!file.type.includes('image/png') && !file.type.includes('image/jpeg')) {
+        form.setError("logo", { message: "Only PNG and JPG files are allowed." });
+        return;
+      }
+      
+      setLogoFile(file);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const result = e.target?.result as string;
+        setLogoPreview(result);
+        form.setValue("logo", result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      const file = e.dataTransfer.files[0];
+      
+      // Check file size and type as above
+      if (file.size > 1048576) {
+        form.setError("logo", { message: "File is too large. Maximum size is 1MB." });
+        return;
+      }
+      
+      if (!file.type.includes('image/png') && !file.type.includes('image/jpeg')) {
+        form.setError("logo", { message: "Only PNG and JPG files are allowed." });
+        return;
+      }
+      
+      setLogoFile(file);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const result = e.target?.result as string;
+        setLogoPreview(result);
+        form.setValue("logo", result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+  
   function onSubmit(data: z.infer<typeof CreateWindowSchema>) {
     console.log(data);
   }
@@ -234,12 +324,73 @@ export default function CreateWindow({ stablecoins }: CreateWindowProp) {
 
           <div className="mb-6">
             <div className="text-sm text-gray-400 mb-2">Logo</div>
-            <div className="bg-gray-600/5 rounded-lg border-[1px] border-gray-600/10 p-8 flex flex-col items-center justify-center">
-              <Upload size={24} className="text-gray-400 mb-2" />
-              <div className="text-sm font-medium mb-1">
-                Click to Upload or drag and drop
+            <div 
+              className="bg-gray-600/5 rounded-lg border-[1px] border-gray-600/10 p-8 flex flex-col items-center justify-center cursor-pointer"
+              onClick={() => fileInputRef.current?.click()}
+              onDragOver={handleDragOver}
+              onDrop={handleDrop}
+            >
+              <input 
+                type="file" 
+                ref={fileInputRef} 
+                onChange={handleFileChange} 
+                className="hidden" 
+                accept="image/png,image/jpeg"
+              />
+              {logoPreview ? (
+                <div className="flex flex-col items-center">
+                  <div className="w-20 h-20 mb-2 overflow-hidden rounded-lg">
+                    <Image 
+                      src={logoPreview} 
+                      alt="Logo preview" 
+                      width={80} 
+                      height={80}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div className="text-sm font-medium">Click to change</div>
+                </div>
+              ) : (
+                <>
+                  <Upload size={24} className="text-gray-400 mb-2" />
+                  <div className="text-sm font-medium mb-1">
+                    Click to Upload or drag and drop
+                  </div>
+                  <div className="text-xs text-gray-400">PNG, JPG (1MB)</div>
+                </>
+              )}
+            </div>
+            {form.formState.errors.logo && (
+              <p className="text-red-500 text-xs mt-1">{form.formState.errors.logo.message}</p>
+            )}
+          </div>
+
+          <div className="mb-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-gray-400">cToken</span>
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <Info size={16} className="text-gray-400" />
+                    </TooltipTrigger>
+                    <TooltipContent className="max-w-xs">
+                      <p className="text-xs">
+                        Compressed Tokens store multiple token accounts within a single Merkle Tree. 
+                        Only a small hash representing the tree is stored onchain while the account data 
+                        is kept offchain and the original tokens are held in a common pool account. 
+                        This compression reduces cost by about 95% and enables thousands of token accounts 
+                        to be created for the price of just a few regular accounts, making small transactions 
+                        economically viable and allowing for much wider token distribution.
+                      </p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               </div>
-              <div className="text-xs text-gray-400">PNG, JPG (1MB)</div>
+              <Switch
+                checked={isCToken}
+                onCheckedChange={setIsCToken}
+              />
             </div>
           </div>
 
@@ -251,3 +402,4 @@ export default function CreateWindow({ stablecoins }: CreateWindowProp) {
     </div>
   );
 }
+

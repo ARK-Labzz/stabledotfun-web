@@ -1,12 +1,12 @@
-import MintWindow from "@/components/mint-window";
 import Image from "next/image";
 import CreateWindow from "./components/create-window";
+import PreviewWindow from "./components/preview-window";
 import { AssetProp, TradeWindowToken } from "@/types";
 import { stablecoins } from "@/static-data/token";
 import CreateProvider from "./components/create-context";
 
 async function getFiatData(): Promise<AssetProp[]> {
-  // Fetch data fromyour API
+  // Fetch data from your API
   return stablecoins as unknown as AssetProp[];
 }
 
@@ -17,7 +17,7 @@ export default async function CreatePage() {
       <div className="space-y-4">
         <div className="text-sm w-full">
           <p className="pt-5 pl-5">
-            Deploy your stablecoin and mint an initial supply
+            Deploy your stablecoin to Solana Mainnet
           </p>
           <Image
             src="Line.svg"
@@ -32,9 +32,7 @@ export default async function CreatePage() {
           <CreateWindow
             stablecoins={stablecoins as unknown as TradeWindowToken[]}
           />
-          <MintWindow
-            stablecoins={stablecoins as unknown as TradeWindowToken[]}
-          />
+          <PreviewWindow />
         </div>
       </div>
     </CreateProvider>
