@@ -64,9 +64,9 @@ export default async function AssetDetail({
         <AssetInfo ticker={data.symbol} {...data} price={priceAvg} />
         <PayoutTimeline
           ticker={data.symbol}
-          totalDays={7}
-          endDate={"March 6, 2025"}
           currentAmount={(data.currentInvestment / priceAvg).toString()}
+          totalAmount={data.currentInvestment.toString()} // or whatever your total yield is
+          onWithdraw={() => console.log("Withdraw clicked for", data.symbol)}
         />
       </div>
     </div>
