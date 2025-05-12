@@ -39,6 +39,9 @@ export interface TradeWindowToken {
   apy?: number;    
   price?: number;
   country?: string;
+  supply?: number;
+  change?: number; 
+  yield?: string;
 }
 
 export interface TradeWindowTokenComboBox extends TradeWindowToken {
