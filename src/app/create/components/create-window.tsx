@@ -45,6 +45,7 @@ interface CreateWindowProp {
   stablecoins: TradeWindowToken[];
 }
 
+// Define a proper type for fiat options
 interface FiatOption {
   id: string;
   name: string;
@@ -115,13 +116,17 @@ export default function CreateWindow({ stablecoins }: CreateWindowProp) {
   const { set } = useCreateCoin();
   const [activeFiat, setActiveFiat] = React.useState<FiatOption | null>(null);
   const [isCToken, setIsCToken] = React.useState<boolean>(false);
-  const [, setLogoFile] = React.useState<File | null>(null);
+  const [logoFile, setLogoFile] = React.useState<File | null>(null);
   const [logoPreview, setLogoPreview] = React.useState<string | null>(null);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
+  // For now, we can log the stablecoins to see its structure
+  // This could be used in the future for validation against existing stablecoins
   React.useEffect(() => {
     console.log('Available stablecoins:', stablecoins);
   }, [stablecoins]);
+
+  console.log(logoFile);
 
   // Convert fiat options to combo box format
   const fiatOptionsFormatted = React.useMemo(() => {
@@ -147,8 +152,15 @@ export default function CreateWindow({ stablecoins }: CreateWindowProp) {
         name || null,
         logoPreview,
         {
-          ...activeFiat,
+          id: activeFiat.id,
+          name: activeFiat.name,
+          symbol: activeFiat.symbol,
+          fiat: activeFiat.fiat,
+          country: activeFiat.country,
+          apy: activeFiat.apy,
+          icon: activeFiat.icon,
           amount: 0, // Default amount
+          ratio: 1, // Default ratio
           price: 1, // Default price
           supply: 0, // Default supply
           change: 0, // Default change
@@ -225,6 +237,12 @@ export default function CreateWindow({ stablecoins }: CreateWindowProp) {
   
   function onSubmit(data: z.infer<typeof CreateWindowSchema>) {
     console.log(data);
+    // Here you could check against existing stablecoins to prevent duplicates
+    // const exists = stablecoins.some(coin => coin.symbol === data.symbol);
+    // if (exists) {
+    //   form.setError("symbol", { message: "This symbol already exists" });
+    //   return;
+    // }
   }
 
   return (
