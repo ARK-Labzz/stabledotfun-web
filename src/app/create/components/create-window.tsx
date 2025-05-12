@@ -4,7 +4,7 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ChevronDown, Info, Upload } from "lucide-react";
-import { TradeWindowToken, TradeWindowTokenComboBox } from "@/types";
+import { TradeWindowToken } from "@/types";
 import {
   Command,
   CommandEmpty,
@@ -45,8 +45,20 @@ interface CreateWindowProp {
   stablecoins: TradeWindowToken[];
 }
 
+interface FiatOption {
+  id: string;
+  name: string;
+  symbol: string;
+  fiat: string;
+  country: string;
+  bond: string;
+  apy: number;
+  icon: string;
+  label?: string;
+  value?: string;
+}
 
-const fiatOptions = [
+const fiatOptions: FiatOption[] = [
   {
     id: "usd",
     name: "US Dollar",
@@ -101,11 +113,15 @@ const fiatOptions = [
 
 export default function CreateWindow({ stablecoins }: CreateWindowProp) {
   const { set } = useCreateCoin();
-  const [activeFiat, setActiveFiat] = React.useState<any>(null);
+  const [activeFiat, setActiveFiat] = React.useState<FiatOption | null>(null);
   const [isCToken, setIsCToken] = React.useState<boolean>(false);
   const [, setLogoFile] = React.useState<File | null>(null);
   const [logoPreview, setLogoPreview] = React.useState<string | null>(null);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
+
+  React.useEffect(() => {
+    console.log('Available stablecoins:', stablecoins);
+  }, [stablecoins]);
 
   // Convert fiat options to combo box format
   const fiatOptionsFormatted = React.useMemo(() => {
