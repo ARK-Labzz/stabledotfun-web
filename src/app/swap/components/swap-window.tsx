@@ -34,9 +34,55 @@ import { TradeWindowToken, TradeWindowTokenComboBox } from "@/types";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import { ChevronDown, RefreshCw, ArrowDown } from "lucide-react";
+import { ChevronDown, RefreshCw } from "lucide-react";
 import { useSwap } from "./swap-context";
 import { Input } from "@/components/ui/input";
+
+interface IconProps {
+  className?: string;
+}
+
+function SwapIcon({ className = "" }: IconProps) {
+  return (
+    <svg 
+      width="24" 
+      height="24" 
+      viewBox="0 0 24 24" 
+      fill="none" 
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+    >
+      <path 
+        d="M7 10L3 14L7 18" 
+        stroke="currentColor" 
+        strokeWidth="2" 
+        strokeLinecap="round" 
+        strokeLinejoin="round"
+      />
+      <path 
+        d="M21 14H3" 
+        stroke="currentColor" 
+        strokeWidth="2" 
+        strokeLinecap="round" 
+        strokeLinejoin="round"
+      />
+      <path 
+        d="M17 6L21 10L17 14" 
+        stroke="currentColor" 
+        strokeWidth="2" 
+        strokeLinecap="round" 
+        strokeLinejoin="round"
+      />
+      <path 
+        d="M3 10H21" 
+        stroke="currentColor" 
+        strokeWidth="2" 
+        strokeLinecap="round" 
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
 
 // Schema for swap form
 const SwapSchema = z.object({
@@ -135,7 +181,6 @@ export default function SwapWindow({ stablecoins, tokens }: SwapWindowProps) {
     }, 300);
   };
 
-
   const handleMaxClick = () => {
     if (fromToken && fromToken.amount) {
       const maxAmount = fromToken.amount.toString();
@@ -162,7 +207,7 @@ export default function SwapWindow({ stablecoins, tokens }: SwapWindowProps) {
   };
 
   const formatLastUpdated = () => {
-    if (!lastUpdated) return "";
+    if (!lastUpdated) return "Not yet updated";
     
     const now = new Date();
     const seconds = Math.floor((now.getTime() - lastUpdated.getTime()) / 1000);
@@ -278,16 +323,11 @@ export default function SwapWindow({ stablecoins, tokens }: SwapWindowProps) {
                   name="fromAmount"
                   render={({ field }) => (
                     <FormItem className="flex-1 w-full">
-                      <FormControl>
-                        <div className="relative">
-                          <Input
-                            placeholder="0.00"
-                            className="w-full border-none bg-transparent text-right text-xl focus-visible:ring-0 focus-visible:ring-offset-0"
-                            onChange={handleFromAmountChange}
-                            value={field.value}
-                          />
+                      <div className="flex flex-col w-full">
+                        {/* Amount buttons */}
+                        <div className="flex justify-end mb-2">
                           {fromToken && (
-                            <div className="absolute right-2 top-2 flex gap-1">
+                            <div className="flex gap-1">
                               <Button
                                 type="button"
                                 variant="ghost"
@@ -309,7 +349,17 @@ export default function SwapWindow({ stablecoins, tokens }: SwapWindowProps) {
                             </div>
                           )}
                         </div>
-                      </FormControl>
+                        
+                        {/* Input field - now below the buttons */}
+                        <FormControl>
+                          <Input
+                            placeholder="0.00"
+                            className="w-full border-none bg-transparent text-right text-xl focus-visible:ring-0 focus-visible:ring-offset-0"
+                            onChange={handleFromAmountChange}
+                            value={field.value}
+                          />
+                        </FormControl>
+                      </div>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -330,7 +380,8 @@ export default function SwapWindow({ stablecoins, tokens }: SwapWindowProps) {
               )}
               onClick={handleSwitch}
             >
-              <ArrowDown className="h-5 w-5" />
+              {/* Using SwapIcon instead of ArrowDown */}
+              <SwapIcon className="h-5 w-5" />
             </Button>
           </div>
 
@@ -432,36 +483,42 @@ export default function SwapWindow({ stablecoins, tokens }: SwapWindowProps) {
             </div>
           </div>
 
-          {/* Rate Information */}
-          {fromToken && toToken && rate && (
+          {/* Rate Information with Manual Refresh Button */}
+          {fromToken && toToken && (
             <div className="flex flex-col sm:flex-row sm:items-center justify-between rounded-lg border border-white/10 bg-white/5 p-3 text-sm gap-2">
               <div className="flex items-center gap-2">
-                <span>1 {fromToken.symbol} ≈ {rate.toFixed(6)} {toToken.symbol}</span>
+                <span>1 {fromToken.symbol} ≈ {rate ? rate.toFixed(6) : '...'} {toToken.symbol}</span>
+                {/* Prominent refresh button */}
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="h-7 px-2 border-primary/30 hover:bg-primary/10 flex items-center gap-1"
+                  onClick={updateRate}
+                >
+                  <RefreshCw className="h-3 w-3 mr-1" />
+                  Refresh
+                </Button>
+              </div>
+              
+              <div className="text-gray-400 flex items-center gap-2">
+                <span>
+                  {fromToken.fiat && toToken.fiat ? 
+                    `${fromToken.fiat} → ${toToken.fiat}` : 
+                    `${fromToken.symbol} → ${toToken.symbol}`
+                  }
+                </span>
                 <TooltipProvider>
                   <Tooltip>
-                    <TooltipTrigger>
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="icon"
-                        className="h-6 w-6 hover:bg-white/10"
-                        onClick={updateRate}
-                      >
-                        <RefreshCw className="h-3 w-3" />
-                      </Button>
+                    <TooltipTrigger className="text-gray-500">
+                      <span className="text-xs">ⓘ</span>
                     </TooltipTrigger>
                     <TooltipContent>
-                      <p>Last updated {formatLastUpdated()}</p>
+                      <p>Last updated: {formatLastUpdated()}</p>
+                      <p className="text-xs mt-1">Rates refresh every 15 minutes</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
-              </div>
-              
-              <div className="text-gray-400">
-                {fromToken.fiat && toToken.fiat ? 
-                  `${fromToken.fiat} → ${toToken.fiat}` : 
-                  `${fromToken.symbol} → ${toToken.symbol}`
-                }
               </div>
             </div>
           )}

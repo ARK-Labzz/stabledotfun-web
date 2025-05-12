@@ -26,7 +26,7 @@ export const columns: ColumnDef<AssetProp>[] = [
             className="rounded-md bg-white/5"
           />
           <span>
-            {asset.symbol}s ({asset.fiat})
+            {asset.symbol}s 
           </span>
         </Link>
       );

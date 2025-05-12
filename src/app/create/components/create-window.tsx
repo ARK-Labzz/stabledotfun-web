@@ -45,38 +45,76 @@ interface CreateWindowProp {
   stablecoins: TradeWindowToken[];
 }
 
+
+const fiatOptions = [
+  {
+    id: "usd",
+    name: "US Dollar",
+    symbol: "USD",
+    fiat: "USD",
+    country: "USA",
+    bond: "USTRY",
+    apy: 3.62,
+    icon: "/flags/usa.png", 
+  },
+  {
+    id: "gbp",
+    name: "Great British Pounds",
+    symbol: "GBP",
+    fiat: "GBP",
+    country: "Great Britain",
+    bond: "GILTS",
+    apy: 3.92,
+    icon: "/flags/gb.png",
+  },
+  {
+    id: "eur",
+    name: "Euros",
+    symbol: "EUR",
+    fiat: "EUR",
+    country: "Europe",
+    bond: "EUROB",
+    apy: 1.95,
+    icon: "/flags/eu.png",
+  },
+  {
+    id: "mxn",
+    name: "Mexican Peso",
+    symbol: "MXN",
+    fiat: "MXN",
+    country: "Mexico",
+    bond: "CETES",
+    apy: 7.3,
+    icon: "/flags/mx.png",
+  },
+  {
+    id: "brl",
+    name: "Brazilian Real",
+    symbol: "BRL",
+    fiat: "BRL",
+    country: "Brazil",
+    bond: "TESOURO",
+    apy: 12.95,
+    icon: "/flags/br.png",
+  },
+];
+
 export default function CreateWindow({ stablecoins }: CreateWindowProp) {
   const { set } = useCreateCoin();
-  const [activeStable, setActiveStable] = React.useState<TradeWindowToken | null>(null);
+  const [activeFiat, setActiveFiat] = React.useState<any>(null);
   const [isCToken, setIsCToken] = React.useState<boolean>(false);
-  const [, setLogoFile] = React.useState<File | null>(null); // Fixed: removed unused variable
+  const [, setLogoFile] = React.useState<File | null>(null);
   const [logoPreview, setLogoPreview] = React.useState<string | null>(null);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
-  const [stables, setStables] = React.useState<
-    TradeWindowTokenComboBox[] | null
-  >(null);
-
-  // Bond mapping based on fiat currency
-  const bondMap: Record<string, { bond: string; apy: number }> = {
-    USD: { bond: "USTRY", apy: 3.62 },
-    GBP: { bond: "GILTS", apy: 3.92 },
-    EUR: { bond: "EUROB", apy: 1.95 },
-    MXN: { bond: "CETES", apy: 7.3 },
-    BRL: { bond: "TESUORO", apy: 12.95 },
-  };
-
-  React.useEffect(() => {
-    if (stablecoins && stablecoins.length > 0) {
-      setActiveStable(stablecoins[0]); // Set the active token to the first index
-      const output: TradeWindowTokenComboBox[] = stablecoins.map((el) => ({
-        ...el,
-        label: el.name,
-        value: el.name.toLowerCase(),
-      }));
-      setStables(output);
-    }
-  }, [stablecoins]);
+  // Convert fiat options to combo box format
+  const fiatOptionsFormatted = React.useMemo(() => {
+    return fiatOptions.map((option) => ({
+      ...option,
+      label: option.name,
+      value: option.id,
+    }));
+  }, []);
 
   const form = useForm<z.infer<typeof CreateWindowSchema>>({
     resolver: zodResolver(CreateWindowSchema),
@@ -84,24 +122,29 @@ export default function CreateWindow({ stablecoins }: CreateWindowProp) {
 
   const watch = form.watch();
   const stablecoinSymbol = watch.symbol;
-  const { symbol, name } = watch; // Fixed: removed unused variables
+  const { symbol, name } = watch;
 
   React.useEffect(() => {
-    if (activeStable) {
-      const bondInfo = activeStable.fiat ? bondMap[activeStable.fiat] || { bond: "CETES", apy: 7.3 } : { bond: "CETES", apy: 7.3 };
-      
+    if (activeFiat) {
       set(
-        symbol || null, 
-        name || null, 
-        logoPreview, 
-        activeStable, 
-        isCToken, 
-        bondInfo.bond,
-        bondInfo.apy,
+        symbol || null,
+        name || null,
+        logoPreview,
+        {
+          ...activeFiat,
+          amount: 0, // Default amount
+          price: 1, // Default price
+          supply: 0, // Default supply
+          change: 0, // Default change
+          yield: activeFiat.apy.toString(), // Use APY as yield
+        },
+        isCToken,
+        activeFiat.bond,
+        activeFiat.apy,
         0 // Initial supply is 0
       );
     }
-  }, [activeStable, logoPreview, name, set, symbol, isCToken, bondMap]); 
+  }, [activeFiat, logoPreview, name, set, symbol, isCToken]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -248,22 +291,22 @@ export default function CreateWindow({ stablecoins }: CreateWindowProp) {
                                 <ChevronDown className="opacity-50" />
                                 <div className="flex gap-2 font-normal text-xl items-center">
                                   {
-                                    stables?.find(
-                                      (token) => token.value === field.value
+                                    fiatOptionsFormatted.find(
+                                      (option) => option.value === field.value
                                     )?.symbol
                                   }
                                   <Image
                                     src={
-                                      stables?.find(
-                                        (token) => token.value === field.value
+                                      fiatOptionsFormatted.find(
+                                        (option) => option.value === field.value
                                       )?.icon || "/placeholder.svg"
                                     }
                                     className="h-4 w-4 overflow-hidden rounded-full bg-white/5"
                                     width={16}
                                     height={16}
                                     alt={
-                                      stables?.find(
-                                        (token) => token.value === field.value
+                                      fiatOptionsFormatted.find(
+                                        (option) => option.value === field.value
                                       )?.symbol || "Coin"
                                     }
                                   />
@@ -271,16 +314,16 @@ export default function CreateWindow({ stablecoins }: CreateWindowProp) {
                               </div>
                               <div className="text-xs bg-white/5 border border-white/10 py-1 px-2 rounded-lg">
                                 {
-                                  stables?.find(
-                                    (token) => token.value === field.value
-                                  )?.fiat
+                                  fiatOptionsFormatted.find(
+                                    (option) => option.value === field.value
+                                  )?.country
                                 }
                               </div>
                             </>
                           ) : (
                             <div className="flex gap-2 items-center">
                               <ChevronDown className="opacity-50" />
-                              Select stablecoin
+                              Select fiat currency
                             </div>
                           )}
                         </Button>
@@ -289,26 +332,31 @@ export default function CreateWindow({ stablecoins }: CreateWindowProp) {
                     <PopoverContent className="w-full p-0">
                       <Command className="bg-secondary text-white border-secondary/30">
                         <CommandInput
-                          placeholder="Search stablecoin..."
+                          placeholder="Search currency..."
                           className="h-9 text-white"
                         />
                         <CommandList>
-                          <CommandEmpty>No stablecoin found.</CommandEmpty>
+                          <CommandEmpty>No currency found.</CommandEmpty>
                           <CommandGroup>
-                            {stables?.map((token) => (
+                            {fiatOptionsFormatted.map((option) => (
                               <CommandItem
-                                value={token.id}
-                                key={token.id}
+                                value={option.id}
+                                key={option.id}
                                 onSelect={() => {
-                                  form.setValue("fiat", token.value);
-                                  setActiveStable(
-                                    stables.find(
-                                      (el) => el.value === token.value
-                                    ) || null
-                                  );
+                                  form.setValue("fiat", option.value);
+                                  setActiveFiat(option);
                                 }}
                               >
-                                {token.label}
+                                <div className="flex items-center gap-2">
+                                  <Image 
+                                    src={option.icon || "/placeholder.svg"}
+                                    alt={option.symbol}
+                                    width={16}
+                                    height={16}
+                                    className="rounded-full"
+                                  />
+                                  {option.name} ({option.symbol})
+                                </div>
                               </CommandItem>
                             ))}
                           </CommandGroup>
@@ -402,4 +450,3 @@ export default function CreateWindow({ stablecoins }: CreateWindowProp) {
     </div>
   );
 }
-

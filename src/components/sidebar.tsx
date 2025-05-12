@@ -15,16 +15,10 @@ import {
   DashboardIcon,
   StackIcon,
   CreateFoldericon,
-  CashIcon,
-  HelpIcon,
-  // SettingIcon,
 } from "./icons/sidebar";
 import { 
-  ReceiveIcon, 
-  BuyIcon, 
   SwapIcon, 
-  StakeIcon, 
-  SendIcon,
+  ProfileIcon,
 } from "./icons/mobile-nav";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -36,51 +30,45 @@ export default function AppSidebar() {
   const navItems = [
     { icon: DashboardIcon, label: "Dashboard", href: "/" },
     { icon: StackIcon, label: "Portfolio", href: "/portfolio" },
-    { icon: CashIcon, label: "Create", href: "/create" },
-    { icon: CreateFoldericon, label: "Swap", href: "/redeem" },
-    { icon: HelpIcon, label: "Help & Support", href: "/help" },
-    // { icon: SettingIcon, label: "Settings", href: "/setting" },
+    { icon: CreateFoldericon, label: "Create", href: "/create" },
+    { icon: SwapIcon, label: "Swap", href: "/swap" },
+    { icon: ProfileIcon, label: "Profile", href: "/profile" },
   ];
 
   const mobileNavItems = [
-    { icon: ReceiveIcon, label: "Receive", href: "/receive" },
-    { icon: BuyIcon, label: "Buy", href: "/buy" },
-    { icon: SwapIcon, label: "Swap", href: "/redeem" },
-    { icon: StakeIcon, label: "Stake", href: "/stake" },
-    { icon: SendIcon, label: "Send", href: "/send" },
+    { icon: DashboardIcon, label: "Dashboard", href: "/" },
+    { icon: StackIcon, label: "Portfolio", href: "/portfolio" },
+    { icon: CreateFoldericon, label: "Create", href: "/create" },
+    { icon: SwapIcon, label: "Swap", href: "/swap" },
+    { icon: ProfileIcon, label: "Profile", href: "/profile" },
   ];
 
   if (isMobile) {
     return (
       <>
-        {/* Fixed mobile navigation bar */}
-        <div className="fixed bottom-6 left-0 right-0 z-50 flex justify-center md:hidden">
-          <div className="backdrop-blur-md bg-black/60 rounded-full border border-white/10 flex items-center justify-between px-6 py-4 w-[85%] max-w-sm shadow-lg">
+        {/* Updated mobile navigation: full width, fixed to bottom, no glassmorphism */}
+        <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-[#040D13] border-t border-white/10">
+          <div className="flex items-center justify-between w-full px-2 py-3">
             {mobileNavItems.map((item) => (
               <Link 
                 key={item.label} 
                 href={item.href}
                 className={cn(
-                  "flex flex-col items-center justify-center",
+                  "flex flex-col items-center justify-center px-2",
                   pathname === item.href 
                     ? "text-primary" 
                     : "text-gray-400 hover:text-white"
                 )}
               >
-                <div className={cn(
-                  "p-2 rounded-full mb-1",
-                  pathname === item.href 
-                    ? "bg-[#23262F]/80" 
-                    : "bg-[#23262F]/40"
-                )}>
-                  <item.icon className="h-5 w-5" />
-                </div>
+                <item.icon className={cn(
+                  "h-5 w-5 mb-1",
+                  pathname === item.href ? "text-primary" : "text-gray-400"
+                )} />
                 <span className="text-[10px]">{item.label}</span>
               </Link>
             ))}
           </div>
         </div>
-        
         <div className="hidden" />
       </>
     );

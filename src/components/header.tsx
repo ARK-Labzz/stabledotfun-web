@@ -8,7 +8,6 @@ import {
   Wallet,
   ExternalLink,
   Copy,
-  Menu,
   X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -25,40 +24,36 @@ import { cn } from "@/lib/utils";
 import { SidebarTrigger, useSidebar } from "./ui/sidebar";
 import Image from "next/image";
 import Link from "next/link";
+import NotificationsModal from "./notifications-modal";
 
 export default function Header() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [isMobileSearch, setMobileSearch] = useState(false);
-  const { openMobile, setOpenMobile, isMobile } = useSidebar();
+  const [isMobileSearch, setIsMobileSearch] = useState(false);
+  const { isMobile } = useSidebar();
 
-  const toggleSidebar = () => {
-    setOpenMobile(!openMobile);
+  const toggleMobileSearch = () => {
+    setIsMobileSearch(!isMobileSearch);
   };
 
   return (
     <header className="fixed lg:sticky top-0 z-30 bg-sidebar">
-      <div className="bg-secondary p-4 flex md:hidden items-center justify-between">
-        <Image
-          src={"/stable-fun-logo.svg"}
-          alt="Logo"
-          width={140}
-          height={34}
-        />
-        {/* Mobile menu button */}
-        <button
-          id="sidebar-toggle"
-          className="md:hidden text-primary p-2"
-          onClick={toggleSidebar}
-        >
-          {openMobile ? <X size={20} /> : <Menu size={20} />}
-        </button>
-      </div>
-      <div className="flex items-center justify-between  p-4">
+      <div className="flex items-center justify-between p-4">
+        {/* Left Section: Sidebar trigger, product selector, search */}
         <div className="flex flex-1 items-center gap-2 lg:gap-6 pr-4">
+          {/* Sidebar Trigger (desktop only) */}
           <SidebarTrigger className="hidden lg:flex" />
-          <div className="flex items-center gap-2 p-1.5 border border-primary/20 bg-white/5 rounded-lg lg:rounded-2xl">
-            <span className="font-semibold text-[10px] lg:text-xs flex gap-1 p-2 border border-primary/5 lg:border-primary/80 bg-white/5 hover:border-primary rounded-md lg:rounded-lg">
-              Stablecoin
+          
+          {/* Product Selector (Stablecoin/Lending) */}
+          <div className={cn(
+            "flex items-center gap-2 p-1.5 border border-primary/20 bg-white/5 rounded-lg lg:rounded-2xl",
+            isMobileSearch ? "flex-shrink-0" : "flex-shrink"
+          )}>
+            {/* Stablecoin Button */}
+            <span className={cn(
+              "font-semibold flex gap-1 p-2 border border-primary/5 lg:border-primary/80 bg-white/5 hover:border-primary rounded-md lg:rounded-lg",
+              isMobileSearch ? "text-[0px]" : "text-[10px] lg:text-xs"
+            )}>
+              <span className={isMobileSearch ? "block" : "inline"}>Stablecoin</span>
               <svg
                 width="16"
                 height="16"
@@ -94,8 +89,13 @@ export default function Header() {
                 />
               </svg>
             </span>
-            <span className="text-[10px] lg:text-xs text-white opacity-30 flex gap-1 px-1.5">
-              Lending
+
+            {/* Lending Button (Coming Soon) */}
+            <span className={cn(
+              "text-white opacity-30 flex gap-1 px-1.5",
+              isMobileSearch ? "text-[0px]" : "text-[10px] lg:text-xs"
+            )}>
+              <span className={isMobileSearch ? "hidden" : "inline"}>Lending</span>
               <svg
                 width="16"
                 height="16"
@@ -108,68 +108,74 @@ export default function Header() {
                   fill="white"
                 />
               </svg>
-              <span className="text-[6px] lg:text-[7px] text-white px-1 py-0.5 bg-secondary/80 flex items-center rounded-xs">
-                Coming Soon
-              </span>
+              {/* Coming Soon tag */}
+              {!isMobileSearch && (
+                <span className="text-[6px] lg:text-[7px] text-white px-1 py-0.5 bg-secondary/80 flex items-center rounded-xs">
+                  Coming Soon
+                </span>
+              )}
             </span>
           </div>
 
-          <div className="relative flex-1 w-[80px] lg:w-[500px] border border-primary/10 rounded-lg h-11 lg:h-auto p-2 bg-white/5 lg:bg-transparent lg:border-none">
+          {/* Search Bar */}
+          <div className={cn(
+            "relative flex-1 border border-primary/10 rounded-lg h-11 lg:h-auto p-2 bg-white/5 lg:bg-transparent lg:border-none",
+            isMobileSearch ? "w-full transition-all duration-300" : "w-[80px] lg:w-[500px]"
+          )}>
+            {/* Search Icon */}
             <div
-              className="absolute inset-y-0 top-1/2 left-1/2 -translate-1/2 lg:left-7 flex items-center pointer-events-none"
-              onClick={() => {
-                if (isMobile) setMobileSearch((prev) => !prev);
-              }}
+              className={cn(
+                "absolute inset-y-0 top-1/2 flex items-center",
+                isMobileSearch ? "left-3 -translate-y-1/2" : "left-1/2 -translate-x-1/2 lg:left-7 -translate-y-1/2 lg:-translate-x-0",
+                isMobile ? "cursor-pointer" : "pointer-events-none"
+              )}
+              onClick={() => isMobile && toggleMobileSearch()}
             >
               <Search size={16} className="text-gray-500" />
             </div>
+            
+            {/* Search Input Field */}
             <div
               className={cn(
-                isMobileSearch
-                  ? "fixed z-20 top-18 left-1/2 -translate-x-1/2  w-full h-20 lg:h-auto flex justify-center p-4 bg-black/90 backdrop-blur-lg"
+                isMobileSearch 
+                  ? "relative flex items-center w-full"
                   : "hidden lg:flex lg:relative lg:top-0 lg:p-0 lg:backdrop-blur-none lg:bg-transparent items-center"
               )}
-              onClick={() => {
-                if (isMobile) setMobileSearch((prev) => !prev);
-              }}
             >
               <input
                 type="text"
                 placeholder="Search for stablecoins or traders"
-                className="w-11/12 lg:w-full h-9 pl-10 pr-4 rounded-lg lg:rounded-full text-xs border border-white/10 bg-white/5 focus:outline-none focus:ring-1 focus:ring-teal"
+                className="w-full h-9 pl-10 pr-4 rounded-lg lg:rounded-full text-xs border border-white/10 bg-white/5 focus:outline-none focus:ring-1 focus:ring-teal"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
+              
+              {/* Close Button (mobile search) */}
+              {isMobileSearch && isMobile && (
+                <button 
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 p-1"
+                  onClick={toggleMobileSearch}
+                >
+                  <X size={16} />
+                </button>
+              )}
             </div>
           </div>
         </div>
 
+        {/* Right Section: Notifications and Wallet Connection */}
         <div className="flex items-center gap-2">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="flex bg-white/5 hover:bg-secondary/30 border border-primary/30 rounded-full cursor-pointer"
-          >
-            <svg
-              width="19"
-              height="19"
-              viewBox="0 0 19 19"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M16.5962 5.16272C16.5962 6.64388 15.3913 7.84877 13.9101 7.84877C12.429 7.84877 11.2241 6.64388 11.2241 5.16272C11.2241 3.68156 12.429 2.47667 13.9101 2.47667C15.3913 2.47667 16.5962 3.68156 16.5962 5.16272ZM15.0613 9.22249C14.6776 9.32226 14.2939 9.38365 13.9101 9.38365C12.7913 9.38162 11.7189 8.93627 10.9277 8.14513C10.1366 7.35399 9.69123 6.28156 9.6892 5.16272C9.6892 4.03458 10.1343 3.01388 10.8404 2.25412C10.7011 2.08339 10.5255 1.94589 10.3263 1.85163C10.1272 1.75736 9.90953 1.70872 9.6892 1.70923C8.84502 1.70923 8.15432 2.39993 8.15432 3.24412V3.46667C5.87502 4.14202 4.31711 6.23714 4.31711 8.61621V13.2209L2.78223 14.7557V15.5232H16.5962V14.7557L15.0613 13.2209V9.22249ZM9.6892 17.8255C10.5411 17.8255 11.2241 17.1425 11.2241 16.2906H8.15432C8.15432 16.6977 8.31603 17.0881 8.60388 17.376C8.89172 17.6638 9.28213 17.8255 9.6892 17.8255Z"
-                fill="#01B8CF"
-              />
-            </svg>
-          </Button>
-
+          {/* Notifications Modal Component */}
+          <NotificationsModal />
+          
+          {/* Wallet Connect Button (desktop only) */}
           <ConnectButton className="hidden lg:flex" />
         </div>
       </div>
-      <div className="flex w- overflow-hidden">
+      
+      {/* Decorative Gradient Line */}
+      <div className="flex overflow-hidden">
         <svg
-          // width="1751"
           height="1"
           viewBox="0 0 1751 1"
           fill="none"
@@ -191,9 +197,9 @@ export default function Header() {
               y2="1.5"
               gradientUnits="userSpaceOnUse"
             >
-              <stop stop-color="white" stop-opacity="0" />
-              <stop offset="0.129" stop-color="#00BCD4" />
-              <stop offset="1" stop-color="#CCCCCC" stop-opacity="0" />
+              <stop stopColor="white" stopOpacity="0" />
+              <stop offset="0.129" stopColor="#00BCD4" />
+              <stop offset="1" stopColor="#CCCCCC" stopOpacity="0" />
             </linearGradient>
           </defs>
         </svg>
@@ -202,13 +208,18 @@ export default function Header() {
   );
 }
 
+/**
+ * Wallet Connect Button Component
+ */
 function ConnectButton({ className }: { className?: string }) {
   const { connected, publicKey, connect, disconnect } = useWallet();
 
+  // Truncate wallet address for display
   const truncateAddress = (address: string) => {
     return `${address.slice(0, 4)}...${address.slice(-4)}`;
   };
 
+  // Copy wallet address to clipboard
   const handleCopy = () => {
     if (publicKey) navigator.clipboard.writeText(publicKey);
   };
@@ -224,6 +235,7 @@ function ConnectButton({ className }: { className?: string }) {
                 className
               )}
             >
+              {/* User Avatar */}
               <div className="w-8 h-8 rounded-full bg-primary/10 border border-primary/30 p-0.5 flex items-center justify-center">
                 <Image
                   src="/placeholder.svg?height=32&width=32"
@@ -233,6 +245,8 @@ function ConnectButton({ className }: { className?: string }) {
                   className="w-6 h-6 rounded-full"
                 />
               </div>
+              
+              {/* Display Wallet Address (medium screens+) */}
               <div className="hidden md:flex items-center gap-1">
                 <span className="text-sm font-medium text-primary">
                   {publicKey ? truncateAddress(publicKey) : "@cre8tivebuka"}
@@ -241,6 +255,8 @@ function ConnectButton({ className }: { className?: string }) {
               </div>
             </div>
           </DropdownMenuTrigger>
+          
+          {/* Wallet Dropdown Menu */}
           <DropdownMenuContent
             align="end"
             className="w-64 border-white/10 bg-secondary"
@@ -249,6 +265,8 @@ function ConnectButton({ className }: { className?: string }) {
               My Wallet
             </DropdownMenuLabel>
             <DropdownMenuSeparator className="bg-white/50" />
+            
+            {/* Wallet Address Display */}
             <div className="px-2 py-1">
               <div className="text-xs text-white/80 mb-1">
                 Connected Address
@@ -265,7 +283,10 @@ function ConnectButton({ className }: { className?: string }) {
                 </Button>
               </div>
             </div>
+            
             <DropdownMenuSeparator className="bg-white/50" />
+            
+            {/* View on Explorer Link */}
             <DropdownMenuItem
               className="cursor-pointer text-white/80 hover:bg-secondary hover:text-white"
               asChild
@@ -278,7 +299,10 @@ function ConnectButton({ className }: { className?: string }) {
                 <span>View on Explorer</span>
               </Link>
             </DropdownMenuItem>
+            
             <DropdownMenuSeparator className="bg-white/50" />
+            
+            {/* Disconnect Button */}
             <DropdownMenuItem
               onClick={disconnect}
               className="cursor-pointer text-red-500 hover:bg-red-500/10 hover:text-red-400"

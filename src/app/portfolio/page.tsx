@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { token } from "@/static-data/token";
@@ -37,17 +39,18 @@ export default async function AssetsPage() {
   if (!data || data.length < 1) return <NoAssetFound />;
 
   return (
-    <div className="relative space-y-2 flex flex-col gap-2">
+    <div className="max-w-full relative space-y-2 flex flex-col gap-2">
       <div className="text-xs text-white/50 mb-3">
         Explore your <span className="text-primary">coins</span> collections and
         earnings
       </div>
 
-      <div className="flex flex-1 overflow-hidden justify-center w-30 lg:w-[90vw]">
+      <div className="flex flex-1 overflow-hidden justify-center w-full">
         <svg
-          width="1751"
+          width="100%"
           height="1"
           viewBox="0 0 1751 1"
+          preserveAspectRatio="xMidYMid meet"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
@@ -75,7 +78,7 @@ export default async function AssetsPage() {
       </div>
 
       {/* Mobile layout: UserDetails -> Metrics -> Table -> Timeline */}
-      <div className="flex flex-col lg:hidden gap-4">
+      <div className="flex flex-col lg:hidden gap-4 w-full">
         <UserDetails username="stable.user" className="w-full" />
         <MetricsCards metrics={metrics} />
         <AssetWindow data={data} />
@@ -83,12 +86,12 @@ export default async function AssetsPage() {
       </div>
 
       {/* Desktop layout: Split into columns */}
-      <div className="hidden lg:flex lg:flex-row gap-4">
-        <div className="flex-1 flex flex-col gap-4">
+      <div className="hidden lg:flex lg:flex-row gap-4 w-full">
+        <div className="flex-1 flex flex-col gap-4 min-w-0">
           <MetricsCards metrics={metrics} />
           <AssetWindow data={data} />
         </div>
-        <div className="flex flex-col gap-4 lg:w-80 xl:w-96">
+        <div className="flex flex-col gap-4 lg:w-80 xl:w-96 flex-shrink-0">
           <UserDetails username="stable.user" />
           <PayoutTimeline />
         </div>

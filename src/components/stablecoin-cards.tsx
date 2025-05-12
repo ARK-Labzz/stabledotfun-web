@@ -98,18 +98,26 @@ export default function StablecoinCards({
           <div className="flex items-center gap-2">
             <span className="text-xs text-gray-300">Filter stablecoins by</span>
             <Select
-              value={filterOption}
-              onValueChange={(value) => setFilterOption(value)}
+            value={filterOption}
+            onValueChange={(value) => setFilterOption(value)}
             >
-              <SelectTrigger className="w-32 text-xs h-8 bg-white/5 border border-primary/30 text-gray-300">
+            <SelectTrigger className="w-32 text-xs h-8 bg-white/5 border border-primary/30 text-gray-300">
                 <SelectValue placeholder="Filter by" />
-              </SelectTrigger>
-              <SelectContent className="bg-background border border-primary/30">
-                <SelectItem value="trending">Trending</SelectItem>
-                <SelectItem value="recent">Most Recent</SelectItem>
-                <SelectItem value="price">Price</SelectItem>
-                <SelectItem value="mcap">MCap</SelectItem>
-              </SelectContent>
+            </SelectTrigger>
+            <SelectContent className="bg-background border border-primary/30">
+                <SelectItem value="trending" className="text-gray-300 data-[highlighted]:text-gray-300 data-[highlighted]:bg-white/10">
+                Trending
+                </SelectItem>
+                <SelectItem value="recent" className="text-gray-300 data-[highlighted]:text-gray-300 data-[highlighted]:bg-white/10">
+                Most Recent
+                </SelectItem>
+                <SelectItem value="price" className="text-gray-300 data-[highlighted]:text-gray-300 data-[highlighted]:bg-white/10">
+                Price
+                </SelectItem>
+                <SelectItem value="mcap" className="text-gray-300 data-[highlighted]:text-gray-300 data-[highlighted]:bg-white/10">
+                MCap
+                </SelectItem>
+            </SelectContent>
             </Select>
           </div>
           

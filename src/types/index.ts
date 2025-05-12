@@ -38,6 +38,7 @@ export interface TradeWindowToken {
   symbol: string;
   apy?: number;    
   price?: number;
+  country?: string;
 }
 
 export interface TradeWindowTokenComboBox extends TradeWindowToken {

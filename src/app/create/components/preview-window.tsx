@@ -50,7 +50,7 @@ const PreviewWindow = ({ className }: PreviewWindowProps) => {
 
             <div className="flex justify-between items-center">
               <span className="text-xs text-gray-400">Bond</span>
-              <span className="text-sm font-medium text-primary">{bond || "CETES"}</span>
+              <span className="text-sm font-medium text-primary">{bond || "Select fiat currency"}</span>
             </div>
 
             <div className="flex justify-between items-center">
@@ -60,7 +60,7 @@ const PreviewWindow = ({ className }: PreviewWindowProps) => {
 
             <div className="flex justify-between items-center">
               <span className="text-xs text-gray-400">APY</span>
-              <span className="text-sm font-medium text-primary">{apy ? `${apy}%` : "7.3%"}</span>
+              <span className="text-sm font-medium text-primary">{apy ? `${apy}%` : "Select fiat currency"}</span>
             </div>
 
             {/* cToken Badge */}
@@ -73,7 +73,7 @@ const PreviewWindow = ({ className }: PreviewWindowProps) => {
             )}
           </div>
 
-          {/* Fiat Currency Info */}
+          {/* Fiat Currency/Country Info */}
           {fiat && (
             <div className="w-full p-3 bg-white/5 rounded-lg border border-white/10">
               <div className="flex items-center justify-between">
@@ -88,7 +88,7 @@ const PreviewWindow = ({ className }: PreviewWindowProps) => {
                   <span className="text-sm">{fiat.name}</span>
                 </div>
                 <div className="text-xs bg-white/5 border border-white/10 py-1 px-2 rounded-lg">
-                  {fiat.fiat}
+                  {fiat.country || fiat.fiat}
                 </div>
               </div>
             </div>

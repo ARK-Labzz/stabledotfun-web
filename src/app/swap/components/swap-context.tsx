@@ -19,7 +19,7 @@ interface SwapContextType {
     rate?: number | null
   ) => void;
   switchTokens: () => void;
-  updateRate: () => void;
+  updateRate: () => void; // Manual rate refresh function
 }
 
 const SwapContext = createContext<SwapContextType>({
@@ -43,6 +43,9 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
   const [toAmount, setToAmount] = React.useState<string>("");
   const [rate, setRate] = React.useState<number | null>(null);
   const [lastUpdated, setLastUpdated] = React.useState<Date | null>(null);
+  
+  // Reference to store the last time rate was auto-updated
+  const lastAutoUpdateRef = React.useRef<number>(0);
 
   React.useEffect(() => {
     const savedSwapState = localStorage.getItem("swapState");
@@ -55,6 +58,13 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
         setFromAmount(parsedState.fromAmount || "");
         setToAmount(parsedState.toAmount || "");
         setRate(parsedState.rate || null);
+        
+        // If there was a saved rate, set lastUpdated
+        if (parsedState.rate) {
+          const now = new Date();
+          setLastUpdated(now);
+          lastAutoUpdateRef.current = now.getTime();
+        }
       } catch (error) {
         console.error("Error parsing saved swap state:", error);
       }
@@ -107,17 +117,19 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
     return getRate(1.0);
   };
 
+  // Manual rate update function - can be called by refresh button
   const updateRate = () => {
     const newRate = generateRate();
     setRate(newRate);
-    setLastUpdated(new Date());
+    const now = new Date();
+    setLastUpdated(now);
+    lastAutoUpdateRef.current = now.getTime();
     
     // If we have amounts, recalculate based on new rate
     if (fromAmount && newRate) {
       const newToAmount = (parseFloat(fromAmount) * newRate).toFixed(6);
       setToAmount(newToAmount);
       
-    
       localStorage.setItem("swapState", JSON.stringify({
         fromToken,
         toToken,
@@ -128,14 +140,27 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  // Auto-update rate every 30 seconds
+  // This effect runs only when tokens or amounts change
   React.useEffect(() => {
     if (fromToken && toToken) {
-      updateRate();
-      const interval = setInterval(updateRate, 30000);
-      return () => clearInterval(interval);
+      // Calculate whether we need to update the rate
+      const shouldRefresh = () => {
+        // Only auto-update if there's input and rates are displayed
+        if (!fromAmount || !rate) return false;
+        
+        const now = new Date().getTime();
+        const FIFTEEN_MINUTES = 15 * 60 * 1000; // 15 minutes in milliseconds
+        
+        // Check if it's been more than 15 minutes since last update
+        return (now - lastAutoUpdateRef.current) > FIFTEEN_MINUTES;
+      };
+      
+      // If we don't have a rate yet, or we need to refresh, update it
+      if (rate === null || shouldRefresh()) {
+        updateRate();
+      }
     }
-  }, [fromToken, toToken, updateRate]);
+  }, [fromToken, toToken, fromAmount]); // Only run when tokens or amount change
 
   const set = (
     fromToken: TradeWindowToken | null,
@@ -152,12 +177,16 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
     // Only update rate if explicitly provided or tokens changed
     if (newRate !== undefined) {
       setRate(newRate);
-      setLastUpdated(new Date());
+      const now = new Date();
+      setLastUpdated(now);
+      lastAutoUpdateRef.current = now.getTime();
     } else if (!rate || newRate === null) {
       // If no rate exists or rate is being reset
       const generatedRate = generateRate();
       setRate(generatedRate);
-      setLastUpdated(new Date());
+      const now = new Date();
+      setLastUpdated(now);
+      lastAutoUpdateRef.current = now.getTime();
     }
     
     localStorage.setItem("swapState", JSON.stringify({
@@ -195,9 +224,10 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
     }
     
     setRate(newRate);
-    setLastUpdated(new Date());
+    const now = new Date();
+    setLastUpdated(now);
+    lastAutoUpdateRef.current = now.getTime();
     
- 
     localStorage.setItem("swapState", JSON.stringify({
       fromToken: toToken,
       toToken: tempToken,
