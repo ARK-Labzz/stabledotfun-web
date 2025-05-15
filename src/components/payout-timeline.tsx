@@ -116,7 +116,7 @@ export function PayoutTimeline({
                 <PartyPopper size={48} className="text-primary mb-4" />
               </motion.div>
               <h3 className="text-xl font-bold text-primary mb-2">Maturity Day!</h3>
-              <p className="text-white/80 mb-4">Your investment has reached maturity. Withdraw your returns now!</p>
+              <p className="text-white/80 mb-4">Your investment has reached maturity!</p>
               <Button 
                 onClick={onWithdraw} 
                 className="bg-primary text-black hover:bg-primary/90"

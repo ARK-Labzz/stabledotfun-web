@@ -11,9 +11,11 @@ interface AssetWindowProp {
 
 export default function AssetWindow({ data }: AssetWindowProp) {
   return (
-    <div className="w-full lg:flex-1 rounded-lg p-4 border border-white/10 bg-white/5 overflow-hidden">
-      <div className="max-w-full">
-        <DataTable columns={columns} data={data} />
+    <div className="w-full rounded-lg border border-white/10 bg-white/5">
+      <div className="w-full overflow-x-auto custom-scrollbar">
+        <div className="min-w-[640px] p-2 lg:p-4">
+          <DataTable columns={columns} data={data} />
+        </div>
       </div>
     </div>
   );

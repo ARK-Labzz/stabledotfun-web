@@ -39,13 +39,13 @@ export default async function AssetsPage() {
   if (!data || data.length < 1) return <NoAssetFound />;
 
   return (
-    <div className="max-w-full relative space-y-2 flex flex-col gap-2">
-      <div className="text-xs text-white/50 mb-3">
+    <div className="max-w-full overflow-hidden space-y-2 flex flex-col gap-2">
+      <div className="text-xs text-white/50 mb-2 lg:mb-3">
         Explore your <span className="text-primary">coins</span> collections and
         earnings
       </div>
 
-      <div className="flex flex-1 overflow-hidden justify-center w-full">
+      <div className="flex flex-1 overflow-hidden justify-center w-full mb-2 lg:mb-4">
         <svg
           width="100%"
           height="1"
@@ -78,7 +78,7 @@ export default async function AssetsPage() {
       </div>
 
       {/* Mobile layout: UserDetails -> Metrics -> Table -> Timeline */}
-      <div className="flex flex-col lg:hidden gap-4 w-full">
+      <div className="flex flex-col lg:hidden gap-3 lg:gap-4 w-full px-2 sm:px-4">
         <UserDetails username="stable.user" className="w-full" />
         <MetricsCards metrics={metrics} />
         <AssetWindow data={data} />
@@ -86,12 +86,12 @@ export default async function AssetsPage() {
       </div>
 
       {/* Desktop layout: Split into columns */}
-      <div className="hidden lg:flex lg:flex-row gap-4 w-full">
-        <div className="flex-1 flex flex-col gap-4 min-w-0">
+      <div className="hidden lg:flex lg:flex-row gap-3 lg:gap-4 w-full px-0">
+        <div className="flex-1 flex flex-col gap-3 lg:gap-4 min-w-0">
           <MetricsCards metrics={metrics} />
           <AssetWindow data={data} />
         </div>
-        <div className="flex flex-col gap-4 lg:w-80 xl:w-96 flex-shrink-0">
+        <div className="flex flex-col gap-3 lg:gap-4 w-72 xl:w-80 flex-shrink-0">
           <UserDetails username="stable.user" />
           <PayoutTimeline />
         </div>
@@ -102,19 +102,19 @@ export default async function AssetsPage() {
 
 function NoAssetFound() {
   return (
-    <div className="flex flex-col items-center justify-center h-[calc(100vh-120px)]">
+    <div className="flex flex-col items-center justify-center h-[calc(100vh-120px)] px-4">
       <div className="text-center max-w-md">
-        <h2 className="text-2xl font-bold mb-4">Holdings</h2>
-        <p className="text-white/50 mb-6">
+        <h2 className="text-xl lg:text-2xl font-bold mb-3 lg:mb-4">Holdings</h2>
+        <p className="text-sm lg:text-base text-white/50 mb-4 lg:mb-6">
           {
             "You don't have any assets yet. Create a stablecoin or buy one to get started."
           }
         </p>
-        <div className="flex gap-4 justify-center">
-          <Button variant={"secondary"} asChild>
+        <div className="flex flex-col sm:flex-row gap-3 lg:gap-4 justify-center">
+          <Button variant={"secondary"} size="sm" asChild>
             <Link href="/create">Create Stablecoin</Link>
           </Button>
-          <Button className="border-primary" variant="outline">
+          <Button className="border-primary" variant="outline" size="sm">
             <Link href="/">Buy Stablecoin</Link>
           </Button>
         </div>
