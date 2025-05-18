@@ -137,7 +137,7 @@ export default function AssetShowcase({
         )}>
           {/* For Mobile: Horizontal slider with no stacking */}
           {isMobile ? (
-            <div className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory custom-scrollbar pr-4">
+            <div className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory custom-scrollbar">
               {assets
                 ?.filter((_, i) => i < 5)
                 .map((coin, index) => (
@@ -215,9 +215,6 @@ export default function AssetShowcase({
                 "relative h-full pb-6 md:pb-0 bg-[#121c2200] flex gap-3 flex-1 overflow-x-auto overflow-y-hidden custom-scrollbar",
                 isHover ? "absolute bg-background/40 backdrop-blur-md" : ""
               )}
-              style={{
-                paddingRight: "24px" // Added right padding
-              }}
               onHoverStart={() => setHover(true)}
               onHoverEnd={() => setHover(false)}
             >
