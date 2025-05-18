@@ -104,7 +104,7 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className="relative flex flex-col gap-4 w-full">
+    <div className="relative flex flex-col gap-4 w-full overflow-hidden">
       <div className="relative flex flex-wrap gap-2 sm:gap-3 justify-between mb-2 sm:mb-4">
         <div className="flex items-center gap-2">
           <span className="text-xs font-normal text-primary">

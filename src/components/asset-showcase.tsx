@@ -21,38 +21,12 @@ import MiniChart from "./mini-chart";
 import { AssetProp } from "@/types";
 import { motion } from "motion/react";
 import Link from "next/link";
+import { getThursdayDates } from "./dates";
 
 interface AssetShowcaseProps {
   className?: string;
   asset: AssetProp[];
 }
-
-// Function to calculate the most recent Thursday (start date)
-// and the next Thursday (maturity date)
-const calculateThursdayDates = (): { startDate: string; maturityDate: string } => {
-  const today = new Date();
-  
-  // Find the most recent Thursday (0 = Sunday, 4 = Thursday)
-  const mostRecentThursday = new Date(today);
-  const daysSinceThursday = (today.getDay() + 3) % 7; // Days since last Thursday
-  mostRecentThursday.setDate(today.getDate() - daysSinceThursday);
-  
-  // Find the next Thursday
-  const nextThursday = new Date(mostRecentThursday);
-  nextThursday.setDate(mostRecentThursday.getDate() + 7);
-  
-  // Format dates (May 8, 2025 format)
-  const formatDate = (date: Date): string => {
-    const months = ['January', 'February', 'March', 'April', 'May', 'June', 
-                    'July', 'August', 'September', 'October', 'November', 'December'];
-    return `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
-  };
-  
-  return {
-    startDate: formatDate(mostRecentThursday),
-    maturityDate: formatDate(nextThursday)
-  };
-};
 
 export default function AssetShowcase({
   className,
@@ -64,7 +38,34 @@ export default function AssetShowcase({
   const [thursdayDates, setThursdayDates] = React.useState<{
     startDate: string;
     maturityDate: string;
-  }>(() => calculateThursdayDates());
+  }>(() => getThursdayDates());
+
+  // Update the useEffect
+  React.useEffect(() => {
+    // Initial calculation
+    setThursdayDates(getThursdayDates());
+    
+    // Set up an interval to check daily at midnight
+    const midnight = new Date();
+    midnight.setHours(24, 0, 0, 0);
+    const timeUntilMidnight = midnight.getTime() - new Date().getTime();
+    
+    // Initial timeout to align with midnight
+    const initialTimeout = setTimeout(() => {
+      setThursdayDates(getThursdayDates());
+      
+      // Then set interval for daily checks
+      const interval = setInterval(() => {
+        setThursdayDates(getThursdayDates());
+      }, 24 * 60 * 60 * 1000); // 24 hours
+      
+      // Store interval reference for cleanup
+      return () => clearInterval(interval);
+    }, timeUntilMidnight);
+    
+    // Clean up initial timeout on unmount
+    return () => clearTimeout(initialTimeout);
+  }, []);
   
   // Detect if we're on mobile
   const [isMobile, setIsMobile] = React.useState<boolean>(false);
@@ -83,34 +84,6 @@ export default function AssetShowcase({
     
     // Clean up
     return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-  // Update Thursday dates when component mounts and when date changes
-  React.useEffect(() => {
-    // Initial calculation
-    setThursdayDates(calculateThursdayDates());
-    
-    // Set up an interval to check daily at midnight
-    // This ensures dates update automatically when days change
-    const midnight = new Date();
-    midnight.setHours(24, 0, 0, 0);
-    const timeUntilMidnight = midnight.getTime() - new Date().getTime();
-    
-    // Initial timeout to align with midnight
-    const initialTimeout = setTimeout(() => {
-      setThursdayDates(calculateThursdayDates());
-      
-      // Then set interval for daily checks
-      const interval = setInterval(() => {
-        setThursdayDates(calculateThursdayDates());
-      }, 24 * 60 * 60 * 1000); // 24 hours
-      
-      // Store interval reference for cleanup
-      return () => clearInterval(interval);
-    }, timeUntilMidnight);
-    
-    // Clean up initial timeout on unmount
-    return () => clearTimeout(initialTimeout);
   }, []);
 
   React.useEffect(() => {
@@ -164,7 +137,7 @@ export default function AssetShowcase({
         )}>
           {/* For Mobile: Horizontal slider with no stacking */}
           {isMobile ? (
-            <div className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory custom-scrollbar">
+            <div className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory custom-scrollbar pr-4">
               {assets
                 ?.filter((_, i) => i < 5)
                 .map((coin, index) => (
@@ -242,6 +215,9 @@ export default function AssetShowcase({
                 "relative h-full pb-6 md:pb-0 bg-[#121c2200] flex gap-3 flex-1 overflow-x-auto overflow-y-hidden custom-scrollbar",
                 isHover ? "absolute bg-background/40 backdrop-blur-md" : ""
               )}
+              style={{
+                paddingRight: "24px" // Added right padding
+              }}
               onHoverStart={() => setHover(true)}
               onHoverEnd={() => setHover(false)}
             >
@@ -347,7 +323,10 @@ export default function AssetShowcase({
         </div>
         
         {/* Table for both mobile and desktop */}
-        <div className="flex-1 z-0 rounded-2xl p-4 border border-secondary/30 bg-white/5 overflow-x-auto custom-scrollbar">
+        <div className={cn(
+          "flex-1 z-0 rounded-2xl p-4 border border-secondary/30 bg-white/5 overflow-x-auto custom-scrollbar",
+          isMobile ? "hidden" : "block"
+        )}>
           <Table>
             <TableHeader>
               <TableRow className="w-full border-none hover:bg-transparent">

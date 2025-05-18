@@ -1,5 +1,5 @@
 import type React from "react";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Sora } from "next/font/google";
 import "./globals.css";
 import AppSidebar from "@/components/sidebar";
@@ -18,6 +18,13 @@ export const metadata: Metadata = {
   description: "Create and manage stablecoins",
 };
 
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1.0,
+  viewportFit: 'cover',
+  maximumScale: 1.0,
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -25,7 +32,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${sora.className} bg-background text-white`}>
+      <body className={`${sora.className} bg-background text-white max-w-[100vw] overflow-x-hidden`}>
         <DynamicProvider>
           <QueryProvider>
             <WagmiConnector>

@@ -17,7 +17,7 @@ export default function MetricsCards({ metrics, className }: MetricsProps) {
   const { netWorth, invested, returnOnInvestment, roiPercentage, weeklyChange } = metrics;
   
   return (
-    <div className={cn("grid grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-3", className)}>
+    <div className={cn("grid grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-3 w-full max-w-full", className)}>
       {/* Net Worth Card */}
       <div className="bg-white/5 rounded-lg lg:rounded-xl border border-secondary/30 p-3 lg:p-4">
         <div className="text-[10px] lg:text-xs text-gray-400 mb-1 lg:mb-2">Net Worth</div>
@@ -32,7 +32,6 @@ export default function MetricsCards({ metrics, className }: MetricsProps) {
           <span className="text-gray-400">overall</span>
         </div>
       </div>
-
       {/* 7D % Change Card */}
       <div className="bg-white/5 rounded-lg lg:rounded-xl border border-secondary/30 p-3 lg:p-4">
         <div className="text-[10px] lg:text-xs text-gray-400 mb-1 lg:mb-2">7D %</div>

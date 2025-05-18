@@ -39,7 +39,7 @@ export default async function AssetsPage() {
   if (!data || data.length < 1) return <NoAssetFound />;
 
   return (
-    <div className="max-w-full overflow-hidden space-y-2 flex flex-col gap-2">
+    <div className="max-w-full w-full overflow-hidden space-y-2 flex flex-col gap-2">
       <div className="text-xs text-white/50 mb-2 lg:mb-3">
         Explore your <span className="text-primary">coins</span> collections and
         earnings
@@ -78,7 +78,7 @@ export default async function AssetsPage() {
       </div>
 
       {/* Mobile layout: UserDetails -> Metrics -> Table -> Timeline */}
-      <div className="flex flex-col lg:hidden gap-3 lg:gap-4 w-full px-2 sm:px-4">
+      <div className="flex flex-col lg:hidden gap-3 lg:gap-4 w-full max-w-full overflow-hidden px-2 sm:px-4">
         <UserDetails username="stable.user" className="w-full" />
         <MetricsCards metrics={metrics} />
         <AssetWindow data={data} />
