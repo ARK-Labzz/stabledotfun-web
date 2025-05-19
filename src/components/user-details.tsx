@@ -128,11 +128,11 @@ export default function UserDetails({ username, className }: UserDetailsProp) {
           variant={"outline"}
           className="cursor-pointer flex-1 border-primary border"
         >
-          <ArrowUpRight className="w-4 h-4" /> Withdraw
+          <ArrowUpRight className="w-4 h-4" /> Send
         </Button>
 
         <Button variant={"secondary"} className="cursor-pointer flex-1">
-          <ArrowDownLeft className="w-4 h-4" /> Deposit
+          <ArrowDownLeft className="w-4 h-4" /> Receive
         </Button>
       </div>
     </div>

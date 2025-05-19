@@ -39,7 +39,7 @@ export default async function AssetsPage() {
   if (!data || data.length < 1) return <NoAssetFound />;
 
   return (
-    <div className="max-w-full w-full overflow-hidden space-y-2 flex flex-col gap-2">
+    <div className="max-w-full w-full space-y-2 flex flex-col gap-2">
       <div className="text-xs text-white/50 mb-2 lg:mb-3">
         Explore your <span className="text-primary">coins</span> collections and
         earnings
