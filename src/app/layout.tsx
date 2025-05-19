@@ -32,7 +32,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${sora.className} bg-background text-white max-w-[100vw] overflow-x-hidden`}>
+      <body className={`${sora.className} bg-background text-white w-full overflow-x-hidden`}>
         <DynamicProvider>
           <QueryProvider>
             <WagmiConnector>
