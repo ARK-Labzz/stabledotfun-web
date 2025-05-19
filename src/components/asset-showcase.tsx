@@ -344,7 +344,7 @@ export default function AssetShowcase({
   return (
     <div
       className={cn(
-        "flex flex-col gap-1 bg-white/5 rounded-2xl p-4 border border-secondary/30 overflow-scroll",
+        "flex flex-col gap-1 bg-white/5 rounded-2xl p-4 border border-secondary/30 overflow-scroll custom-scrollbar",
         className
       )}
     >
@@ -372,7 +372,7 @@ export default function AssetShowcase({
         </div>
       </div>
        {/* We also have scrollbar here */}
-      <div className="relative flex flex-col lg:flex-row gap-3 overflow-x-auto overflow-y-hidden">
+      <div className="relative flex flex-col lg:flex-row gap-3 overflow-x-auto overflow-y-hidden custom-scrollbar">
         {/* Cards Container - Different display for mobile and desktop */}
         <div className={cn(
           "lg:w-3/7 z-10",
