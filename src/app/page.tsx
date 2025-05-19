@@ -41,20 +41,20 @@ export default async function Dashboard() {
       <UsernameBlock />
 
       {/* Mobile Layout */}
-      <div className="flex flex-col gap-3 lg:hidden">
+      <div className="grid grid-cols-1 gap-3 lg:hidden">
         <AssetShowcase asset={token} />
         <InvestmentCalculator stablecoins={fiat} />
         <StablecoinCards asset={token} />
       </div>
 
       {/* Desktop Layout */}
-      <div className="hidden lg:flex lg:flex-col xl:flex-row gap-3">
-        <div className="flex-1 flex w-full flex-col gap-3">
+      <div className="hidden lg:grid lg:grid-cols-1 xl:grid-cols-[1fr_20rem] 2xl:grid-cols-[1fr_24rem] gap-3">
+        <div className="grid grid-cols-1 gap-3">
           <AssetShowcase asset={token} />
           <StablecoinCards asset={token} />
         </div>
 
-        <div className="w-full xl:w-80 2xl:w-96 space-y-4">
+        <div className="h-full space-y-4">
           <InvestmentCalculator 
             className="h-full"
             stablecoins={fiat} 
