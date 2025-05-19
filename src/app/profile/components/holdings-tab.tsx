@@ -44,7 +44,7 @@ export default function HoldingsTab({ holdings }: HoldingsTabProps) {
           <thead>
             <tr className="bg-white/5">
               <th className="px-2 sm:px-4 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-medium text-gray-400">Token</th>
-              <th className="px-2 sm:px-4 py-2 sm:py-3 text-right text-[10px] sm:text-xs font-medium text-gray-400">Amount</th>
+              <th className="px-2 sm:px-4 py-2 sm:py-3 text-right text-[10px] sm:text-xs font-medium text-gray-400">Position Size</th>
               <th className="px-2 sm:px-4 py-2 sm:py-3 text-right text-[10px] sm:text-xs font-medium text-gray-400 hidden sm:table-cell">Value</th>
               <th className="px-2 sm:px-4 py-2 sm:py-3 text-right text-[10px] sm:text-xs font-medium text-gray-400 hidden md:table-cell">APY</th>
               <th className="px-2 sm:px-4 py-2 sm:py-3 text-right text-[10px] sm:text-xs font-medium text-gray-400 hidden md:table-cell">Bond</th>
