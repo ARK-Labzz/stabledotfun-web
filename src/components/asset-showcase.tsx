@@ -81,7 +81,7 @@ export default function AssetShowcase({
         <div className="lg:w-3/7 flex z-10">
           <motion.div
             className={cn(
-              "relative h-full pb-6 md:pb-0 bg-[#121c2200] flex gap-3 flex-1 overflow-x-auto overflow-y-hidden",
+              "relative h-full pb-6 md:pb-0 bg-[#121c2200] flex gap-3 flex-1 overflow-x-auto overflow-y-hidden min-h-[20rem]",
               isHover ? "absolute bg-background/40 backdrop-blur-md" : ""
             )}
             onHoverStart={() => setHover(true)}
