@@ -8,6 +8,7 @@ import { AssetProp } from "@/types";
 import { PayoutTimeline } from "@/components/payout-timeline";
 import UserDetails from "@/components/user-details";
 import MetricsCards from "./components/metrics-card";
+import { useEffect, useState } from "react";
 
 async function getData(): Promise<AssetProp[]> {
   // Fetch data from your API here.
@@ -31,13 +32,22 @@ function calculateMetrics(data: AssetProp[]) {
   };
 }
 
-export default async function AssetsPage() {
-  const data = await getData();
-  const metrics = calculateMetrics(data);
+export default function AssetsPage() {
+  
+const [data, setData] = useState<AssetProp[] | null>(null);
+
+  useEffect(() => {
+    getData().then((res) => {
+      setData(res);
+    });
+  }, []);
+
   
   // TODO - Implement token fetch api to replace the static `token` import
+  // TODO - Separate the !data from the data.length<1 the !data would be used for a loading state. I don't know what you want the loading state to look like.  
   if (!data || data.length < 1) return <NoAssetFound />;
 
+  const metrics = calculateMetrics(data);
   return (
     <div className="max-w-full w-full space-y-2 flex flex-col gap-2">
       <div className="text-xs text-white/50 mb-2 lg:mb-3">
@@ -78,15 +88,16 @@ export default async function AssetsPage() {
       </div>
 
       {/* Mobile layout: UserDetails -> Metrics -> Table -> Timeline */}
-      <div className="flex flex-col lg:hidden gap-3 lg:gap-4 w-full max-w-full overflow-hidden px-2 sm:px-4">
-        <UserDetails username="stable.user" className="w-full" />
-        <MetricsCards metrics={metrics} />
-        <AssetWindow data={data} />
-        <PayoutTimeline />
-      </div>
+		<div className="grid grid-cols-1 gap-3 lg:gap-4 w-full max-w-full overflow-hidden px-2 sm:px-4 lg:hidden">
+		  <UserDetails username="stable.user" className="w-full" />
+		  <MetricsCards metrics={metrics} />
+		  <AssetWindow data={data} />
+		  <PayoutTimeline />
+		</div>
+
 
       {/* Desktop layout: Split into columns */}
-      <div className="hidden lg:flex lg:flex-row gap-3 lg:gap-4 w-full px-0">
+      <div className="hidden lg:grid lg:grid-cols-[3fr_1fr] gap-3 lg:gap-4 w-full px-0">
         <div className="flex-1 flex flex-col gap-3 lg:gap-4 min-w-0">
           <MetricsCards metrics={metrics} />
           <AssetWindow data={data} />

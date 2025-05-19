@@ -32,7 +32,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${sora.className} bg-background text-white max-w-[100vw] overflow-x-hidden`}>
+      <body className={`${sora.className} bg-background text-white w-full overflow-x-hidden`}>
         <DynamicProvider>
           <QueryProvider>
             <WagmiConnector>
@@ -42,7 +42,8 @@ export default function RootLayout({
                   <div className="relative flex min-h-screen flex-col flex-1">
                     <Header />
                     {/* Added extra padding at the bottom for mobile to account for the fixed navbar */}
-                    <main className="flex-1 p-4 pt-30 mt-10 md:mt-0 md:pt-4 pb-24 md:pb-4">
+                    <main className="flex-1 p-4 pt-30 mt-10 md:mt-0 md:pt-4 pb-24 md:pb-4 ">
+
                       {children}
                       <Toaster />
                     </main>
