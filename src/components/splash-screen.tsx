@@ -39,7 +39,7 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
       const timer = setTimeout(() => {
         setTypedText(prev => prev + letters[currentLetterIndex]);
         setCurrentLetterIndex(prev => prev + 1);
-      }, 150); 
+      }, 150); // Typing speed
 
       return () => clearTimeout(timer);
     } else if (currentLetterIndex >= letters.length && onComplete) {
