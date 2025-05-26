@@ -66,7 +66,7 @@ export default function NotFound() {
             Page Not Found
           </h1>
           <p className="text-lg text-white/70">
-            The page you're looking for seems to be non-existent.
+            The page you&apos;re looking for seems to be non-existent.
           </p>
         </div>
         <div className="flex flex-col sm:flex-row gap-4 mt-8">

@@ -107,7 +107,7 @@ export default function Forbidden() {
               🚫 RESTRICTED AREA
             </p>
             <p className="text-sm text-red-300/80 mt-2">
-              You currently don't have the required permissions to access this stablecoin treasury.
+              You currently don&apos;t have the required permissions to access this stablecoin treasury.
             </p>
           </div>
         </div>
