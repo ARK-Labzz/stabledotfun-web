@@ -9,7 +9,7 @@ export default function Loading() {
   useEffect(() => {
     const interval = setInterval(() => {
       setPulseIntensity(prev => (prev + 1) % 100);
-    }, 50);
+    }, 100);
     return () => clearInterval(interval);
   }, []);
 

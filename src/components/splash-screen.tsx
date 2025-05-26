@@ -43,7 +43,7 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
       }, 150);
       return () => clearTimeout(timer);
     } else if (currentLetterIndex >= letters.length && onComplete) {
-      const completeTimer = setTimeout(onComplete, 1000);
+      const completeTimer = setTimeout(onComplete, 3000);
       return () => clearTimeout(completeTimer);
     }
   }, [currentLetterIndex, letters, textSlideIn, onComplete]);
@@ -116,7 +116,7 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
               )}
             </div>
             <div
-              className={`text-xs sm:text-sm lg:text-base text-primary/70 mt-2 transition-all duration-500 ${
+              className={`text-xs sm:text-sm lg:text-base text-white/90 mt-2 transition-all duration-500 ${
                 currentLetterIndex >= letters.length
                   ? 'opacity-100 translate-y-0'
                   : 'opacity-0 translate-y-4'
