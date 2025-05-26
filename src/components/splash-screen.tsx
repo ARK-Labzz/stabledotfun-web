@@ -24,6 +24,7 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
       setTextSlideIn(true);
     }, 1500);
     const typewriterTimer = setTimeout(() => {
+      setTypedText(""); 
       setCurrentLetterIndex(0);
     }, 2000);
 
@@ -37,10 +38,9 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
   useEffect(() => {
     if (currentLetterIndex < letters.length && textSlideIn) {
       const timer = setTimeout(() => {
-        setTypedText(prev => prev + letters[currentLetterIndex]);
+        setTypedText(letters.slice(0, currentLetterIndex + 1).join(""));
         setCurrentLetterIndex(prev => prev + 1);
-      }, 150); // Typing speed
-
+      }, 150);
       return () => clearTimeout(timer);
     } else if (currentLetterIndex >= letters.length && onComplete) {
       const completeTimer = setTimeout(onComplete, 1000);
