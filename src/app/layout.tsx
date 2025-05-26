@@ -10,12 +10,37 @@ import { Toaster } from "@/components/ui/sonner";
 import DynamicProvider from "@/components/providers/dynamic-lab";
 import QueryProvider from "@/components/providers/query-provider";
 import WagmiConnector from "@/components/providers/wagmi-connector";
+import SplashProvider from "@/components/providers/splash-provider";
 
 const sora = Sora({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Stable | Launch Stablecoins",
-  description: "Create and manage stablecoins",
+  title: "Stable.fun | Buy Stablecoins",
+  description: "Your Stablecoin factory - Create and manage stablecoins with ease",
+  manifest: "/manifest.json",
+  themeColor: "#7fcdd3",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Stable.fun",
+  },
+  icons: {
+    icon: [
+      { url: "/ios/32.png", sizes: "32x32", type: "image/png" },
+      { url: "/ios/16.png", sizes: "16x16", type: "image/png" },
+    ],
+    apple: [
+      { url: "/ios/180.png", sizes: "180x180", type: "image/png" },
+    ],
+  },
+  other: {
+    "mobile-web-app-capable": "yes",
+    "apple-mobile-web-app-capable": "yes",
+    "apple-mobile-web-app-status-bar-style": "default",
+    "apple-mobile-web-app-title": "Stable.fun",
+    "msapplication-TileColor": "#7fcdd3",
+    "msapplication-config": "/browserconfig.xml",
+  },
 };
 
 export const viewport: Viewport = {
@@ -23,6 +48,7 @@ export const viewport: Viewport = {
   initialScale: 1.0,
   viewportFit: 'cover',
   maximumScale: 1.0,
+  themeColor: "#7fcdd3",
 };
 
 export default function RootLayout({
@@ -32,7 +58,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <link rel="apple-touch-icon" href="/ios/180.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/ios/32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/ios/16.png" />
+        <meta name="msapplication-TileColor" content="#7fcdd3" />
+        <meta name="theme-color" content="#7fcdd3" />
+      </head>
       <body className={`${sora.className} bg-background text-white w-full overflow-x-hidden`}>
+      <SplashProvider>
         <DynamicProvider>
           <QueryProvider>
             <WagmiConnector>
@@ -52,6 +86,7 @@ export default function RootLayout({
             </WagmiConnector>
           </QueryProvider>
         </DynamicProvider>
+        </SplashProvider>
       </body>
     </html>
   );

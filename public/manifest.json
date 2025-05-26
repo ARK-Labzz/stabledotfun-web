@@ -1,0 +1,112 @@
+{
+  "name": "Stable.fun",
+  "short_name": "Stable.fun",
+  "description": "Your Stablecoin factory - Create and manage stablecoins with ease",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "hsl(194, 100%, 5%)",
+  "theme_color": "#7fcdd3",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "en",
+  "categories": ["finance", "defi", "stablecoins"],
+  "icons": [
+    {
+      "src": "/android/android-launchericon-72-72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/android/android-launchericon-96-96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/android/android-launchericon-144-144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/ios/152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/android/android-launchericon-192-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/ios/256.png",
+      "sizes": "256x256",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/android/android-launchericon-512-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Create Stablecoin",
+      "short_name": "Create",
+      "description": "Create a new stablecoin",
+      "url": "/create",
+      "icons": [
+        {
+          "src": "/ios/192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Dashboard",
+      "short_name": "Dashboard",
+      "description": "View your stablecoins",
+      "url": "/dashboard",
+      "icons": [
+        {
+          "src": "/ios/192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+        {
+      "name": "Swap Stablecoins",
+      "short_name": "Swap",
+      "description": "Swap your stablecoins instantly",
+      "url": "/swap",
+      "icons": [
+        {
+          "src": "/ios/192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/screenshot-mobile.png",
+      "sizes": "624x1280",
+      "type": "image/png",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "/screenshots/screenshot-desktop.png",
+      "sizes": "1900x867",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ]
+}
