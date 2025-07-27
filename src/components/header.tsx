@@ -216,7 +216,7 @@ export default function Header() {
  */
 function ConnectButton({ className }: { className?: string }) {
   const { connected, publicKey, connect, username } = useWallet();
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
 
   // Truncate wallet address for display
   const truncateAddress = (address: string) => {
@@ -248,7 +248,27 @@ function ConnectButton({ className }: { className?: string }) {
             >
               {/* User Avatar */}
               <div className="w-8 h-8 rounded-full bg-primary/10 border border-primary/30 p-0.5 flex items-center justify-center">
-                <User className="w-5 h-5 text-primary" />
+                {user?.avatarUrl ? (
+                  <Image
+                    src={user.avatarUrl}
+                    alt="Avatar"
+                    height={32}
+                    width={32}
+                    className="w-full h-full rounded-full object-cover"
+                    onError={(e) => {
+                      // Fallback to placeholder on error
+                      (e.target as HTMLImageElement).src = "/placeholder.svg?height=32&width=32";
+                    }}
+                  />
+                ) : (
+                  <Image
+                    src="/placeholder.svg?height=32&width=32"
+                    alt="Avatar"
+                    height={24}
+                    width={24}
+                    className="w-6 h-6 rounded-full"
+                  />
+                )}
               </div>
               
               {/* Display Username or Truncated Address (medium screens+) */}
