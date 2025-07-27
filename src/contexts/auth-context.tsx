@@ -26,11 +26,21 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   const refreshUser = async () => {
     try {
       const userData = await auth.getUser();
       setUser(userData);
+      
+      // Debug logging
+      if (process.env.NODE_ENV === 'development') {
+        console.log('Auth refreshUser result:', { 
+          hasUser: !!userData, 
+          email: userData?.email,
+          username: userData?.username 
+        });
+      }
     } catch (error) {
       console.error('Failed to refresh user:', error);
       setUser(null);
@@ -126,20 +136,36 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  // Initialize auth on mount
   useEffect(() => {
     const initializeAuth = async () => {
       setIsLoading(true);
-      await refreshUser();
-      setIsLoading(false);
+      
+      try {
+        await refreshUser();
+      } catch (error) {
+        console.error('Auth initialization failed:', error);
+        setUser(null);
+      } finally {
+        setIsLoading(false);
+        setIsInitialized(true);
+        
+        // Debug logging
+        if (process.env.NODE_ENV === 'development') {
+          console.log('Auth initialization complete');
+        }
+      }
     };
 
-    initializeAuth();
-  }, []);
+    if (!isInitialized) {
+      initializeAuth();
+    }
+  }, [isInitialized]);
 
   const value: AuthContextType = {
     user,
     isLoading,
-    isAuthenticated: !!user,
+    isAuthenticated: !!user && !isLoading,
     verifyOTP,
     completeProfile,
     uploadAvatar,
