@@ -121,10 +121,10 @@ export default function SignupPage() {
               <Sparkles className="w-5 h-5 sm:w-6 sm:h-6 text-primary animate-pulse flex-shrink-0" />
             </h1>
             <p className="text-base sm:text-lg text-white/70">
-              You're just a few taps away from stable income.
+              You&apos;re just a few taps away from stable income.
             </p>
             <p className="text-sm text-primary/80 font-medium">
-              Don't miss out.
+              Don&apos;t miss out.
             </p>
           </div>
         </div>

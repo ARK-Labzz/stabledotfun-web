@@ -25,8 +25,8 @@ export default function ReferralsTab({ referralUsers, referralCode, isLoading = 
       
       // Reset copied state after 2 seconds
       setTimeout(() => setCopied(false), 2000);
-    } catch (error) {
-      toast("Failed to copy referral code");
+    } catch {
+      toast.error("Failed to copy referral code");
     }
   };
 
@@ -45,7 +45,7 @@ export default function ReferralsTab({ referralUsers, referralCode, isLoading = 
           text: 'Join me on Stable.fun and start earning with stablecoins!',
           url: referralLink,
         });
-      } catch (error) {
+      } catch {
         // Fallback to copy
         await navigator.clipboard.writeText(referralLink);
         toast("Referral link copied to clipboard!");

@@ -366,7 +366,7 @@ export default function VerifyPage() {
           {/* Help text */}
           <div className="mt-4 pt-4 border-t border-white/10 text-center">
             <p className="text-xs text-white/50">
-              Didn't receive the code? Check your spam folder or{" "}
+              Didn&apos;t receive the code? Check your spam folder or{" "}
               <button
                 onClick={handleResend}
                 disabled={!canResend || isResending}

@@ -33,6 +33,14 @@ interface OnboardingData {
   createWallet: boolean;
 }
 
+interface CompleteProfilePayload {
+  username: string;
+  displayName: string;
+  bio: string;
+  referralCode?: string;
+  walletPassword?: string;
+}
+
 export default function OnboardingPage() {
   const [step, setStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
@@ -112,7 +120,7 @@ export default function OnboardingPage() {
       } else {
         setError(result.message || "Failed to upload avatar");
       }
-    } catch (error) {
+    } catch {
       setError("Failed to upload avatar. Please try again.");
     } finally {
       setIsUploadingAvatar(false);
@@ -190,7 +198,7 @@ export default function OnboardingPage() {
     setSuccess("");
 
     try {
-      const payload: any = {
+      const payload: CompleteProfilePayload = {
         username: formData.username.trim(),
         displayName: formData.displayName.trim(),
         bio: formData.bio.trim(),
@@ -219,7 +227,7 @@ export default function OnboardingPage() {
       } else {
         setError(result.message || "Failed to complete profile. Please try again.");
       }
-    } catch (error) {
+    } catch {
       setError("Network error. Please check your connection and try again.");
     } finally {
       setIsLoading(false);

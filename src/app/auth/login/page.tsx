@@ -121,10 +121,10 @@ export default function LoginPage() {
               <LogIn className="w-5 h-5 sm:w-6 sm:h-6 text-primary flex-shrink-0" />
             </h1>
             <p className="text-base sm:text-lg text-white/70">
-              They can't say you were lucky
+              They can&apos;t say you were lucky
             </p>
             <p className="text-sm text-primary/80 font-medium">
-              They'll see you worked for it
+              They&apos;ll see you worked for it
             </p>
           </div>
         </div>
@@ -202,7 +202,7 @@ export default function LoginPage() {
           {/* Sign up link */}
           <div className="text-center">
             <p className="text-sm text-white/60 mb-3">
-              Don't have an account yet?
+              Don&apos;t have an account yet?
             </p>
             <Button
               variant="outline"

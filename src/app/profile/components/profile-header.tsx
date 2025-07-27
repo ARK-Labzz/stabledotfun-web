@@ -42,12 +42,12 @@ export default function ProfileHeader({
       if (result.success) {
         setCurrentlyFollowing(!currentlyFollowing);
         onFollowChange?.(!currentlyFollowing);
-        toast(result.message || (currentlyFollowing ? 'Unfollowed successfully' : 'Following successfully'));
+        toast.success(result.message || (currentlyFollowing ? 'Unfollowed successfully' : 'Following successfully'));
       } else {
-        toast(result.message || 'Action failed');
+        toast.error(result.message || 'Action failed');
       }
-    } catch (error) {
-      toast('Network error. Please try again.');
+    } catch {
+      toast.error('Network error. Please try again.');
     } finally {
       setIsFollowLoading(false);
     }
@@ -62,7 +62,7 @@ export default function ProfileHeader({
       toast("Profile link copied!");
       
       setTimeout(() => setCopied(false), 2000);
-    } catch (error) {
+    } catch {
       toast("Failed to copy profile link");
     }
   };
