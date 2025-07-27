@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { stablecoins, token } from "@/static-data/token";
-import { AssetProp, TradeWindowToken } from "@/types";
+import { AssetProp, TradeWindowToken, ChartTokenData } from "@/types";
 import TradeWindow from "@/components/trade-window";
 import { notFound } from "next/navigation";
 import { TokenPriceChart } from "./components/chart-display";
@@ -30,7 +30,7 @@ interface AssetDetailProps {
 export default function AssetDetail({ params }: AssetDetailProps) {
   const { user, isLoading: authLoading } = useAuthGuard();
   const [id, setId] = useState<string>("");
-  const [tokenData, setTokenData] = useState<any[]>([]);
+  const [tokenData, setTokenData] = useState<ChartTokenData[]>([]);
   const [token, setToken] = useState<AssetProp[]>([]);
   const [fiat, setFiat] = useState<TradeWindowToken[]>([]);
   const [data, setData] = useState<AssetProp | null>(null);
