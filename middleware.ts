@@ -1,84 +1,106 @@
-// middleware.ts
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
-// Define protected routes that require authentication
-const protectedRoutes = ['/swap', '/profile', '/portfolio', '/create'];
+// Route configuration
+const PROTECTED_ROUTES = ['/swap', '/profile', '/portfolio', '/create'];
+const AUTH_ROUTES = ['/auth/login', '/auth/signup'];
 
-// Define public routes that don't require authentication
-const publicRoutes = ['/auth/login', '/auth/signup', '/auth/verify', '/', '/terms', '/privacy'];
+// Base URL for API calls
+const getApiBaseUrl = () => {
+  // In production, use your actual domain
+  if (process.env.NODE_ENV === 'production') {
+    return process.env.NEXT_PUBLIC_BASE_URL || 'https://stabledotfun-backend-js.onrender.com';
+  }
+  // In development, try to use localhost first
+  return process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+};
 
-// Define auth routes that should redirect if already authenticated
-const authRoutes = ['/auth/login', '/auth/signup'];
-
-async function checkSession(request: NextRequest): Promise<boolean> {
+// Lightweight session check
+async function isAuthenticated(request: NextRequest): Promise<boolean> {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/session-info`, {
+    const baseUrl = getApiBaseUrl();
+    
+    // Modern fetch with minimal headers
+    const response = await fetch(`${baseUrl}/api/auth/session-info`, {
       method: 'GET',
       headers: {
-        // Forward all cookies from the original request
+        // Only forward the essential cookie header
         'Cookie': request.headers.get('cookie') || '',
+        // Add cache control to prevent stale responses
+        'Cache-Control': 'no-cache',
       },
-      credentials: 'include',
+      // Disable cache for fresh session check
+      cache: 'no-store',
     });
 
     return response.ok;
   } catch (error) {
-    console.error('Session verification failed:', error);
+    // Log error in development only
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Auth check failed:', error);
+    }
     return false;
   }
 }
 
+// Route matching helpers
+function isProtectedRoute(pathname: string): boolean {
+  return PROTECTED_ROUTES.some(route => pathname.startsWith(route));
+}
+
+function isAuthRoute(pathname: string): boolean {
+  return AUTH_ROUTES.some(route => pathname.startsWith(route));
+}
+
+function shouldSkipMiddleware(pathname: string): boolean {
+  return (
+    pathname.startsWith('/_next') ||     // Next.js internals
+    pathname.startsWith('/api') ||       // API routes
+    pathname.includes('.') ||            // Static files
+    pathname === '/favicon.ico'          // Favicon
+  );
+}
+
 export async function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
-  
-  // Skip middleware for static files and API routes
-  if (
-    pathname.startsWith('/_next') ||
-    pathname.startsWith('/api') ||
-    pathname.includes('.') // files with extensions
-  ) {
+  const { pathname, searchParams } = request.nextUrl;
+
+  // Skip middleware for static assets and API routes
+  if (shouldSkipMiddleware(pathname)) {
     return NextResponse.next();
   }
-  
-  // Check if user is authenticated by verifying session with backend
-  const isAuthenticated = await checkSession(request);
-  
+
+  // Check authentication status
+  const userIsAuthenticated = await isAuthenticated(request);
+
   // Handle protected routes
-  if (protectedRoutes.some(route => pathname.startsWith(route))) {
-    if (!isAuthenticated) {
-      // Redirect to login with return URL
-      const loginUrl = new URL('/auth/signup', request.url);
-      loginUrl.searchParams.set('from', pathname);
-      return NextResponse.redirect(loginUrl);
+  if (isProtectedRoute(pathname)) {
+    if (!userIsAuthenticated) {
+      const signupUrl = new URL('/auth/signup', request.url);
+      signupUrl.searchParams.set('from', pathname);
+      return NextResponse.redirect(signupUrl);
     }
   }
-  
-  // Handle auth routes (login, signup) - redirect if already authenticated
-  if (authRoutes.some(route => pathname.startsWith(route))) {
-    if (isAuthenticated) {
-      // Check if there's a return URL
-      const from = request.nextUrl.searchParams.get('from');
-      const redirectUrl = from && protectedRoutes.some(route => from.startsWith(route)) 
-        ? from 
-        : '/';
-      return NextResponse.redirect(new URL(redirectUrl, request.url));
+
+  // Handle auth routes (redirect if already authenticated)
+  if (isAuthRoute(pathname)) {
+    if (userIsAuthenticated) {
+      const redirectTo = searchParams.get('from') || '/';
+      return NextResponse.redirect(new URL(redirectTo, request.url));
     }
   }
-  
+
   return NextResponse.next();
 }
 
+// Modern matcher configuration
 export const config = {
   matcher: [
     /*
-     * Match all request paths except:
-     * - api routes
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - public files (manifest.json, robots.txt, etc.)
+     * Match all paths except:
+     * 1. /api routes
+     * 2. /_next (Next.js internals)
+     * 3. /_static (inside /public)
+     * 4. Static files (e.g. /favicon.ico, /sitemap.xml, etc.)
      */
-    '/((?!api|_next/static|_next/image|favicon.ico|manifest.json|robots.txt|ios|android|browserconfig.xml).*)',
+    '/((?!api|_next/static|_next/image|_next/webpack-hmr|favicon.ico|sitemap.xml|robots.txt).*)',
   ],
 };

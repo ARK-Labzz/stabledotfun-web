@@ -117,14 +117,14 @@ export default function LoginPage() {
           {/* Animated title */}
           <div className="space-y-2">
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white flex items-center justify-center gap-2 flex-wrap">
-              <span className="text-center leading-tight">Back again? We love to see it</span>
+              <span className="text-center leading-tight">Back again? We love to see :&#41;</span>
               <LogIn className="w-5 h-5 sm:w-6 sm:h-6 text-primary flex-shrink-0" />
             </h1>
             <p className="text-base sm:text-lg text-white/70">
-              They can&apos;t say you were lucky
+              Stop dreaming.
             </p>
             <p className="text-sm text-primary/80 font-medium">
-              They&apos;ll see you worked for it
+              Start doing.
             </p>
           </div>
         </div>
@@ -223,7 +223,7 @@ export default function LoginPage() {
         {/* Footer */}
         <div className="text-center mt-6">
           <p className="text-xs text-white/50">
-            Secure login powered by blockchain technology
+            Built on Solana with ❤️ by the Stable.fun team
           </p>
         </div>
       </div>
