@@ -72,7 +72,7 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
   }, []);
   
   // Generate a mock rate between 0.95 and 1.05
-  const generateRate = () => {
+  const generateRate = React.useCallback(() => {
     if (!fromToken || !toToken) return null;
     
     // Base rates for different token pairs
@@ -115,10 +115,10 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
     
     // Fallback to a reasonable default
     return getRate(1.0);
-  };
+  }, [fromToken, toToken]);
 
   // Manual rate update function - can be called by refresh button
-  const updateRate = () => {
+  const updateRate = React.useCallback(() => {
     const newRate = generateRate();
     setRate(newRate);
     const now = new Date();
@@ -138,7 +138,7 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
         rate: newRate
       }));
     }
-  };
+  }, [fromToken, toToken, fromAmount, generateRate]);
 
   // This effect runs only when tokens or amounts change
   React.useEffect(() => {
@@ -160,7 +160,7 @@ export default function SwapProvider({ children }: { children: ReactNode }) {
         updateRate();
       }
     }
-  }, [fromToken, toToken, fromAmount]); // Only run when tokens or amount change
+  }, [fromToken, toToken, fromAmount, rate, updateRate]); // Include all dependencies
 
   const set = (
     fromToken: TradeWindowToken | null,

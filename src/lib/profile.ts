@@ -89,10 +89,16 @@ export interface ProfileData {
   referralCode: string;
 }
 
+export interface ProfileUpdateData {
+  user?: AuthUser;
+  message?: string;
+  [key: string]: unknown;
+}
+
 export interface ProfileResponse {
   success: boolean;
   message?: string;
-  data?: any;
+  data?: ProfileUpdateData;
 }
 
 class ProfileError extends Error {
@@ -121,8 +127,8 @@ export const profile = {
 
       const data = await response.json();
       return data;
-    } catch (error) {
-      console.error('Get profile error:', error);
+    } catch {
+      console.error('Get profile error occurred');
       return null;
     }
   },
@@ -185,8 +191,8 @@ export const profile = {
 
       const data = await response.json();
       return data;
-    } catch (error) {
-      console.error('Get profile by username error:', error);
+    } catch {
+      console.error('Get profile by username error occurred');
       return null;
     }
   },
@@ -212,8 +218,8 @@ export const profile = {
 
       const data = await response.json();
       return data;
-    } catch (error) {
-      console.error('Get followers error:', error);
+    } catch {
+      console.error('Get followers error occurred');
       return null;
     }
   },
@@ -239,8 +245,8 @@ export const profile = {
 
       const data = await response.json();
       return data;
-    } catch (error) {
-      console.error('Get following error:', error);
+    } catch {
+      console.error('Get following error occurred');
       return null;
     }
   },
@@ -376,8 +382,8 @@ export const social = {
 
       const data = await response.json();
       return { isFollowing: data.isFollowing || false };
-    } catch (error) {
-      console.error('Check following error:', error);
+    } catch {
+      console.error('Check following error occurred');
       return { isFollowing: false };
     }
   },
@@ -395,8 +401,8 @@ export const social = {
 
       const data = await response.json();
       return data;
-    } catch (error) {
-      console.error('Get my followers error:', error);
+    } catch {
+      console.error('Get my followers error occurred');
       return [];
     }
   },
@@ -414,8 +420,8 @@ export const social = {
 
       const data = await response.json();
       return data;
-    } catch (error) {
-      console.error('Get my following error:', error);
+    } catch {
+      console.error('Get my following error occurred');
       return [];
     }
   },
@@ -433,8 +439,8 @@ export const social = {
 
       const data = await response.json();
       return data;
-    } catch (error) {
-      console.error('Get mutual followers error:', error);
+    } catch {
+      console.error('Get mutual followers error occurred');
       return [];
     }
   },
@@ -452,8 +458,8 @@ export const social = {
 
       const data = await response.json();
       return data;
-    } catch (error) {
-      console.error('Get recommended error:', error);
+    } catch {
+      console.error('Get recommended error occurred');
       return [];
     }
   },
@@ -471,8 +477,8 @@ export const social = {
 
       const data = await response.json();
       return data.referralCode || null;
-    } catch (error) {
-      console.error('Get referral code error:', error);
+    } catch {
+      console.error('Get referral code error occurred');
       return null;
     }
   },
@@ -490,8 +496,8 @@ export const social = {
 
       const data = await response.json();
       return data;
-    } catch (error) {
-      console.error('Get referrals error:', error);
+    } catch {
+      console.error('Get referrals error occurred');
       return [];
     }
   },
@@ -513,8 +519,8 @@ export const social = {
 
       const data = await response.json();
       return data;
-    } catch (error) {
-      console.error('Get social stats error:', error);
+    } catch {
+      console.error('Get social stats error occurred');
       return null;
     }
   },

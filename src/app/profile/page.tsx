@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { HelpCircle, AlertCircle, RefreshCw } from "lucide-react";
 import Link from "next/link";
@@ -21,7 +21,7 @@ export default function ProfilePage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const fetchProfileData = async () => {
+  const fetchProfileData = useCallback(async () => {
     if (!user) return;
     
     setIsLoading(true);
@@ -53,7 +53,7 @@ export default function ProfilePage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [user]);
 
   const handleRefresh = () => {
     fetchProfileData();
@@ -63,7 +63,7 @@ export default function ProfilePage() {
     if (user && !authLoading) {
       fetchProfileData();
     }
-  }, [user, authLoading]);
+  }, [user, authLoading, fetchProfileData]);
 
   // Show loading state while auth is loading
   if (authLoading) {
