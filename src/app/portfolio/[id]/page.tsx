@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
 import { stablecoins, token } from "@/static-data/token";
 import { AssetProp, TradeWindowToken } from "@/types";
 import TradeWindow from "@/components/trade-window";
@@ -9,6 +11,7 @@ import AssetInfo from "./components/asset-info";
 import { PayoutTimeline } from "@/components/payout-timeline";
 import { TransactionsDataTable } from "./components/data-table";
 import { mockData, txcolumns } from "./components/columns";
+import { useAuthGuard } from "@/hooks/use-auth-guard";
 
 async function getData(): Promise<AssetProp[]> {
   // Fetch data from your API here.
@@ -20,22 +23,64 @@ async function getFiatData(): Promise<TradeWindowToken[]> {
   return stablecoins as TradeWindowToken[];
 }
 
-export default async function AssetDetail({
-  params,
-}: {
+interface AssetDetailProps {
   params: Promise<{ id: string }>;
-}) {
-  const { id } = await params;
-  const token = await getData();
-  const fiat = await getFiatData();
-  const tokenData = await generateTokenData();
+}
 
-  const dataArr = token.filter((el) => el.id === id);
-  const data = dataArr.length > 0 ? dataArr[0] : null;
+export default function AssetDetail({ params }: AssetDetailProps) {
+  const { user, isLoading: authLoading } = useAuthGuard();
+  const [id, setId] = useState<string>("");
+  const [tokenData, setTokenData] = useState<any[]>([]);
+  const [token, setToken] = useState<AssetProp[]>([]);
+  const [fiat, setFiat] = useState<TradeWindowToken[]>([]);
+  const [data, setData] = useState<AssetProp | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    params.then(({ id }) => setId(id));
+  }, [params]);
+
+  useEffect(() => {
+    if (user && !authLoading && id) {
+      Promise.all([
+        getData(),
+        getFiatData(),
+        generateTokenData()
+      ]).then(([tokenData, fiatData, chartData]) => {
+        setToken(tokenData);
+        setFiat(fiatData);
+        setTokenData(chartData);
+
+        const dataArr = tokenData.filter((el) => el.id === id);
+        const foundData = dataArr.length > 0 ? dataArr[0] : null;
+        setData(foundData);
+        setIsLoading(false);
+      });
+    }
+  }, [user, authLoading, id]);
+
+  // Show loading state while auth is loading
+  if (authLoading || isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-[400px]">
+        <div className="animate-spin w-8 h-8 border-2 border-primary border-t-transparent rounded-full"></div>
+      </div>
+    );
+  }
+
+  // If no user after loading, useAuthGuard will handle redirect
+  if (!user) {
+    return (
+      <div className="flex justify-center items-center min-h-[400px]">
+        <div className="animate-spin w-8 h-8 border-2 border-primary border-t-transparent rounded-full"></div>
+      </div>
+    );
+  }
 
   if (!data) return notFound();
 
-  const priceAvg = tokenData[tokenData.length - 1].price;
+  const priceAvg = tokenData[tokenData.length - 1]?.price || 0;
+  const dataArr = token.filter((el) => el.id === id);
 
   return (
     <div className="space-y-4 flex gap-4">

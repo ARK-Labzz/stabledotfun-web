@@ -2,15 +2,15 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
-import { HelpCircle, AlertCircle, RefreshCw } from "lucide-react";
+import { HelpCircle, RefreshCw } from "lucide-react";
 import Link from "next/link";
 import ProfileHeader from "./components/profile-header";
 import ProfileTabs from "./components/profile-tabs";
-import { useAuth } from "@/contexts/auth-context";
+import { useAuthGuard } from "@/hooks/use-auth-guard";
 import { profile, social, transformers, ProfileData, handleProfileError } from "@/lib/profile";
 
 export default function ProfilePage() {
-  const { user, isLoading: authLoading } = useAuth();
+  const { user, isLoading: authLoading } = useAuthGuard();
   const [activeTab, setActiveTab] = useState("holdings");
   const [profileData, setProfileData] = useState<ProfileData>({
     holdings: [],
@@ -76,17 +76,12 @@ export default function ProfilePage() {
     );
   }
 
-  // Show error state if user is not authenticated
+  // If no user after loading, useAuthGuard will handle redirect
   if (!user) {
     return (
       <div className="w-full mx-auto py-2 px-2 sm:py-4 sm:px-4 md:max-w-6xl">
-        <div className="text-center py-10">
-          <AlertCircle className="w-12 h-12 text-red-400 mx-auto mb-4" />
-          <h2 className="text-xl font-semibold text-white mb-2">Authentication Required</h2>
-          <p className="text-gray-400 mb-4">Please log in to view your profile</p>
-          <Link href="/auth/login">
-            <Button>Login</Button>
-          </Link>
+        <div className="flex justify-center items-center min-h-[400px]">
+          <div className="animate-spin w-8 h-8 border-2 border-primary border-t-transparent rounded-full"></div>
         </div>
       </div>
     );
@@ -128,7 +123,7 @@ export default function ProfilePage() {
       {error && (
         <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4 mb-4 sm:mb-6">
           <div className="flex items-center gap-2">
-            <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0" />
+            <RefreshCw className="w-5 h-5 text-red-400 flex-shrink-0" />
             <div>
               <p className="text-red-200 text-sm">{error}</p>
               <Button

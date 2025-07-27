@@ -9,6 +9,7 @@ import { PayoutTimeline } from "@/components/payout-timeline";
 import UserDetails from "@/components/user-details";
 import MetricsCards from "./components/metrics-card";
 import { useEffect, useState } from "react";
+import { useAuthGuard } from "@/hooks/use-auth-guard";
 
 async function getData(): Promise<AssetProp[]> {
   // Fetch data from your API here.
@@ -33,15 +34,34 @@ function calculateMetrics(data: AssetProp[]) {
 }
 
 export default function AssetsPage() {
-  
-const [data, setData] = useState<AssetProp[] | null>(null);
+  const { user, isLoading: authLoading } = useAuthGuard();
+  const [data, setData] = useState<AssetProp[] | null>(null);
 
   useEffect(() => {
-    getData().then((res) => {
-      setData(res);
-    });
-  }, []);
+    if (user && !authLoading) {
+      getData().then((res) => {
+        setData(res);
+      });
+    }
+  }, [user, authLoading]);
 
+  // Show loading state while auth is loading
+  if (authLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-[400px]">
+        <div className="animate-spin w-8 h-8 border-2 border-primary border-t-transparent rounded-full"></div>
+      </div>
+    );
+  }
+
+  // If no user after loading, useAuthGuard will handle redirect
+  if (!user) {
+    return (
+      <div className="flex justify-center items-center min-h-[400px]">
+        <div className="animate-spin w-8 h-8 border-2 border-primary border-t-transparent rounded-full"></div>
+      </div>
+    );
+  }
   
   // TODO - Implement token fetch api to replace the static `token` import
   // TODO - Separate the !data from the data.length<1 the !data would be used for a loading state. I don't know what you want the loading state to look like.  
@@ -88,13 +108,12 @@ const [data, setData] = useState<AssetProp[] | null>(null);
       </div>
 
       {/* Mobile layout: UserDetails -> Metrics -> Table -> Timeline */}
-		<div className="grid grid-cols-1 gap-3 lg:gap-4 w-full max-w-full overflow-hidden px-2 sm:px-4 lg:hidden">
-		  <UserDetails username="stable.user" className="w-full" />
-		  <MetricsCards metrics={metrics} />
-		  <AssetWindow data={data} />
-		  <PayoutTimeline />
-		</div>
-
+      <div className="grid grid-cols-1 gap-3 lg:gap-4 w-full max-w-full overflow-hidden px-2 sm:px-4 lg:hidden">
+        <UserDetails username={user.username || user.displayName || "user"} className="w-full" />
+        <MetricsCards metrics={metrics} />
+        <AssetWindow data={data} />
+        <PayoutTimeline />
+      </div>
 
       {/* Desktop layout: Split into columns */}
       <div className="hidden lg:grid lg:grid-cols-[3fr_1fr] gap-3 lg:gap-4 w-full px-0">
@@ -103,7 +122,7 @@ const [data, setData] = useState<AssetProp[] | null>(null);
           <AssetWindow data={data} />
         </div>
         <div className="flex flex-col gap-3 lg:gap-4 w-72 xl:w-80 flex-shrink-0">
-          <UserDetails username="stable.user" />
+          <UserDetails username={user.username || user.displayName || "user"} />
           <PayoutTimeline />
         </div>
       </div>
