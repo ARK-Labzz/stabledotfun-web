@@ -5,15 +5,7 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       { pathname: "/logos/**", protocol: "https", hostname: "cryptologos.cc" },
-      {
-        pathname: "/icons/**",
-        protocol: "https",
-        hostname: "iconic.dynamic-static-assets.com",
-      },
     ],
-  },
-  experimental: {
-    optimizePackageImports: ["@dynamic-labs/sdk-react-core"],
   },
 };
 
@@ -32,17 +24,6 @@ export default withPWA({
         expiration: {
           maxEntries: 100,
           maxAgeSeconds: 30 * 24 * 60 * 60, 
-        },
-      },
-    },
-    {
-      urlPattern: /^https:\/\/iconic\.dynamic-static-assets\.com\/icons\/.*/i,
-      handler: 'CacheFirst',
-      options: {
-        cacheName: 'dynamic-icons',
-        expiration: {
-          maxEntries: 100,
-          maxAgeSeconds: 30 * 24 * 60 * 60,
         },
       },
     },

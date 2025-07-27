@@ -9,7 +9,7 @@ export default function UsernameBlock() {
   return (
     <div className="text-xs text-gray-400">
       Welcome,{" "}
-      <span className="text-primary">{username ? username : "user"}</span>
+      <span className="text-primary">{username || "user"}</span>
     </div>
   );
 }
