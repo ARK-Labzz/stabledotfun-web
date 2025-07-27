@@ -1,5 +1,32 @@
 // lib/auth.ts
 
+export interface SecurityEvent {
+  action: string;
+  timestamp: string;
+  ip: string;
+  userAgent: string;
+  metadata: Record<string, unknown>;
+}
+
+export interface WalletStatus {
+  hasWallet: boolean;
+  walletAddress?: string;
+  securityMethod?: string;
+  exportCount?: number;
+  lastExport?: string;
+}
+
+export interface SessionData {
+  sessionId: string;
+  userId: string;
+  email: string;
+  ip: string;
+  userAgent: string;
+  loginTime: string;
+  lastActivity: string;
+  isActive: boolean;
+}
+
 export interface AuthUser {
   _id: string;
   email: string;
@@ -15,13 +42,7 @@ export interface AuthUser {
   walletSecurityMethod?: string;
   walletExportCount?: number;
   lastWalletExport?: string;
-  securityEvents?: Array<{
-    action: string;
-    timestamp: string;
-    ip: string;
-    userAgent: string;
-    metadata: any;
-  }>;
+  securityEvents?: SecurityEvent[];
   followers: Array<{
     userId: string;
     displayName: string;
@@ -342,8 +363,8 @@ export const auth = {
         method: 'POST',
         credentials: 'include',
       });
-    } catch (error) {
-      console.error('Logout error:', error);
+    } catch {
+      console.error('Logout error occurred');
     }
   },
 
@@ -354,8 +375,8 @@ export const auth = {
         method: 'POST',
         credentials: 'include',
       });
-    } catch (error) {
-      console.error('Logout all error:', error);
+    } catch {
+      console.error('Logout all error occurred');
     }
   },
 
@@ -372,8 +393,8 @@ export const auth = {
 
       const data = await response.json();
       return data;
-    } catch (error) {
-      console.error('Get user error:', error);
+    } catch {
+      console.error('Get user error occurred');
       return null;
     }
   },
@@ -391,8 +412,8 @@ export const auth = {
 
       const data = await response.json();
       return data;
-    } catch (error) {
-      console.error('Session info error:', error);
+    } catch {
+      console.error('Session info error occurred');
       return null;
     }
   },
@@ -405,8 +426,8 @@ export const auth = {
       });
       
       return response.ok;
-    } catch (error) {
-      console.error('Session check error:', error);
+    } catch {
+      console.error('Session check error occurred');
       return false;
     }
   },
@@ -431,7 +452,7 @@ export const auth = {
           message: data.message || 'Username is not available',
         };
       }
-    } catch (error) {
+    } catch {
       return {
         available: false,
         message: 'Error checking username availability',
@@ -440,7 +461,7 @@ export const auth = {
   },
 
   // Get current user's wallet status
-  async getWalletStatus(): Promise<any> {
+  async getWalletStatus(): Promise<WalletStatus | null> {
     try {
       const response = await fetch(`${API_BASE_URL}/api/auth/wallet/status`, {
         credentials: 'include',
@@ -452,8 +473,8 @@ export const auth = {
 
       const data = await response.json();
       return data;
-    } catch (error) {
-      console.error('Get wallet status error:', error);
+    } catch {
+      console.error('Get wallet status error occurred');
       return null;
     }
   },
@@ -500,7 +521,7 @@ export const auth = {
   },
 
   // Get all user sessions
-  async getAllSessions(): Promise<any[]> {
+  async getAllSessions(): Promise<SessionData[]> {
     try {
       const response = await fetch(`${API_BASE_URL}/api/auth/sessions`, {
         credentials: 'include',
@@ -512,8 +533,8 @@ export const auth = {
 
       const data = await response.json();
       return data;
-    } catch (error) {
-      console.error('Get all sessions error:', error);
+    } catch {
+      console.error('Get all sessions error occurred');
       return [];
     }
   },
