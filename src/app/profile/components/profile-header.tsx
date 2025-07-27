@@ -1,102 +1,259 @@
 "use client";
 
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Copy, Edit, Users, UserCheck, Share2 } from "lucide-react";
+import { Settings, UserPlus, UserMinus, MessageCircle, MoreHorizontal, Copy, CheckCircle } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { toast } from "sonner";
+import { AuthUser } from "@/lib/auth";
+import { social } from "@/lib/profile";
 
 interface ProfileHeaderProps {
-  profile: {
-    name: string;
-    username: string;
-    bio: string;
-    avatar: string;
-    followers: number;
-    following: number;
-    referrals: number;
-    referralCode: string;
-  };
+  profile: AuthUser;
+  isOwnProfile?: boolean;
+  isFollowing?: boolean;
+  onFollowChange?: (isFollowing: boolean) => void;
 }
 
-export default function ProfileHeader({ profile }: ProfileHeaderProps) {
-  const handleCopyReferralCode = () => {
-    navigator.clipboard.writeText(profile.referralCode);
-    toast("Referral code copied to clipboard!");
+export default function ProfileHeader({ 
+  profile, 
+  isOwnProfile = true, 
+  isFollowing = false,
+  onFollowChange 
+}: ProfileHeaderProps) {
+  const [isFollowLoading, setIsFollowLoading] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const [currentlyFollowing, setCurrentlyFollowing] = useState(isFollowing);
+
+  const handleFollow = async () => {
+    if (!profile.username) return;
+    
+    setIsFollowLoading(true);
+    
+    try {
+      let result;
+      if (currentlyFollowing) {
+        result = await social.unfollowUser(profile.username);
+      } else {
+        result = await social.followUser(profile.username);
+      }
+
+      if (result.success) {
+        setCurrentlyFollowing(!currentlyFollowing);
+        onFollowChange?.(!currentlyFollowing);
+        toast(result.message || (currentlyFollowing ? 'Unfollowed successfully' : 'Following successfully'));
+      } else {
+        toast(result.message || 'Action failed');
+      }
+    } catch (error) {
+      toast('Network error. Please try again.');
+    } finally {
+      setIsFollowLoading(false);
+    }
+  };
+
+  const handleCopyProfile = async () => {
+    const profileUrl = `${window.location.origin}/profile/${profile.username}`;
+    
+    try {
+      await navigator.clipboard.writeText(profileUrl);
+      setCopied(true);
+      toast("Profile link copied!");
+      
+      setTimeout(() => setCopied(false), 2000);
+    } catch (error) {
+      toast("Failed to copy profile link");
+    }
+  };
+
+  const formatNumber = (num: number) => {
+    if (num >= 1000000) {
+      return (num / 1000000).toFixed(1) + 'M';
+    }
+    if (num >= 1000) {
+      return (num / 1000).toFixed(1) + 'K';
+    }
+    return num.toString();
   };
 
   return (
-    <div className="bg-white/5 rounded-xl sm:rounded-2xl p-3 sm:p-6 border border-secondary/30 mb-4 sm:mb-6">
-      <div className="flex flex-col md:flex-row gap-4 sm:gap-6 items-start">
-        {/* Avatar - Kept circular */}
-        <div className="relative mx-auto md:mx-0">
-          <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-secondary/30 border-2 border-secondary overflow-hidden">
-            <Image
-              src={profile.avatar}
-              alt="Avatar"
-              width={96}
-              height={96}
-              className="w-full h-full object-cover"
-            />
+    <div className="bg-white/5 rounded-xl sm:rounded-2xl border border-secondary/30 p-4 sm:p-6 mb-4 sm:mb-6">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
+        {/* Avatar */}
+        <div className="relative">
+          <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-white/5 overflow-hidden">
+            {profile.avatarUrl ? (
+              <Image
+                src={profile.avatarUrl}
+                alt={profile.displayName || profile.username || 'User'}
+                width={80}
+                height={80}
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = '/default-avatar.png';
+                }}
+              />
+            ) : (
+              <div className="w-full h-full bg-gradient-to-br from-primary/20 to-primary/40 flex items-center justify-center">
+                <span className="text-white font-bold text-lg sm:text-xl">
+                  {(profile.displayName || profile.username || 'U')[0].toUpperCase()}
+                </span>
+              </div>
+            )}
           </div>
         </div>
 
         {/* Profile Info */}
-        <div className="flex-1 w-full">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-4 mb-3 sm:mb-4">
-            <div className="text-center md:text-left">
-              <h2 className="text-lg sm:text-xl font-bold">{profile.name}</h2>
-              <p className="text-gray-400 text-sm">@{profile.username}</p>
+        <div className="flex-1 min-w-0">
+          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4">
+            <div className="min-w-0">
+              <h1 className="text-lg sm:text-xl font-bold text-white truncate">
+                {profile.displayName || profile.username || 'Anonymous User'}
+              </h1>
+              {profile.username && (
+                <p className="text-sm text-gray-400">@{profile.username}</p>
+              )}
+              {profile.bio && (
+                <p className="text-xs sm:text-sm text-gray-300 mt-1 sm:mt-2 line-clamp-2">
+                  {profile.bio}
+                </p>
+              )}
             </div>
-            <Button variant="outline" size="sm" className="w-full sm:w-auto text-xs sm:text-sm">
-              <Edit className="mr-1 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4" /> Edit Profile
-            </Button>
-          </div>
-          <p className="text-xs sm:text-sm mb-3 sm:mb-4 text-center md:text-left">{profile.bio}</p>
-          
-          {/* Stats - Reduced to 2 columns on smaller screens */}
-          <div className="grid grid-cols-2 gap-2 sm:gap-4 mb-3 sm:mb-6">
-            <div className="flex flex-col items-center p-2 sm:p-3 bg-white/5 rounded-lg">
-              <div className="flex items-center gap-1 sm:gap-2 text-primary">
-                <Users className="h-3 w-3 sm:h-4 sm:w-4" />
-                <span className="font-bold text-sm sm:text-base">{profile.followers}</span>
-              </div>
-              <span className="text-[10px] sm:text-xs text-gray-400">Followers</span>
+
+            {/* Action Buttons */}
+            <div className="flex items-center gap-2 flex-shrink-0">
+              {isOwnProfile ? (
+                <>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleCopyProfile}
+                    className="text-xs h-8"
+                  >
+                    {copied ? (
+                      <>
+                        <CheckCircle className="mr-1 h-3 w-3" />
+                        Copied
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="mr-1 h-3 w-3" />
+                        Share
+                      </>
+                    )}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    asChild
+                    className="text-xs h-8"
+                  >
+                    <Link href="/profile/settings">
+                      <Settings className="mr-1 h-3 w-3" />
+                      Edit
+                    </Link>
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button
+                    onClick={handleFollow}
+                    disabled={isFollowLoading}
+                    size="sm"
+                    variant={currentlyFollowing ? "outline" : "default"}
+                    className="text-xs h-8"
+                  >
+                    {isFollowLoading ? (
+                      <div className="w-3 h-3 border border-white border-t-transparent rounded-full animate-spin mr-1" />
+                    ) : currentlyFollowing ? (
+                      <UserMinus className="mr-1 h-3 w-3" />
+                    ) : (
+                      <UserPlus className="mr-1 h-3 w-3" />
+                    )}
+                    {currentlyFollowing ? 'Unfollow' : 'Follow'}
+                  </Button>
+                  
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-xs h-8"
+                  >
+                    <MessageCircle className="mr-1 h-3 w-3" />
+                    Message
+                  </Button>
+                  
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleCopyProfile}
+                    className="text-xs h-8"
+                  >
+                    {copied ? (
+                      <CheckCircle className="h-3 w-3" />
+                    ) : (
+                      <MoreHorizontal className="h-3 w-3" />
+                    )}
+                  </Button>
+                </>
+              )}
             </div>
-            
-            <div className="flex flex-col items-center p-2 sm:p-3 bg-white/5 rounded-lg">
-              <div className="flex items-center gap-1 sm:gap-2 text-primary">
-                <UserCheck className="h-3 w-3 sm:h-4 sm:w-4" />
-                <span className="font-bold text-sm sm:text-base">{profile.following}</span>
-              </div>
-              <span className="text-[10px] sm:text-xs text-gray-400">Following</span>
-            </div>
-            
-            <div className="flex flex-col items-center p-2 sm:p-3 bg-white/5 rounded-lg col-span-2">
-              <div className="flex items-center gap-1 sm:gap-2 text-primary">
-                <Share2 className="h-3 w-3 sm:h-4 sm:w-4" />
-                <span className="font-bold text-sm sm:text-base">{profile.referrals}</span>
-              </div>
-              <span className="text-[10px] sm:text-xs text-gray-400">Referrals</span>
-            </div>
-          </div>
-          
-          {/* Referral Code - Stacked on mobile */}
-          <div className="flex flex-col gap-2 items-center bg-white/5 p-2 sm:p-3 rounded-lg">
-            <div className="text-center sm:text-left w-full">
-              <span className="text-[10px] sm:text-xs text-gray-400 block mb-1">Your Referral Code</span>
-              <span className="font-mono text-xs sm:text-sm">{profile.referralCode}</span>
-            </div>
-            <Button
-              variant="outline"
-              size="sm"
-              className="w-full text-xs sm:text-sm"
-              onClick={handleCopyReferralCode}
-            >
-              <Copy className="mr-1 sm:mr-2 h-3 w-3 sm:h-4 sm:w-4" /> Copy Code
-            </Button>
           </div>
         </div>
       </div>
+
+      {/* Stats */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-white/10">
+        <div className="text-center">
+          <div className="text-lg sm:text-xl font-bold text-white">
+            ${formatNumber(profile.portfolio?.netWorth || 0)}
+          </div>
+          <div className="text-xs text-gray-400">Net Worth</div>
+        </div>
+        
+        <div className="text-center">
+          <div className="text-lg sm:text-xl font-bold text-white">
+            {profile.portfolio?.roi?.overall || 0}%
+          </div>
+          <div className="text-xs text-gray-400">Overall ROI</div>
+        </div>
+        
+        <div className="text-center">
+          <div className="text-lg sm:text-xl font-bold text-white">
+            {formatNumber(profile.followers?.length || 0)}
+          </div>
+          <div className="text-xs text-gray-400">Followers</div>
+        </div>
+        
+        <div className="text-center">
+          <div className="text-lg sm:text-xl font-bold text-white">
+            {formatNumber(profile.following?.length || 0)}
+          </div>
+          <div className="text-xs text-gray-400">Following</div>
+        </div>
+      </div>
+
+      {/* Wallet Address (if available) */}
+      {profile.walletAddress && (
+        <div className="mt-4 pt-4 border-t border-white/10">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-xs text-gray-400 mb-1">Wallet Address</p>
+              <p className="text-xs font-mono text-white truncate max-w-[200px] sm:max-w-[300px]">
+                {profile.walletAddress}
+              </p>
+            </div>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => navigator.clipboard.writeText(profile.walletAddress!)}
+              className="text-xs h-6 px-2"
+            >
+              <Copy className="h-3 w-3" />
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -5,22 +5,24 @@ import { ExternalLink, Plus } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { CreatedCoinForUI } from "@/lib/profile";
 
 interface CreatedTabProps {
-  coinsCreated: Array<{
-    id: string;
-    name: string;
-    symbol: string;
-    price: number;
-    apy: number;
-    bond: string;
-    createdAt: string;
-    icon: string;
-  }>;
+  coinsCreated: CreatedCoinForUI[];
+  isLoading?: boolean;
 }
 
-export default function CreatedTab({ coinsCreated }: CreatedTabProps) {
+export default function CreatedTab({ coinsCreated, isLoading = false }: CreatedTabProps) {
   const router = useRouter();
+
+  if (isLoading) {
+    return (
+      <div className="text-center py-10 sm:py-16 bg-white/5 rounded-xl sm:rounded-2xl border border-secondary/30">
+        <div className="animate-spin w-8 h-8 border-2 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
+        <p className="text-sm sm:text-base text-gray-400">Loading your created stablecoins...</p>
+      </div>
+    );
+  }
 
   if (coinsCreated.length === 0) {
     return (
@@ -64,6 +66,10 @@ export default function CreatedTab({ coinsCreated }: CreatedTabProps) {
                         width={32}
                         height={32}
                         className="w-full h-full object-cover"
+                        onError={(e) => {
+                          // Fallback to default token icon
+                          (e.target as HTMLImageElement).src = '/tokens/default.png';
+                        }}
                       />
                     </div>
                     <div>

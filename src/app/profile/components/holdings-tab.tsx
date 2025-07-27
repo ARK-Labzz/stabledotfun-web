@@ -5,22 +5,24 @@ import { ExternalLink } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { HoldingForUI } from "@/lib/profile";
 
 interface HoldingsTabProps {
-  holdings: Array<{
-    id: string;
-    name: string;
-    symbol: string;
-    amount: number;
-    value: number;
-    apy?: number;
-    bond?: string;
-    icon: string;
-  }>;
+  holdings: HoldingForUI[];
+  isLoading?: boolean;
 }
 
-export default function HoldingsTab({ holdings }: HoldingsTabProps) {
+export default function HoldingsTab({ holdings, isLoading = false }: HoldingsTabProps) {
   const router = useRouter();
+
+  if (isLoading) {
+    return (
+      <div className="text-center py-10 sm:py-16 bg-white/5 rounded-xl sm:rounded-2xl border border-secondary/30">
+        <div className="animate-spin w-8 h-8 border-2 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
+        <p className="text-sm sm:text-base text-gray-400">Loading your holdings...</p>
+      </div>
+    );
+  }
 
   if (holdings.length === 0) {
     return (
@@ -64,6 +66,10 @@ export default function HoldingsTab({ holdings }: HoldingsTabProps) {
                         width={32}
                         height={32}
                         className="w-full h-full object-cover"
+                        onError={(e) => {
+                          // Fallback to default token icon
+                          (e.target as HTMLImageElement).src = '/tokens/default.png';
+                        }}
                       />
                     </div>
                     <div>

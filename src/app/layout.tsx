@@ -5,12 +5,12 @@ import "./globals.css";
 import AppSidebar from "@/components/sidebar";
 import Header from "@/components/header";
 import { WalletProvider } from "@/hooks/use-wallet";
+import { AuthProvider } from "@/contexts/auth-context";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/sonner";
-import DynamicProvider from "@/components/providers/dynamic-lab";
 import QueryProvider from "@/components/providers/query-provider";
-import WagmiConnector from "@/components/providers/wagmi-connector";
 import SplashProvider from "@/components/providers/splash-provider";
+import { Analytics } from "@vercel/analytics/next"
 
 const sora = Sora({ subsets: ["latin"] });
 
@@ -66,10 +66,9 @@ export default function RootLayout({
         <meta name="theme-color" content="#7fcdd3" />
       </head>
       <body className={`${sora.className} bg-background text-white w-full overflow-x-hidden`}>
-      <SplashProvider>
-        <DynamicProvider>
+        <SplashProvider>
           <QueryProvider>
-            <WagmiConnector>
+            <AuthProvider>
               <SidebarProvider defaultOpen={false}>
                 <WalletProvider>
                   <AppSidebar />
@@ -83,10 +82,10 @@ export default function RootLayout({
                   </div>
                 </WalletProvider>
               </SidebarProvider>
-            </WagmiConnector>
+            </AuthProvider>
           </QueryProvider>
-        </DynamicProvider>
         </SplashProvider>
+        <Analytics />
       </body>
     </html>
   );
